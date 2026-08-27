@@ -2,16 +2,20 @@
 #
 # Pins the exact versions of every package installed in the environment the
 # paper's artifacts (test/results/*.json, power_*.json, figures) were produced
-# in, in `pip freeze`-compatible form (one `pkg==ver` per line).
+# in.
 #
-# Regenerate with:  pip freeze --exclude-editable | sort -f > requirements.lock
+# Scope: a complete `pip freeze` of the development virtualenv (Python 3.12),
+# minus two non-portable entries that cannot be installed elsewhere as-is:
+#   - the editable install of this project itself (causal_abstraction_eval); install
+#     it from a clone with `pip install .` (or `-e .`).
+#   - tracr (a local path ref); install per the README:
+#     `pip install git+https://github.com/google-deepmind/tracr.git`.
+#     Tracr's own transitive deps (jax, dm-haiku, chex, ...) stay pinned below.
 #
-# NOTE: This is a full transitive lock. Direct dependencies (the ones we
-# actually chose) live in pyproject.toml / requirements.txt; everything else
-# here is pulled in automatically. When bumping a direct dependency, regenerate
-# the whole lock rather than hand-editing individual transitive pins.
-#
-# Created 2026-06-30 in the CAE release virtualenv (Python 3.12).
+# This is not the dependency contract (which is in pyproject.toml). Use this file
+# only to reproduce the paper exactly:
+#   pip install -r requirements.lock
+
 absl-py==2.3.1
 accelerate==1.8.1
 aiofiles==25.1.0
@@ -29,7 +33,7 @@ arrow==1.3.0
 asttokens==3.0.0
 async-lru==2.0.5
 attrs==25.3.0
-babel==2.17.1
+babel==2.17.0
 beartype==0.14.1
 beautifulsoup4==4.13.5
 better-abc==0.0.3
