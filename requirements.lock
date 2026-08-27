@@ -2,20 +2,16 @@
 #
 # Pins the exact versions of every package installed in the environment the
 # paper's artifacts (test/results/*.json, power_*.json, figures) were produced
-# in.
+# in, in `pip freeze`-compatible form (one `pkg==ver` per line).
 #
-# Scope: a complete `pip freeze` of the development virtualenv (Python 3.12),
-# minus two non-portable entries that cannot be installed elsewhere as-is:
-#   - the editable install of this project itself (causal_abstraction_eval); install
-#     it from a clone with `pip install .` (or `-e .`).
-#   - tracr (a local path ref); install per the README:
-#     `pip install git+https://github.com/google-deepmind/tracr.git`.
-#     Tracr's own transitive deps (jax, dm-haiku, chex, ...) stay pinned below.
+# Regenerate with:  pip freeze --exclude-editable | sort -f > requirements.lock
 #
-# This is not the dependency contract (which is in pyproject.toml). Use this file
-# only to reproduce the paper exactly:
-#   pip install -r requirements.lock
-
+# NOTE: This is a full transitive lock. Direct dependencies (the ones we
+# actually chose) live in pyproject.toml / requirements.txt; everything else
+# here is pulled in automatically. When bumping a direct dependency, regenerate
+# the whole lock rather than hand-editing individual transitive pins.
+#
+# Created 2026-06-30 in the CAE release virtualenv (Python 3.12).
 absl-py==2.3.1
 accelerate==1.8.1
 aiofiles==25.1.0
@@ -33,7 +29,7 @@ arrow==1.3.0
 asttokens==3.0.0
 async-lru==2.0.5
 attrs==25.3.0
-babel==2.17.0
+babel==2.17.1
 beartype==0.14.1
 beautifulsoup4==4.13.5
 better-abc==0.0.3
@@ -130,7 +126,6 @@ notebook==7.4.5
 notebook_shim==0.2.4
 numba==0.61.2
 numpy==2.2.0
-numpy-typing-compat==20251206.2.4
 nvidia-cublas-cu12==12.6.4.1
 nvidia-cuda-cupti-cu12==12.6.80
 nvidia-cuda-nvrtc-cu12==12.6.77
@@ -147,7 +142,6 @@ nvidia-nvjitlink-cu12==12.6.85
 nvidia-nvtx-cu12==12.6.77
 opt_einsum==3.4.0
 optax==0.2.6
-optype==0.15.0
 orbax-checkpoint==0.11.30
 packaging==25.0
 pandas==2.3.1
@@ -198,7 +192,6 @@ rpds-py==0.27.1
 safetensors==0.5.3
 scikit-learn==1.8.0
 scipy==1.16.0
-scipy-stubs==1.16.3.3
 seaborn==0.13.2
 Send2Trash==1.8.3
 sentencepiece==0.2.0
@@ -231,7 +224,6 @@ torch==2.7.1
 tornado==6.5.2
 tqdm==4.67.1
 traitlets==5.14.3
-transformer-lens==2.16.1
 transformers==4.53.2
 transformers-stream-generator==0.0.5
 treescope==0.1.10
