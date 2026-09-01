@@ -130,7 +130,6 @@ notebook==7.4.5
 notebook_shim==0.2.4
 numba==0.61.2
 numpy==2.2.0
-numpy-typing-compat==20251206.2.4
 nvidia-cublas-cu12==12.6.4.1
 nvidia-cuda-cupti-cu12==12.6.80
 nvidia-cuda-nvrtc-cu12==12.6.77
@@ -147,7 +146,6 @@ nvidia-nvjitlink-cu12==12.6.85
 nvidia-nvtx-cu12==12.6.77
 opt_einsum==3.4.0
 optax==0.2.6
-optype==0.15.0
 orbax-checkpoint==0.11.30
 packaging==25.0
 pandas==2.3.1
@@ -198,7 +196,6 @@ rpds-py==0.27.1
 safetensors==0.5.3
 scikit-learn==1.8.0
 scipy==1.16.0
-scipy-stubs==1.16.3.3
 seaborn==0.13.2
 Send2Trash==1.8.3
 sentencepiece==0.2.0
@@ -231,7 +228,6 @@ torch==2.7.1
 tornado==6.5.2
 tqdm==4.67.1
 traitlets==5.14.3
-transformer-lens==2.16.1
 transformers==4.53.2
 transformers-stream-generator==0.0.5
 treescope==0.1.10
