@@ -1,0 +1,22 @@
+{
+  "document": "OTT_RUN_AUTHORIZATION",
+  "protocol_version": "v0.5.6",
+  "authorization_scope": "SCIENTIFIC_CHALLENGE_STAGE_A_RAW_EXECUTION_ONLY",
+  "public_v0_5_6_doi": "10.5281/zenodo.22293061",
+  "zenodo_record_id": 22293061,
+  "publication_timestamp_utc": "2026-09-04T05:49:13.619399Z",
+  "authorization_timestamp_utc": "2026-09-04T05:59:14.006785Z",
+  "public_protocol_zip_sha256": "41d5f23edd5d3fb44b6df8a746c4432ea09c781bc080855dd2949f993331314f",
+  "public_protocol_root_sha256": "b699fea96417a244f7276575f91f0bddd3c7e4f965a84ef167ef077a9ef0d516",
+  "runtime_immutable_ref": "ghcr.io/slowomir33-arch/cae-ott-v055-runtime@sha256:1f9fad0bb1f8d65282ff237e0538e47a4e940e472fee7e915ec9c74fffe265b8",
+  "runtime_digest": "sha256:1f9fad0bb1f8d65282ff237e0538e47a4e940e472fee7e915ec9c74fffe265b8",
+  "runtime_fingerprint_root": "166068659b03c450b9ba2425f324bd4cfb2338a3784ee3c6fa764f0a8f256271",
+  "stage_a_only": true,
+  "candidate_selection_authorized": false,
+  "held_out_authorized": false,
+  "external_label_scoring_authorized": false,
+  "hypothesis_verdict_authorized": false,
+  "publication_mutation_authorized": false,
+  "consumed": false,
+  "start_stage_a": "ABSENT"
+}
