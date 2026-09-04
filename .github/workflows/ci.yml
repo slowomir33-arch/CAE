@@ -7,12 +7,11 @@ on:
   workflow_dispatch:
 
 jobs:
-  # Decoder6502 immutable runtime supplement freeze.
-  # Occupies the registered `CI` workflow_dispatch path. Stage A and the
-  # Decoder6502 diagnostic job stay unreachable (if: false).
+  # Decoder6502 freeze/retrieve disabled. Registered CI workflow_dispatch
+  # now executes Stage A only (not dispatched by this preparation packet).
   ott-v056-d6502-supplement-freeze:
-    name: OTT v0.5.6 Decoder6502 supplement freeze (workflow_dispatch only)
-    if: github.event_name == 'workflow_dispatch'
+    name: OTT v0.5.6 Decoder6502 supplement freeze (DISABLED during Stage-A window)
+    if: false
     runs-on: ubuntu-latest
     timeout-minutes: 60
     permissions:
@@ -91,9 +90,9 @@ jobs:
           include-hidden-files: false
 
   ott-v056-d6502-supplement-retrieve:
-    name: OTT v0.5.6 Decoder6502 supplement independent retrieval
+    name: OTT v0.5.6 Decoder6502 supplement independent retrieval (DISABLED during Stage-A window)
     needs: ott-v056-d6502-supplement-freeze
-    if: github.event_name == 'workflow_dispatch' && needs.ott-v056-d6502-supplement-freeze.result == 'success'
+    if: false
     runs-on: ubuntu-latest
     timeout-minutes: 60
     permissions:
@@ -207,11 +206,11 @@ jobs:
           retention-days: 90
           include-hidden-files: false
 
-  # DISABLED for the Decoder6502 PRESTART diagnostic window.
-  # Stage-A START / RUN_AUTHORIZATION consumption must stay unreachable.
+  # Stage A is the only workflow_dispatch execution job on registered CI.
+  # This packet does NOT dispatch it.
   ott-v056-stage-a:
-    name: OTT v0.5.6 Stage A (DISABLED during Decoder6502 diagnostic)
-    if: false
+    name: OTT v0.5.6 Stage A (workflow_dispatch only)
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 360
     permissions:
@@ -220,6 +219,9 @@ jobs:
     env:
       OTT_RUNTIME_REF: ghcr.io/slowomir33-arch/cae-ott-v055-runtime@sha256:1f9fad0bb1f8d65282ff237e0538e47a4e940e472fee7e915ec9c74fffe265b8
       OTT_RUNTIME_DIGEST: sha256:1f9fad0bb1f8d65282ff237e0538e47a4e940e472fee7e915ec9c74fffe265b8
+      OTT_SUPPLEMENT_REF: ghcr.io/slowomir33-arch/cae-ott-v056-d6502-supplement@sha256:b5f0938a6706f33add9e624072c1a6cab542a2fbf5eea899880778243a74ee20
+      OTT_SUPPLEMENT_DIGEST: sha256:b5f0938a6706f33add9e624072c1a6cab542a2fbf5eea899880778243a74ee20
+      OTT_SUPPLEMENT_CONTENT_ROOT: 5bd5679a5ca297eb1d2b2a84d1b68c900b54d98ea7cd0c5ac672ec903e5a48ea
     steps:
       - name: Initialize Stage-A execution identity
         id: identity

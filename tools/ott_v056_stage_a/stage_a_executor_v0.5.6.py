@@ -40,7 +40,7 @@ ZIP_NAME = "OTT_v0.5.6_FINAL_PUBLIC_FREEZE_CANDIDATE_20260904T043759Z_74EB9712.z
 ZIP_BYTES = 58243
 ZIP_SHA256 = "41d5f23edd5d3fb44b6df8a746c4432ea09c781bc080855dd2949f993331314f"
 PROTOCOL_ROOT = "b699fea96417a244f7276575f91f0bddd3c7e4f965a84ef167ef077a9ef0d516"
-AUTH_SHA256 = "4c6d8aff18dac5fdaa55a8a5733244b96dc49761da88efc4827388622271d358"
+AUTH_SHA256 = "cb194c51d80937842a816544a3f377673f18e9206e48003c0c636711282f9e26"
 RUNTIME_REF = (
     "ghcr.io/slowomir33-arch/cae-ott-v055-runtime@"
     "sha256:1f9fad0bb1f8d65282ff237e0538e47a4e940e472fee7e915ec9c74fffe265b8"
@@ -57,6 +57,15 @@ RECORD_ID = 22293061
 WALL_LIMIT_S = 20.0
 RSS_LIMIT = 4294967296
 AUTH_SCOPE = "SCIENTIFIC_CHALLENGE_STAGE_A_RAW_EXECUTION_ONLY"
+SUPPLEMENT_OCI_DIGEST = "sha256:b5f0938a6706f33add9e624072c1a6cab542a2fbf5eea899880778243a74ee20"
+SUPPLEMENT_OCI_REF = (
+    "ghcr.io/slowomir33-arch/cae-ott-v056-d6502-supplement@"
+    "sha256:b5f0938a6706f33add9e624072c1a6cab542a2fbf5eea899880778243a74ee20"
+)
+SUPPLEMENT_CONTENT_ROOT = "5bd5679a5ca297eb1d2b2a84d1b68c900b54d98ea7cd0c5ac672ec903e5a48ea"
+DECODER6502_SHA256 = "d231d459368c2049a73fd3b25377a657f08d4b95a7098112748b794abc673b62"
+DECODER6502_BYTES = 272629760
+OLD_AUTH_SHA256 = "4c6d8aff18dac5fdaa55a8a5733244b96dc49761da88efc4827388622271d358"
 
 PAIRS: List[Tuple[str, str]] = [
     ("logic_circuit", "valid"),
@@ -306,13 +315,24 @@ def phase_host_public_protocol(args: argparse.Namespace) -> None:
         raise StopError("STOP_STAGE_A_RUN_AUTHORIZATION_MISMATCH", f"auth sha {auth_sha}")
     auth = json.loads(auth_raw.decode("utf-8"))
     required = {
-        "authorization_scope": AUTH_SCOPE,
+        "scope": AUTH_SCOPE,
+        "authorization_generation": 2,
+        "stage_a_only": True,
         "public_v0_5_6_doi": VERSION_DOI,
         "public_protocol_zip_sha256": ZIP_SHA256,
         "public_protocol_root_sha256": PROTOCOL_ROOT,
-        "runtime_digest": RUNTIME_DIGEST,
+        "base_runtime_digest": RUNTIME_DIGEST,
+        "decoder6502_supplement_oci_digest": SUPPLEMENT_OCI_DIGEST,
+        "decoder6502_supplement_oci_ref": SUPPLEMENT_OCI_REF,
+        "decoder6502_supplement_content_root_sha256": SUPPLEMENT_CONTENT_ROOT,
+        "decoder6502_sha256": DECODER6502_SHA256,
+        "decoder6502_bytes": DECODER6502_BYTES,
         "consumed": False,
         "start_stage_a": "ABSENT",
+        "candidate_selection_authorized": False,
+        "held_out_authorized": False,
+        "external_label_scoring_authorized": False,
+        "hypothesis_verdict_authorized": False,
     }
     for k, v in required.items():
         if auth.get(k) != v:
@@ -356,6 +376,10 @@ def phase_host_start(args: argparse.Namespace) -> None:
     ready_obj = json.loads(ready.read_text(encoding="utf-8"))
     if ready_obj.get("READY_TO_START_STAGE_A") != "YES":
         raise StopError("STOP_STAGE_A_OUTPUT_PATH_NOT_CLEAN", "not ready")
+    if ready_obj.get("SUPPLEMENT_IDENTITY") != "PASS":
+        raise StopError("STOP_STAGE_A_SUPPLEMENT_IDENTITY_FAILURE", "PRESTART missing SUPPLEMENT_IDENTITY PASS")
+    if sha256_file(auth_path) != AUTH_SHA256:
+        raise StopError("STOP_STAGE_A_RUN_AUTHORIZATION_MISMATCH", "auth sha before START")
     if run_dir.exists():
         raise StopError("STOP_STAGE_A_OUTPUT_PATH_NOT_CLEAN", "run dir exists before START")
     run_dir.mkdir(parents=True, exist_ok=False)
@@ -911,6 +935,48 @@ def _logic_bundle():
     return builder, vm, high
 
 
+def _supplement_lib_prestart() -> Dict[str, Any]:
+    """Require frozen supplement bytes via CPU6502_LIB_DIR before any CPU import."""
+    lib_dir = os.environ.get("CPU6502_LIB_DIR", "")
+    if not lib_dir:
+        raise StopError("STOP_STAGE_A_SUPPLEMENT_IDENTITY_FAILURE", "CPU6502_LIB_DIR unset")
+    lib_path = Path(lib_dir)
+    decoder = lib_path / "Decoder6502.bin"
+    so = lib_path / "libgate6502.so"
+    if not decoder.is_file() or not so.is_file():
+        raise StopError(
+            "STOP_STAGE_A_SUPPLEMENT_IDENTITY_FAILURE",
+            f"scratch lib incomplete decoder={decoder.is_file()} so={so.is_file()}",
+        )
+    if decoder.stat().st_size != DECODER6502_BYTES:
+        raise StopError(
+            "STOP_STAGE_A_SUPPLEMENT_IDENTITY_FAILURE",
+            f"decoder bytes {decoder.stat().st_size}",
+        )
+    got = sha256_file(decoder)
+    if got != DECODER6502_SHA256:
+        raise StopError("STOP_STAGE_A_SUPPLEMENT_IDENTITY_FAILURE", f"decoder sha {got}")
+    os.environ["CPU6502_LIB_DIR"] = str(lib_path)
+    return {
+        "CPU6502_LIB_DIR": str(lib_path),
+        "decoder_bytes": DECODER6502_BYTES,
+        "decoder_sha256": got,
+        "libgate6502": str(so),
+    }
+
+
+def _nop_gatesimulator_smoke(cpu: Any) -> Dict[str, Any]:
+    sim = cpu.GateSimulator()
+    ao, xo, yo, so, po = sim._exec(0xEA, 0, 1, 0, 0, 0, 0, 0)
+    return {
+        "gate_init": "PASS",
+        "sentinel": {"opcode": 0xEA, "ilen": 1},
+        "outputs": {"A_out": ao, "X_out": xo, "Y_out": yo, "S_out": so, "P_out": po},
+        "scientific": False,
+        "PASS": True,
+    }
+
+
 def phase_prestart(args: argparse.Namespace) -> None:
     receipts = Path(args.receipts_dir)
     protocol_dir = Path(args.protocol_dir)
@@ -921,6 +987,13 @@ def phase_prestart(args: argparse.Namespace) -> None:
 
         if np.__version__ != NUMPY_VERSION:
             raise StopError("STOP_STAGE_A_RUNTIME_IDENTITY_FAILURE", f"numpy {np.__version__}")
+        supp = _supplement_lib_prestart()
+        cpu = _load_system("10_cpu_6502.py", "cpu_6502_precheck")
+        try:
+            smoke = _nop_gatesimulator_smoke(cpu)
+        except Exception as e:
+            raise StopError("STOP_STAGE_A_SUPPLEMENT_IDENTITY_FAILURE", f"NOP smoke: {e}") from e
+        write_new_text(receipts / "SUPPLEMENT_PRESTART_SMOKE.json", dumps_scientific({**supp, "smoke": smoke}) + "\n")
         fp = _fingerprint_check()
         cae_head = git_head(ws) or git_head(Path("/opt/ott/sources/CAE"))
         lilo_head = git_head(Path("/opt/ott/sources/Lilotane")) or git_head(Path("/opt/ott/sources/lilotane"))
@@ -930,7 +1003,6 @@ def phase_prestart(args: argparse.Namespace) -> None:
         from causal_abstraction.paths import DiagramBuilder  # noqa: F401
         from causal_abstraction.sampling import TopDownSampler  # noqa: F401
 
-        cpu = _load_system("10_cpu_6502.py", "cpu_6502_precheck")
         lib_isa = cpu._find_lib("libisa_bridge.so") or cpu._find_lib("isa_bridge.so")
         lib_gate = cpu._find_lib("libgate_bridge.so") or cpu._find_lib("gate_bridge.so")
         lib_tr = cpu._find_lib("libtransistor_bridge.so") or cpu._find_lib("transistor_bridge.so")
@@ -1020,6 +1092,7 @@ def phase_prestart(args: argparse.Namespace) -> None:
             "EXECUTION_WRAPPER_CONFORMANCE": "PASS",
             "LILOTANE_INVOCATION": "RESOLVED",
             "IPC_MANIFEST": "120_AND_PASS",
+            "SUPPLEMENT_IDENTITY": "PASS",
             "START_STAGE_A": "ABSENT",
             "SCIENTIFIC_OBSERVATIONS": 0,
             "READY_TO_START_STAGE_A": "YES",
@@ -1121,8 +1194,10 @@ def _build_pair(system: str, condition: str, cache: Dict[str, Any]) -> Any:
         cache[key] = builder
         return builder
     if system == "cpu_6502":
-        cpu = cache.get("_cpu_mod") or _load_system("10_cpu_6502.py", "cpu_6502")
-        cache["_cpu_mod"] = cpu
+        if cache.get("_cpu_mod") is None:
+            _supplement_lib_prestart()
+            cache["_cpu_mod"] = _load_system("10_cpu_6502.py", "cpu_6502")
+        cpu = cache["_cpu_mod"]
         schema = cache.get("_cpu_schema")
         if schema is None:
             schema = cpu.build_schema()
@@ -1158,8 +1233,10 @@ def _make_sampler(system: str, builder: Any, cache: Dict[str, Any]) -> Any:
     from causal_abstraction.sampling import BottomUpSampler
 
     if system == "cpu_6502":
-        cpu = cache.get("_cpu_mod") or _load_system("10_cpu_6502.py", "cpu_6502")
-        cache["_cpu_mod"] = cpu
+        if cache.get("_cpu_mod") is None:
+            _supplement_lib_prestart()
+            cache["_cpu_mod"] = _load_system("10_cpu_6502.py", "cpu_6502")
+        cpu = cache["_cpu_mod"]
         sampler = cpu.InstructionSampler(builder.vm)
     else:
         sampler = make_sampler(system, builder.vm)
