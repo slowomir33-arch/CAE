@@ -1,0 +1,20 @@
+OTT v0.5.6 IPC membership correction / candidate R3
+Verdict: READY_FOR_AUDIT
+D21: PASS (Rover 30 / Satellite 20 / Transport 40 / Woodworking 30 = 120)
+CAE mapping: unchanged COMPLETE_AND_UNAMBIGUOUS
+Tests: 38/38 PASS
+
+RUN_ID: OTT-v0.5.6-IPC-R3-20260904T040804Z-4F600593
+ZIP: OTT_v0.5.6_EXECUTION_SPEC_CANDIDATE_R3_20260904T040804Z_4F600593.zip
+ZIP SHA-256: 0b36d0f7747a756c18da49b91302920d4a18dea9453be9172fa8eeea9a2fb64e
+ZIP bytes: 50862
+CANDIDATE_ROOT_SHA256: 041bb7f771f1baf814119bc5030cfcca9669f31e5ab289639247c8939aef9aab
+
+Phone / HTTPS downloads (after push):
+ZIP: https://github.com/slowomir33-arch/CAE/raw/cursor/ott-v056-ipc-r3-d621/evidence/v056-ipc-r3/OTT_v0.5.6_EXECUTION_SPEC_CANDIDATE_R3_20260904T040804Z_4F600593.zip
+Folder: https://github.com/slowomir33-arch/CAE/tree/cursor/ott-v056-ipc-r3-d621/evidence/v056-ipc-r3
+Report: https://github.com/slowomir33-arch/CAE/blob/cursor/ott-v056-ipc-r3-d621/evidence/v056-ipc-r3/tree/REPORT.md
+Manifest: https://github.com/slowomir33-arch/CAE/blob/cursor/ott-v056-ipc-r3-d621/evidence/v056-ipc-r3/tree/protocol/IPC_ELIGIBLE_PROBLEM_MANIFEST_v0.5.6.json
+D21 supersession: https://github.com/slowomir33-arch/CAE/blob/cursor/ott-v056-ipc-r3-d621/evidence/v056-ipc-r3/tree/protocol/D21_SUPERSESSION_v0.5.6.json
+
+No DOI, no split, no publication, no science.
