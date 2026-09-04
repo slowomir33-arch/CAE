@@ -1,0 +1,24 @@
+{
+  "CPU6502_LIB_DIR": "/tmp/ott-d6502-smoke/lib",
+  "PASS": true,
+  "gate_init": "PASS",
+  "outputs": {
+    "A_out": 0,
+    "P_out": 0,
+    "S_out": 0,
+    "X_out": 0,
+    "Y_out": 0
+  },
+  "scientific": false,
+  "sentinel": {
+    "A_in": 0,
+    "P_in": 0,
+    "S_in": 0,
+    "X_in": 0,
+    "Y_in": 0,
+    "ilen": 1,
+    "opcode": 234,
+    "operand": 0
+  },
+  "wall_s": 0.0777476149999643
+}

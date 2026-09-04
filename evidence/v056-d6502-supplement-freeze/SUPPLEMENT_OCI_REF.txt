@@ -1,0 +1,1 @@
+ghcr.io/slowomir33-arch/cae-ott-v056-d6502-supplement@sha256:b5f0938a6706f33add9e624072c1a6cab542a2fbf5eea899880778243a74ee20

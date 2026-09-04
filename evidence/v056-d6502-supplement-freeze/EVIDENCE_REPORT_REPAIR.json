@@ -1,0 +1,20 @@
+{
+  "document": "OTT_D6502_SUPPLEMENT_EVIDENCE_REPORT_REPAIR",
+  "protocol_version": "v0.5.6",
+  "source_github_run_id": 33871700908,
+  "source_freeze_run_id": "OTT-v0.5.6-D6502F-20260904T121338Z-99A2AA83",
+  "source_freeze_head": "47d56cc4478c671fc599509ca37e5d051202cd66",
+  "technical_freeze_result": "PASS",
+  "repair_scope": "REPORT_GENERATION_ONLY",
+  "defect": "unquoted shell heredoc interpreted Markdown backticks in D6502_SUPPLEMENT_FREEZE_REPORT.md",
+  "oci_mutation": false,
+  "science_executed": false,
+  "run_authorization_consumed": false,
+  "start_stage_a": "ABSENT",
+  "decoder6502_supplement_oci_digest": "sha256:b5f0938a6706f33add9e624072c1a6cab542a2fbf5eea899880778243a74ee20",
+  "supplement_content_root_sha256": "5bd5679a5ca297eb1d2b2a84d1b68c900b54d98ea7cd0c5ac672ec903e5a48ea",
+  "decoder6502_sha256": "d231d459368c2049a73fd3b25377a657f08d4b95a7098112748b794abc673b62",
+  "message_id": "OTT-v0.5.6-D6502F-20260904T121338Z-99A2AA83-M001",
+  "m002_minted": false,
+  "workflow_dispatch": false
+}

@@ -1,0 +1,4 @@
+staging_tag=ghcr.io/slowomir33-arch/cae-ott-v056-d6502-supplement:OTT-v0.5.6-D6502F-20260904T121338Z-99A2AA83
+manifest_digest=sha256:b5f0938a6706f33add9e624072c1a6cab542a2fbf5eea899880778243a74ee20
+oci_ref=ghcr.io/slowomir33-arch/cae-ott-v056-d6502-supplement@sha256:b5f0938a6706f33add9e624072c1a6cab542a2fbf5eea899880778243a74ee20
+image_id=sha256:135a134a3dc381ffdf2a2dd5a910ae4219e68786c07348467bf5f65b03060d33

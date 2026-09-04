@@ -1,0 +1,24 @@
+{
+  "REGENERATION": "PASS",
+  "canonical_payload": "/ott/out/Decoder6502.bin",
+  "gen1": {
+    "byte_size": 272629760,
+    "command": "fresh-process: chdir(scratch); ctypes.CDLL(libgate6502.so).gate_init()  # M6502(true,false) HLE",
+    "exit_code": 0,
+    "produced": true,
+    "scratch": "/tmp/ott-d6502f-gen1",
+    "sha256": "d231d459368c2049a73fd3b25377a657f08d4b95a7098112748b794abc673b62",
+    "stderr_tail": "gate_init: creating M6502 core (one-time ~273 MB PLA)...\ngate_init: core ready.\n",
+    "stdout_tail": "WALL=1.097950\nPRODUCED=1\n"
+  },
+  "gen2": {
+    "byte_size": 272629760,
+    "command": "fresh-process: chdir(scratch); ctypes.CDLL(libgate6502.so).gate_init()  # M6502(true,false) HLE",
+    "exit_code": 0,
+    "produced": true,
+    "scratch": "/tmp/ott-d6502f-gen2",
+    "sha256": "d231d459368c2049a73fd3b25377a657f08d4b95a7098112748b794abc673b62",
+    "stderr_tail": "gate_init: creating M6502 core (one-time ~273 MB PLA)...\ngate_init: core ready.\n",
+    "stdout_tail": "WALL=1.106819\nPRODUCED=1\n"
+  }
+}
