@@ -1,0 +1,27 @@
+{
+  "document": "RUN_AUTHORIZATION_VERIFICATION",
+  "protocol_version": "v0.5.6",
+  "run_id": "OTT-v0.5.6-SCA-20260904T061127Z-40797FC6",
+  "source": "https://raw.githubusercontent.com/slowomir33-arch/CAE/27f157d6767e77bdb9a07d63e742aec28e100793/evidence/v056-p2b/RUN_AUTHORIZATION.json",
+  "parent_p2b_commit": "27f157d6767e77bdb9a07d63e742aec28e100793",
+  "parent_p2b_run_id": "OTT-v0.5.6-P2B-20260904T055902Z-1D12E2EF",
+  "expected_sha256": "4c6d8aff18dac5fdaa55a8a5733244b96dc49761da88efc4827388622271d358",
+  "observed_sha256": "4c6d8aff18dac5fdaa55a8a5733244b96dc49761da88efc4827388622271d358",
+  "checks": {
+    "http": 200,
+    "sha256": "4c6d8aff18dac5fdaa55a8a5733244b96dc49761da88efc4827388622271d358",
+    "sha256_match": true,
+    "authorization_scope": true,
+    "public_v0_5_6_doi": true,
+    "public_protocol_zip_sha256": true,
+    "public_protocol_root_sha256": true,
+    "runtime_digest": true,
+    "consumed": true,
+    "start_stage_a": true,
+    "concept_doi_absent_from_public_v0_5_6_doi": true
+  },
+  "RUN_AUTHORIZATION_IDENTITY": "PASS",
+  "RUN_AUTHORIZATION_CONSUMED": "NO",
+  "START_STAGE_A": "ABSENT",
+  "original_file_modified": false
+}

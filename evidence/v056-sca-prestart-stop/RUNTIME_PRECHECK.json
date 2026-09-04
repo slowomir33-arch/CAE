@@ -1,0 +1,31 @@
+{
+  "document": "RUNTIME_PRECHECK",
+  "protocol_version": "v0.5.6",
+  "run_id": "OTT-v0.5.6-SCA-20260904T061127Z-40797FC6",
+  "required_ref": "ghcr.io/slowomir33-arch/cae-ott-v055-runtime@sha256:1f9fad0bb1f8d65282ff237e0538e47a4e940e472fee7e915ec9c74fffe265b8",
+  "required_digest": "sha256:1f9fad0bb1f8d65282ff237e0538e47a4e940e472fee7e915ec9c74fffe265b8",
+  "required_fingerprint_root": "166068659b03c450b9ba2425f324bd4cfb2338a3784ee3c6fa764f0a8f256271",
+  "required_numpy": "2.2.0",
+  "container_runtimes_present": {
+    "docker": false,
+    "podman": false,
+    "nerdctl": false,
+    "ctr": false,
+    "crictl": false,
+    "apptainer": false,
+    "singularity": false,
+    "skopeo": false
+  },
+  "docker_sock": false,
+  "image_pulled": false,
+  "inside_runtime_checks": "NOT_PERFORMED",
+  "ghcr_manifest_unauthenticated": 401,
+  "ghcr_manifest_with_github_cli_token": 401,
+  "host_numpy": "2.4.4",
+  "host_numpy_is_not_runtime": true,
+  "rebuild_attempted": false,
+  "package_upgrade_attempted": false,
+  "STAGE_A_RUNTIME_PRECHECK": "FAIL",
+  "stop": "STOP_STAGE_A_RUNTIME_IDENTITY_FAILURE",
+  "reason": "This Cloud Agent VM has no container runtime (docker/podman/nerdctl/etc.) and no docker.sock. The pinned GHCR image manifest is HTTP 401 both anonymously and with the GitHub CLI token. Host CPython NumPy is 2.4.4, not the frozen 2.2.0. The immutable runtime therefore cannot be pulled and verified. Host Python was not used as a substitute runtime."
+}

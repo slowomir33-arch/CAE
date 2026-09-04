@@ -1,0 +1,14 @@
+OTT v0.5.6 Stage A PRESTART STOP
+Verdict: STOP_STAGE_A_RUNTIME_IDENTITY_FAILURE
+RUN_AUTHORIZATION_CONSUMED = NO
+START_STAGE_A = ABSENT
+SCIENTIFIC_OBSERVATIONS = 0
+RUN_ID: OTT-v0.5.6-SCA-20260904T061127Z-40797FC6
+
+Phone / HTTPS:
+Folder: https://github.com/slowomir33-arch/CAE/tree/cursor/ott-v056-sca-prestart-stop-5ef6/evidence/v056-sca-prestart-stop
+Report: https://github.com/slowomir33-arch/CAE/blob/cursor/ott-v056-sca-prestart-stop-5ef6/evidence/v056-sca-prestart-stop/STAGE_A_FINAL_REPORT.md
+Gate: https://github.com/slowomir33-arch/CAE/blob/cursor/ott-v056-sca-prestart-stop-5ef6/evidence/v056-sca-prestart-stop/PRESTART_GATE_STATUS.json
+Runtime: https://github.com/slowomir33-arch/CAE/blob/cursor/ott-v056-sca-prestart-stop-5ef6/evidence/v056-sca-prestart-stop/RUNTIME_PRECHECK.json
+
+Do not merge to main. Do not start Stage A until the immutable GHCR runtime can be pulled.

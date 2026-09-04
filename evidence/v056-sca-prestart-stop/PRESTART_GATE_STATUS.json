@@ -1,0 +1,33 @@
+{
+  "document": "PRESTART_GATE_STATUS",
+  "protocol_version": "v0.5.6",
+  "stage": "SCIENTIFIC_STAGE_A_RAW_EXECUTION",
+  "run_id": "OTT-v0.5.6-SCA-20260904T061127Z-40797FC6",
+  "packet_sha256": "7580707175db7154df26c6301253df4d643932d73e03f95d90dcc9377b5528df",
+  "verdict": "STOP_STAGE_A_RUNTIME_IDENTITY_FAILURE",
+  "PUBLIC_PROTOCOL_BYTE_IDENTITY": "PASS",
+  "RUN_AUTHORIZATION_IDENTITY": "PASS",
+  "RUN_AUTHORIZATION_CONSUMED": "NO",
+  "RUNTIME_PRECHECK": "FAIL",
+  "PUBLIC_TESTS": "NOT_RUN_REQUIRES_IMMUTABLE_RUNTIME",
+  "EXECUTION_WRAPPER_CONFORMANCE": "NOT_RUN_REQUIRES_IMMUTABLE_RUNTIME",
+  "LILOTANE_INVOCATION": "NOT_RESOLVED_REQUIRES_IMMUTABLE_RUNTIME",
+  "IPC_MANIFEST": "NOT_RECHECKED_IN_RUNTIME",
+  "START_STAGE_A": "ABSENT",
+  "SCIENTIFIC_OBSERVATIONS": 0,
+  "READY_TO_START_STAGE_A": "NO",
+  "REAL_DOI_DERIVED_SEEDS": 0,
+  "REAL_DOI_DERIVED_SPLIT": 0,
+  "REAL_BASELINE_EXECUTION": "NO",
+  "DECISIVE_CAE": "NO",
+  "CANDIDATE_SELECTION": "NOT RUN",
+  "HELD_OUT_ABLATION": "NOT RUN",
+  "EXTERNAL_LABEL_SCORING": "NOT RUN",
+  "HYPOTHESIS_VERDICT": "NOT RUN",
+  "notes": [
+    "PRESTART_STAGE_A_READY.json was not created because Sections 7–12 did not all PASS.",
+    "START_STAGE_A.json was not created; exclusive-create consumption did not occur.",
+    "Original P2B RUN_AUTHORIZATION.json was not modified.",
+    "Published 48/48 tests and wrapper conformance were not executed on the host, because NumPy 2.4.4 is not the frozen runtime 2.2.0."
+  ]
+}
