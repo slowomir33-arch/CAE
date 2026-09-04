@@ -1,0 +1,40 @@
+{
+  "document": "OTT_v0.5.6_DOI_P1_GATE_STATUS",
+  "protocol_version": "v0.5.6-CANDIDATE-P1",
+  "stage": "ZENODO_DOI_RESERVATION_AND_FINAL_PUBLIC_FREEZE_CANDIDATE",
+  "run_id": "OTT-v0.5.6-DOI-P1-20260904T042336Z-CC0A7F9F",
+  "verdict": "STOP_ZENODO_WRITE_CREDENTIAL_MISSING",
+  "PARENT_R3_IDENTITY": "PASS",
+  "R3_AUDITOR_ACCEPTANCE": "PASS",
+  "ZENODO_ENVIRONMENT": "PRODUCTION_REQUIRED",
+  "ZENODO_DRAFT": "NOT_CREATED",
+  "PUBLIC_V0_5_6_DOI": "NOT_RESERVED",
+  "ZENODO_PUBLICATION": "NO",
+  "DOI_INSERTION": "NOT_PERFORMED",
+  "DECISIVE_SEED_DERIVATION": "NOT_RUN",
+  "DECISIVE_IPC_SPLIT": "NOT_RUN",
+  "SCIENTIFIC_CHALLENGE_RUN": "NO",
+  "RUN_AUTHORIZATION": "NOT ISSUED",
+  "SCIENTIFIC_OBSERVATIONS": 0,
+  "synthesized_doi": false,
+  "token_printed": false,
+  "token_committed": false,
+  "zenodo_mcp": false,
+  "zenodo_env_names_present": [],
+  "parent_r3": {
+    "run_id": "OTT-v0.5.6-IPC-R3-20260904T040804Z-4F600593",
+    "commit": "91d95b369b7bd2b10a5d03dc59dc259cd66de22d",
+    "zip": "OTT_v0.5.6_EXECUTION_SPEC_CANDIDATE_R3_20260904T040804Z_4F600593.zip",
+    "zip_sha256": "0b36d0f7747a756c18da49b91302920d4a18dea9453be9172fa8eeea9a2fb64e",
+    "candidate_root": "041bb7f771f1baf814119bc5030cfcca9669f31e5ab289639247c8939aef9aab"
+  },
+  "runtime": "ghcr.io/slowomir33-arch/cae-ott-v055-runtime@sha256:1f9fad0bb1f8d65282ff237e0538e47a4e940e472fee7e915ec9c74fffe265b8",
+  "author_action": {
+    "do_not_paste_token_in_chat_or_git": true,
+    "required_secret_name": "ZENODO_TOKEN",
+    "required_environment": "https://zenodo.org (production, not sandbox)",
+    "preferred_scope": ["deposit:write"],
+    "forbidden_scope_this_stage": ["deposit:actions"],
+    "after_secret_is_in_cloud_agent_environment": "re-issue the same P1 packet"
+  }
+}
