@@ -7,11 +7,69 @@ on:
   workflow_dispatch:
 
 jobs:
+  # Dispatch transport for OTT v0.5.6 Stage A.
+  # GitHub only lists workflow_dispatch workflows that exist on the default
+  # branch; this job therefore reuses the already-registered `CI` workflow
+  # identity. It MUST NOT run on push or pull_request. Dedicated workflow:
+  # .github/workflows/ott-v056-stage-a.yml (workflow_dispatch only).
+  ott-v056-stage-a:
+    name: OTT v0.5.6 Stage A (workflow_dispatch only)
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    permissions:
+      contents: read
+      packages: read
+    env:
+      OTT_RUN_ID: OTT-v0.5.6-SCA-20260904T061758Z-AF83E092
+      OTT_PREVIOUS_STOP_RUN_ID: OTT-v0.5.6-SCA-20260904T061127Z-40797FC6
+      OTT_RUNTIME_REF: ghcr.io/slowomir33-arch/cae-ott-v055-runtime@sha256:1f9fad0bb1f8d65282ff237e0538e47a4e940e472fee7e915ec9c74fffe265b8
+      OTT_RUNTIME_DIGEST: sha256:1f9fad0bb1f8d65282ff237e0538e47a4e940e472fee7e915ec9c74fffe265b8
+    steps:
+      - name: Checkout execution branch
+        uses: actions/checkout@v4
+      - name: Runner identity
+        run: |
+          set -euo pipefail
+          echo "runner.name=${{ runner.name }} os=${{ runner.os }} arch=${{ runner.arch }}"
+          docker --version
+          if [ "${{ runner.os }}" != "Linux" ] || [ "${{ runner.arch }}" != "X64" ]; then
+            echo "STOP_STAGE_A_RUNNER_ARCH_MISMATCH" >&2
+            exit 1
+          fi
+      - name: Stage A (PRESTART → START → science → seal)
+        env:
+          GHCR_PULL_TOKEN: ${{ secrets.GHCR_PULL_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_ACTOR: ${{ github.actor }}
+          GITHUB_SHA: ${{ github.sha }}
+          GITHUB_RUN_ID: ${{ github.run_id }}
+          GITHUB_RUN_ATTEMPT: ${{ github.run_attempt }}
+          GITHUB_JOB: ${{ github.job }}
+          GITHUB_WORKFLOW: ${{ github.workflow }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          RUNNER_NAME: ${{ runner.name }}
+          RUNNER_OS: ${{ runner.os }}
+          RUNNER_ARCH: ${{ runner.arch }}
+        run: bash tools/ott_v056_stage_a/gha_entrypoint.sh
+      - name: Upload Stage-A evidence (packaging only; no further science)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: OTT-v0.5.6-STAGE-A-RAW-OTT-v0.5.6-SCA-20260904T061758Z-AF83E092
+          path: |
+            gha-receipts/
+            ott-run/
+            ott-evidence-zip/
+          if-no-files-found: warn
+          retention-days: 90
+
   # Run the pytest unit suite. We install the `neural` extra so torch is available;
   # NeuralModel is otherwise lazy-imported and torch is guarded behind try/except in
   # models/neural.py.
   test:
     name: Unit tests (py${{ matrix.python-version }})
+    if: github.event_name != 'workflow_dispatch'
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -35,6 +93,7 @@ jobs:
   # installed `tracr` (a git-only package) are deliberately excluded here.
   import-matrix:
     name: Import (${{ matrix.extra || 'base' }})
+    if: github.event_name != 'workflow_dispatch'
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
