@@ -7,8 +7,9 @@ on:
   workflow_dispatch:
 
 jobs:
-  # Decoder6502 freeze/retrieve disabled. Registered CI workflow_dispatch
-  # now executes Stage A only (not dispatched by this preparation packet).
+  # Decoder6502 freeze/retrieve/diagnostic disabled. Registered CI
+  # workflow_dispatch executes the libisa6502 PRESTART diagnostic only
+  # (not dispatched by this Cursor preparation).
   ott-v056-d6502-supplement-freeze:
     name: OTT v0.5.6 Decoder6502 supplement freeze (DISABLED during Stage-A window)
     if: false
@@ -206,11 +207,93 @@ jobs:
           retention-days: 90
           include-hidden-files: false
 
-  # Stage A is the only workflow_dispatch execution job on registered CI.
-  # This packet does NOT dispatch it.
-  ott-v056-stage-a:
-    name: OTT v0.5.6 Stage A (workflow_dispatch only)
+  # libisa6502 PRESTART diagnostic occupies registered CI workflow_dispatch.
+  # This Cursor preparation does NOT dispatch it.
+  ott-v056-libisa6502-diagnostic:
+    name: OTT v0.5.6 libisa6502 PRESTART diagnostic (workflow_dispatch only)
     if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    permissions:
+      contents: read
+      packages: read
+    env:
+      OTT_RUNTIME_REF: ghcr.io/slowomir33-arch/cae-ott-v055-runtime@sha256:1f9fad0bb1f8d65282ff237e0538e47a4e940e472fee7e915ec9c74fffe265b8
+      OTT_RUNTIME_DIGEST: sha256:1f9fad0bb1f8d65282ff237e0538e47a4e940e472fee7e915ec9c74fffe265b8
+      OTT_SUPPLEMENT_REF: ghcr.io/slowomir33-arch/cae-ott-v056-d6502-supplement@sha256:b5f0938a6706f33add9e624072c1a6cab542a2fbf5eea899880778243a74ee20
+      OTT_SUPPLEMENT_DIGEST: sha256:b5f0938a6706f33add9e624072c1a6cab542a2fbf5eea899880778243a74ee20
+      OTT_SUPPLEMENT_CONTENT_ROOT: 5bd5679a5ca297eb1d2b2a84d1b68c900b54d98ea7cd0c5ac672ec903e5a48ea
+    steps:
+      - name: Initialize libisa6502 diagnostic identity
+        id: identity
+        shell: bash
+        run: |
+          set -euo pipefail
+          UTC="$(date -u +%Y%m%dT%H%M%SZ)"
+          RAND="$(python3 - <<'PY'
+          import secrets
+          print(secrets.token_hex(4).upper())
+          PY
+          )"
+          DIAG_ID="OTT-v0.5.6-ISA6502-${UTC}-${RAND}"
+          echo "diag_id=$DIAG_ID" >> "$GITHUB_OUTPUT"
+          echo "OTT_DIAGNOSTIC_ID=$DIAG_ID" >> "$GITHUB_ENV"
+          echo "PARENT_STAGE_A_RUN_ID=OTT-v0.5.6-SCA-20260904T124104Z-9A3DE0B9" >> "$GITHUB_ENV"
+          echo "GITHUB_PARENT_RUN_ID=33874006921" >> "$GITHUB_ENV"
+          printf 'OTT_DIAGNOSTIC_ID=%s\n' "$DIAG_ID"
+          printf 'STAGE_A_JOB_DISABLED=YES\n'
+          printf 'START_STAGE_A=ABSENT\n'
+          printf 'RUN_AUTHORIZATION_CONSUMED=NO\n'
+          printf 'SCIENTIFIC_OBSERVATIONS=0\n'
+      - name: Checkout diagnostic branch
+        uses: actions/checkout@v4
+      - name: Runner identity
+        run: |
+          set -euo pipefail
+          echo "runner.name=${{ runner.name }} os=${{ runner.os }} arch=${{ runner.arch }}"
+          echo "OTT_DIAGNOSTIC_ID=${{ steps.identity.outputs.diag_id }}"
+          docker --version
+          if [ "${{ runner.os }}" != "Linux" ] || [ "${{ runner.arch }}" != "X64" ]; then
+            echo "STOP_LIBISA6502_PARENT_IDENTITY_FAILURE" >&2
+            exit 1
+          fi
+      - name: libisa6502 PRESTART diagnostic (no Stage A)
+        env:
+          OTT_DIAGNOSTIC_ID: ${{ steps.identity.outputs.diag_id }}
+          PARENT_STAGE_A_RUN_ID: ${{ env.PARENT_STAGE_A_RUN_ID }}
+          GITHUB_PARENT_RUN_ID: ${{ env.GITHUB_PARENT_RUN_ID }}
+          GHCR_PULL_TOKEN: ${{ secrets.GHCR_PULL_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_ACTOR: ${{ github.actor }}
+          GITHUB_SHA: ${{ github.sha }}
+          GITHUB_RUN_ID: ${{ github.run_id }}
+          GITHUB_RUN_ATTEMPT: ${{ github.run_attempt }}
+          GITHUB_JOB: ${{ github.job }}
+          GITHUB_WORKFLOW: ${{ github.workflow }}
+          GITHUB_WORKFLOW_REF: ${{ github.workflow_ref }}
+          GITHUB_REF: ${{ github.ref }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          RUNNER_NAME: ${{ runner.name }}
+          RUNNER_OS: ${{ runner.os }}
+          RUNNER_ARCH: ${{ runner.arch }}
+        run: bash tools/ott_v056_libisa6502/gha_entrypoint.sh
+      - name: Upload libisa6502 diagnostic receipts (small files only)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: OTT-v0.5.6-ISA6502-${{ steps.identity.outputs.diag_id }}
+          path: |
+            gha-isa6502-receipts/
+            evidence/v056-libisa6502-diagnostic/
+          if-no-files-found: warn
+          retention-days: 90
+          include-hidden-files: false
+
+  # DISABLED during the libisa6502 PRESTART diagnostic window.
+  # Stage-A START / RUN_AUTHORIZATION consumption must stay unreachable.
+  ott-v056-stage-a:
+    name: OTT v0.5.6 Stage A (DISABLED during libisa6502 diagnostic)
+    if: false
     runs-on: ubuntu-latest
     timeout-minutes: 360
     permissions:
