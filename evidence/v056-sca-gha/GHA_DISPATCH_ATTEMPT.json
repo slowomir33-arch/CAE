@@ -1,0 +1,25 @@
+{
+  "document": "GHA_DISPATCH_ATTEMPT",
+  "run_id": "OTT-v0.5.6-SCA-20260904T061758Z-AF83E092",
+  "dedicated_workflow": ".github/workflows/ott-v056-stage-a.yml",
+  "dedicated_dispatch": {
+    "ref": "cursor/ott-v056-sca-gha-5ef6",
+    "http": 404,
+    "detail": "workflow ott-v056-stage-a.yml not found on the default branch"
+  },
+  "ci_fallback_dispatch": {
+    "workflow": "CI (343377983)",
+    "ref": "cursor/ott-v056-sca-gha-5ef6",
+    "http": 403,
+    "detail": "Resource not accessible by integration"
+  },
+  "pull_request_ci": {
+    "event": "pull_request",
+    "note": "Queued unit-test CI for PR #13 only. Stage A job is gated to workflow_dispatch and did not run. No START_STAGE_A."
+  },
+  "push_trigger_added": false,
+  "pull_request_trigger_for_stage_a": false,
+  "START_STAGE_A": "ABSENT",
+  "RUN_AUTHORIZATION_CONSUMED": "NO",
+  "SCIENTIFIC_OBSERVATIONS": 0
+}
