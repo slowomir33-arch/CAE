@@ -1,0 +1,61 @@
+{
+  "document": "P2A_DRAFT_FILE_READBACK",
+  "protocol_version": "v0.5.6-P2A",
+  "run_id": "OTT-v0.5.6-P2A-20260904T054511Z-DA150E60",
+  "status": "PERFORMED",
+  "expected_filename": "OTT_v0.5.6_FINAL_PUBLIC_FREEZE_CANDIDATE_20260904T043759Z_74EB9712.zip",
+  "expected_bytes": 58243,
+  "expected_sha256": "41d5f23edd5d3fb44b6df8a746c4432ea09c781bc080855dd2949f993331314f",
+  "expected_candidate_root": "b699fea96417a244f7276575f91f0bddd3c7e4f965a84ef167ef077a9ef0d516",
+  "authenticated_list": [
+    {
+      "filename": "OTT_v0.5.6_FINAL_PUBLIC_FREEZE_CANDIDATE_20260904T043759Z_74EB9712.zip",
+      "size": 58243,
+      "checksum": "9c142861f44030400243a2eb3465f793",
+      "id": "621ed097-a818-4479-af65-0220f0b7c0ac"
+    }
+  ],
+  "fileset_exact": true,
+  "downloaded": true,
+  "download_filename": "OTT_v0.5.6_FINAL_PUBLIC_FREEZE_CANDIDATE_20260904T043759Z_74EB9712.zip",
+  "download_bytes": 58243,
+  "download_sha256": "41d5f23edd5d3fb44b6df8a746c4432ea09c781bc080855dd2949f993331314f",
+  "byte_identity": true,
+  "zenodo_zip_candidate_root": "b699fea96417a244f7276575f91f0bddd3c7e4f965a84ef167ef077a9ef0d516",
+  "zenodo_api_called": true,
+  "http_calls": [
+    {
+      "method": "GET",
+      "url": "https://zenodo.org/api/deposit/depositions/22293061",
+      "authenticated": true,
+      "status": 200,
+      "bytes": 3812,
+      "publish_endpoint": false
+    },
+    {
+      "method": "GET",
+      "url": "https://zenodo.org/api/records/22293061",
+      "authenticated": false,
+      "status": 404,
+      "bytes": 74,
+      "publish_endpoint": false
+    },
+    {
+      "method": "GET",
+      "url": "https://zenodo.org/records/22293061",
+      "authenticated": false,
+      "status": 404,
+      "bytes": 13980,
+      "publish_endpoint": false
+    },
+    {
+      "method": "GET",
+      "url": "https://zenodo.org/api/records/22293061/draft/files/OTT_v0.5.6_FINAL_PUBLIC_FREEZE_CANDIDATE_20260904T043759Z_74EB9712.zip/content",
+      "authenticated": true,
+      "status": 200,
+      "bytes": 58243,
+      "publish_endpoint": false
+    }
+  ],
+  "publish_endpoint_called": false
+}
