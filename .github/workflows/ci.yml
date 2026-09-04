@@ -7,11 +7,453 @@ on:
   workflow_dispatch:
 
 jobs:
+  # Decoder6502 freeze/retrieve/diagnostic and runtime-fingerprint diagnostic
+  # disabled. Registered CI workflow_dispatch executes Stage A only
+  # (not dispatched by this fingerprint-binding preparation).
+  ott-v056-d6502-supplement-freeze:
+    name: OTT v0.5.6 Decoder6502 supplement freeze (DISABLED during Stage-A window)
+    if: false
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    permissions:
+      contents: read
+      packages: write
+    env:
+      OTT_RUNTIME_REF: ghcr.io/slowomir33-arch/cae-ott-v055-runtime@sha256:1f9fad0bb1f8d65282ff237e0538e47a4e940e472fee7e915ec9c74fffe265b8
+      OTT_RUNTIME_DIGEST: sha256:1f9fad0bb1f8d65282ff237e0538e47a4e940e472fee7e915ec9c74fffe265b8
+    outputs:
+      freeze_id: ${{ steps.identity.outputs.freeze_id }}
+      oci_digest: ${{ steps.freeze.outputs.oci_digest }}
+      oci_ref: ${{ steps.freeze.outputs.oci_ref }}
+      content_root: ${{ steps.freeze.outputs.content_root }}
+      image_id: ${{ steps.freeze.outputs.image_id }}
+    steps:
+      - name: Initialize Decoder6502 supplement freeze identity
+        id: identity
+        shell: bash
+        run: |
+          set -euo pipefail
+          UTC="$(date -u +%Y%m%dT%H%M%SZ)"
+          RAND="$(python3 - <<'PY'
+          import secrets
+          print(secrets.token_hex(4).upper())
+          PY
+          )"
+          FREEZE_ID="OTT-v0.5.6-D6502F-${UTC}-${RAND}"
+          echo "freeze_id=$FREEZE_ID" >> "$GITHUB_OUTPUT"
+          echo "OTT_FREEZE_ID=$FREEZE_ID" >> "$GITHUB_ENV"
+          printf 'OTT_FREEZE_ID=%s\n' "$FREEZE_ID"
+          printf 'STAGE_A_JOB_DISABLED=YES\n'
+          printf 'DIAGNOSTIC_JOB_DISABLED=YES\n'
+          printf 'START_STAGE_A=ABSENT\n'
+          printf 'RUN_AUTHORIZATION_CONSUMED=NO\n'
+      - name: Checkout freeze branch
+        uses: actions/checkout@v4
+      - name: Runner identity
+        run: |
+          set -euo pipefail
+          echo "runner.name=${{ runner.name }} os=${{ runner.os }} arch=${{ runner.arch }}"
+          echo "OTT_FREEZE_ID=${{ steps.identity.outputs.freeze_id }}"
+          docker --version
+          if [ "${{ runner.os }}" != "Linux" ] || [ "${{ runner.arch }}" != "X64" ]; then
+            echo "STOP_D6502_SUPPLEMENT_PARENT_IDENTITY_FAILURE" >&2
+            exit 1
+          fi
+      - name: Freeze Decoder6502 supplement (no Stage A)
+        id: freeze
+        env:
+          OTT_FREEZE_ID: ${{ steps.identity.outputs.freeze_id }}
+          GHCR_PULL_TOKEN: ${{ secrets.GHCR_PULL_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_ACTOR: ${{ github.actor }}
+          GITHUB_SHA: ${{ github.sha }}
+          GITHUB_RUN_ID: ${{ github.run_id }}
+          GITHUB_RUN_ATTEMPT: ${{ github.run_attempt }}
+          GITHUB_JOB: ${{ github.job }}
+          GITHUB_WORKFLOW: ${{ github.workflow }}
+          GITHUB_WORKFLOW_REF: ${{ github.workflow_ref }}
+          GITHUB_REF: ${{ github.ref }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          RUNNER_NAME: ${{ runner.name }}
+          RUNNER_OS: ${{ runner.os }}
+          RUNNER_ARCH: ${{ runner.arch }}
+        run: bash tools/ott_v056_d6502_freeze/gha_freeze.sh
+      - name: Upload freeze receipts (small files only)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.identity.outputs.freeze_id }}-freeze
+          path: |
+            gha-d6502f-receipts/
+            evidence/v056-d6502-supplement-freeze/
+          if-no-files-found: warn
+          retention-days: 90
+          include-hidden-files: false
+
+  ott-v056-d6502-supplement-retrieve:
+    name: OTT v0.5.6 Decoder6502 supplement independent retrieval (DISABLED during Stage-A window)
+    needs: ott-v056-d6502-supplement-freeze
+    if: false
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    permissions:
+      contents: read
+      packages: read
+    env:
+      OTT_RUNTIME_REF: ghcr.io/slowomir33-arch/cae-ott-v055-runtime@sha256:1f9fad0bb1f8d65282ff237e0538e47a4e940e472fee7e915ec9c74fffe265b8
+      OTT_RUNTIME_DIGEST: sha256:1f9fad0bb1f8d65282ff237e0538e47a4e940e472fee7e915ec9c74fffe265b8
+    steps:
+      - name: Checkout retrieve scripts
+        uses: actions/checkout@v4
+      - name: Independent pull-by-digest + smoke (no Stage A)
+        env:
+          OTT_FREEZE_ID: ${{ needs.ott-v056-d6502-supplement-freeze.outputs.freeze_id }}
+          OTT_SUPPLEMENT_DIGEST: ${{ needs.ott-v056-d6502-supplement-freeze.outputs.oci_digest }}
+          OTT_CONTENT_ROOT: ${{ needs.ott-v056-d6502-supplement-freeze.outputs.content_root }}
+          GHCR_PULL_TOKEN: ${{ secrets.GHCR_PULL_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_ACTOR: ${{ github.actor }}
+          GITHUB_SHA: ${{ github.sha }}
+          GITHUB_RUN_ID: ${{ github.run_id }}
+          RUNNER_OS: ${{ runner.os }}
+          RUNNER_ARCH: ${{ runner.arch }}
+        run: bash tools/ott_v056_d6502_freeze/gha_retrieve.sh
+      - name: Upload independent retrieval receipts (small files only)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ needs.ott-v056-d6502-supplement-freeze.outputs.freeze_id }}-retrieve
+          path: |
+            gha-d6502f-retrieve/
+            evidence/v056-d6502-supplement-freeze/
+          if-no-files-found: warn
+          retention-days: 90
+          include-hidden-files: false
+
+  # DISABLED during the Decoder6502 supplement-freeze window.
+  ott-v056-d6502-diagnostic:
+    name: OTT v0.5.6 Decoder6502 PRESTART diagnostic (DISABLED during freeze)
+    if: false
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    permissions:
+      contents: read
+      packages: read
+    env:
+      OTT_RUNTIME_REF: ghcr.io/slowomir33-arch/cae-ott-v055-runtime@sha256:1f9fad0bb1f8d65282ff237e0538e47a4e940e472fee7e915ec9c74fffe265b8
+      OTT_RUNTIME_DIGEST: sha256:1f9fad0bb1f8d65282ff237e0538e47a4e940e472fee7e915ec9c74fffe265b8
+    steps:
+      - name: Initialize Decoder6502 diagnostic identity
+        id: identity
+        shell: bash
+        run: |
+          set -euo pipefail
+          UTC="$(date -u +%Y%m%dT%H%M%SZ)"
+          RAND="$(python3 - <<'PY'
+          import secrets
+          print(secrets.token_hex(4).upper())
+          PY
+          )"
+          DIAG_ID="OTT-v0.5.6-D6502-${UTC}-${RAND}"
+          echo "diag_id=$DIAG_ID" >> "$GITHUB_OUTPUT"
+          echo "OTT_DIAGNOSTIC_ID=$DIAG_ID" >> "$GITHUB_ENV"
+          echo "PARENT_STAGE_A_RUN_ID=OTT-v0.5.6-SCA-20260904T105201Z-BC6F6E8E" >> "$GITHUB_ENV"
+          echo "GITHUB_PARENT_RUN_ID=33865237389" >> "$GITHUB_ENV"
+          printf 'OTT_DIAGNOSTIC_ID=%s\n' "$DIAG_ID"
+          printf 'STAGE_A_JOB_DISABLED=YES\n'
+          printf 'START_STAGE_A=ABSENT\n'
+          printf 'RUN_AUTHORIZATION_CONSUMED=NO\n'
+      - name: Checkout diagnostic branch
+        uses: actions/checkout@v4
+      - name: Runner identity
+        run: |
+          set -euo pipefail
+          echo "runner.name=${{ runner.name }} os=${{ runner.os }} arch=${{ runner.arch }}"
+          echo "OTT_DIAGNOSTIC_ID=${{ steps.identity.outputs.diag_id }}"
+          docker --version
+          if [ "${{ runner.os }}" != "Linux" ] || [ "${{ runner.arch }}" != "X64" ]; then
+            echo "STOP_D6502_RUNTIME_IDENTITY_FAILURE" >&2
+            exit 1
+          fi
+      - name: Decoder6502 PRESTART diagnostic (no Stage A)
+        env:
+          OTT_DIAGNOSTIC_ID: ${{ steps.identity.outputs.diag_id }}
+          PARENT_STAGE_A_RUN_ID: ${{ env.PARENT_STAGE_A_RUN_ID }}
+          GITHUB_PARENT_RUN_ID: ${{ env.GITHUB_PARENT_RUN_ID }}
+          GHCR_PULL_TOKEN: ${{ secrets.GHCR_PULL_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_ACTOR: ${{ github.actor }}
+          GITHUB_SHA: ${{ github.sha }}
+          GITHUB_RUN_ID: ${{ github.run_id }}
+          GITHUB_RUN_ATTEMPT: ${{ github.run_attempt }}
+          GITHUB_JOB: ${{ github.job }}
+          GITHUB_WORKFLOW: ${{ github.workflow }}
+          GITHUB_WORKFLOW_REF: ${{ github.workflow_ref }}
+          GITHUB_REF: ${{ github.ref }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          RUNNER_NAME: ${{ runner.name }}
+          RUNNER_OS: ${{ runner.os }}
+          RUNNER_ARCH: ${{ runner.arch }}
+        run: bash tools/ott_v056_d6502/gha_entrypoint.sh
+      - name: Upload Decoder6502 diagnostic receipts (small files only)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: OTT-v0.5.6-D6502-${{ steps.identity.outputs.diag_id }}
+          path: |
+            gha-d6502-receipts/
+            evidence/v056-d6502-diagnostic/
+          if-no-files-found: warn
+          retention-days: 90
+          include-hidden-files: false
+
+  # libisa6502 PRESTART diagnostic disabled. Registered CI workflow_dispatch
+  # now executes Stage A only (not dispatched by this glue-correction packet).
+  ott-v056-libisa6502-diagnostic:
+    name: OTT v0.5.6 libisa6502 PRESTART diagnostic (DISABLED during Stage-A window)
+    if: false
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    permissions:
+      contents: read
+      packages: read
+    env:
+      OTT_RUNTIME_REF: ghcr.io/slowomir33-arch/cae-ott-v055-runtime@sha256:1f9fad0bb1f8d65282ff237e0538e47a4e940e472fee7e915ec9c74fffe265b8
+      OTT_RUNTIME_DIGEST: sha256:1f9fad0bb1f8d65282ff237e0538e47a4e940e472fee7e915ec9c74fffe265b8
+      OTT_SUPPLEMENT_REF: ghcr.io/slowomir33-arch/cae-ott-v056-d6502-supplement@sha256:b5f0938a6706f33add9e624072c1a6cab542a2fbf5eea899880778243a74ee20
+      OTT_SUPPLEMENT_DIGEST: sha256:b5f0938a6706f33add9e624072c1a6cab542a2fbf5eea899880778243a74ee20
+      OTT_SUPPLEMENT_CONTENT_ROOT: 5bd5679a5ca297eb1d2b2a84d1b68c900b54d98ea7cd0c5ac672ec903e5a48ea
+    steps:
+      - name: Initialize libisa6502 diagnostic identity
+        id: identity
+        shell: bash
+        run: |
+          set -euo pipefail
+          UTC="$(date -u +%Y%m%dT%H%M%SZ)"
+          RAND="$(python3 - <<'PY'
+          import secrets
+          print(secrets.token_hex(4).upper())
+          PY
+          )"
+          DIAG_ID="OTT-v0.5.6-ISA6502-${UTC}-${RAND}"
+          echo "diag_id=$DIAG_ID" >> "$GITHUB_OUTPUT"
+          echo "OTT_DIAGNOSTIC_ID=$DIAG_ID" >> "$GITHUB_ENV"
+          echo "PARENT_STAGE_A_RUN_ID=OTT-v0.5.6-SCA-20260904T124104Z-9A3DE0B9" >> "$GITHUB_ENV"
+          echo "GITHUB_PARENT_RUN_ID=33874006921" >> "$GITHUB_ENV"
+          printf 'OTT_DIAGNOSTIC_ID=%s\n' "$DIAG_ID"
+          printf 'STAGE_A_JOB_DISABLED=YES\n'
+          printf 'START_STAGE_A=ABSENT\n'
+          printf 'RUN_AUTHORIZATION_CONSUMED=NO\n'
+          printf 'SCIENTIFIC_OBSERVATIONS=0\n'
+      - name: Checkout diagnostic branch
+        uses: actions/checkout@v4
+      - name: Runner identity
+        run: |
+          set -euo pipefail
+          echo "runner.name=${{ runner.name }} os=${{ runner.os }} arch=${{ runner.arch }}"
+          echo "OTT_DIAGNOSTIC_ID=${{ steps.identity.outputs.diag_id }}"
+          docker --version
+          if [ "${{ runner.os }}" != "Linux" ] || [ "${{ runner.arch }}" != "X64" ]; then
+            echo "STOP_LIBISA6502_PARENT_IDENTITY_FAILURE" >&2
+            exit 1
+          fi
+      - name: libisa6502 PRESTART diagnostic (no Stage A)
+        env:
+          OTT_DIAGNOSTIC_ID: ${{ steps.identity.outputs.diag_id }}
+          PARENT_STAGE_A_RUN_ID: ${{ env.PARENT_STAGE_A_RUN_ID }}
+          GITHUB_PARENT_RUN_ID: ${{ env.GITHUB_PARENT_RUN_ID }}
+          GHCR_PULL_TOKEN: ${{ secrets.GHCR_PULL_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_ACTOR: ${{ github.actor }}
+          GITHUB_SHA: ${{ github.sha }}
+          GITHUB_RUN_ID: ${{ github.run_id }}
+          GITHUB_RUN_ATTEMPT: ${{ github.run_attempt }}
+          GITHUB_JOB: ${{ github.job }}
+          GITHUB_WORKFLOW: ${{ github.workflow }}
+          GITHUB_WORKFLOW_REF: ${{ github.workflow_ref }}
+          GITHUB_REF: ${{ github.ref }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          RUNNER_NAME: ${{ runner.name }}
+          RUNNER_OS: ${{ runner.os }}
+          RUNNER_ARCH: ${{ runner.arch }}
+        run: bash tools/ott_v056_libisa6502/gha_entrypoint.sh
+      - name: Upload libisa6502 diagnostic receipts (small files only)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: OTT-v0.5.6-ISA6502-${{ steps.identity.outputs.diag_id }}
+          path: |
+            gha-isa6502-receipts/
+            evidence/v056-libisa6502-diagnostic/
+          if-no-files-found: warn
+          retention-days: 90
+          include-hidden-files: false
+
+  # Runtime fingerprint PRESTART diagnostic disabled. Registered CI
+  # workflow_dispatch now executes Stage A only (not dispatched by this
+  # fingerprint-binding preparation).
+  ott-v056-runtime-fingerprint-diagnostic:
+    name: OTT v0.5.6 runtime fingerprint PRESTART diagnostic (DISABLED during Stage-A window)
+    if: false
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    permissions:
+      contents: read
+      packages: read
+    env:
+      OTT_RUNTIME_REF: ghcr.io/slowomir33-arch/cae-ott-v055-runtime@sha256:1f9fad0bb1f8d65282ff237e0538e47a4e940e472fee7e915ec9c74fffe265b8
+      OTT_RUNTIME_DIGEST: sha256:1f9fad0bb1f8d65282ff237e0538e47a4e940e472fee7e915ec9c74fffe265b8
+    steps:
+      - name: Initialize runtime-fingerprint diagnostic identity
+        id: identity
+        shell: bash
+        run: |
+          set -euo pipefail
+          UTC="$(date -u +%Y%m%dT%H%M%SZ)"
+          RAND="$(python3 - <<'PY'
+          import secrets
+          print(secrets.token_hex(4).upper())
+          PY
+          )"
+          DIAG_ID="OTT-v0.5.6-RFP-${UTC}-${RAND}"
+          echo "diag_id=$DIAG_ID" >> "$GITHUB_OUTPUT"
+          echo "OTT_DIAGNOSTIC_ID=$DIAG_ID" >> "$GITHUB_ENV"
+          echo "PARENT_STAGE_A_RUN_ID=OTT-v0.5.6-SCA-20260904T133624Z-33FAE80C" >> "$GITHUB_ENV"
+          echo "GITHUB_PARENT_RUN_ID=33878994052" >> "$GITHUB_ENV"
+          printf 'OTT_DIAGNOSTIC_ID=%s\n' "$DIAG_ID"
+          printf 'STAGE_A_JOB_DISABLED=YES\n'
+          printf 'START_STAGE_A=ABSENT\n'
+          printf 'RUN_AUTHORIZATION_CONSUMED=NO\n'
+          printf 'SCIENTIFIC_OBSERVATIONS=0\n'
+      - name: Checkout diagnostic branch
+        uses: actions/checkout@v4
+      - name: Runner identity
+        run: |
+          set -euo pipefail
+          echo "runner.name=${{ runner.name }} os=${{ runner.os }} arch=${{ runner.arch }}"
+          echo "OTT_DIAGNOSTIC_ID=${{ steps.identity.outputs.diag_id }}"
+          docker --version
+          if [ "${{ runner.os }}" != "Linux" ] || [ "${{ runner.arch }}" != "X64" ]; then
+            echo "STOP_RFP_PARENT_OCI_IDENTITY_FAILURE" >&2
+            exit 1
+          fi
+      - name: Runtime fingerprint PRESTART diagnostic (no Stage A)
+        env:
+          OTT_DIAGNOSTIC_ID: ${{ steps.identity.outputs.diag_id }}
+          PARENT_STAGE_A_RUN_ID: ${{ env.PARENT_STAGE_A_RUN_ID }}
+          GITHUB_PARENT_RUN_ID: ${{ env.GITHUB_PARENT_RUN_ID }}
+          GHCR_PULL_TOKEN: ${{ secrets.GHCR_PULL_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_ACTOR: ${{ github.actor }}
+          GITHUB_SHA: ${{ github.sha }}
+          GITHUB_RUN_ID: ${{ github.run_id }}
+          GITHUB_RUN_ATTEMPT: ${{ github.run_attempt }}
+          GITHUB_JOB: ${{ github.job }}
+          GITHUB_WORKFLOW: ${{ github.workflow }}
+          GITHUB_WORKFLOW_REF: ${{ github.workflow_ref }}
+          GITHUB_REF: ${{ github.ref }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          RUNNER_NAME: ${{ runner.name }}
+          RUNNER_OS: ${{ runner.os }}
+          RUNNER_ARCH: ${{ runner.arch }}
+        run: bash tools/ott_v056_rfp/gha_entrypoint.sh
+      - name: Upload runtime-fingerprint diagnostic receipts (small files only)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: OTT-v0.5.6-RFP-${{ steps.identity.outputs.diag_id }}
+          path: |
+            gha-rfp-receipts/
+            evidence/v056-runtime-fingerprint-diagnostic/
+          if-no-files-found: warn
+          retention-days: 90
+          include-hidden-files: false
+
+  # Stage A occupies registered CI workflow_dispatch. This Cursor
+  # preparation does NOT dispatch it. START / authorization consumption
+  # remain unreachable until an authorized author dispatch.
+  ott-v056-stage-a:
+    name: OTT v0.5.6 Stage A (workflow_dispatch only)
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    permissions:
+      contents: read
+      packages: read
+    env:
+      OTT_RUNTIME_REF: ghcr.io/slowomir33-arch/cae-ott-v055-runtime@sha256:1f9fad0bb1f8d65282ff237e0538e47a4e940e472fee7e915ec9c74fffe265b8
+      OTT_RUNTIME_DIGEST: sha256:1f9fad0bb1f8d65282ff237e0538e47a4e940e472fee7e915ec9c74fffe265b8
+      OTT_SUPPLEMENT_REF: ghcr.io/slowomir33-arch/cae-ott-v056-d6502-supplement@sha256:b5f0938a6706f33add9e624072c1a6cab542a2fbf5eea899880778243a74ee20
+      OTT_SUPPLEMENT_DIGEST: sha256:b5f0938a6706f33add9e624072c1a6cab542a2fbf5eea899880778243a74ee20
+      OTT_SUPPLEMENT_CONTENT_ROOT: 5bd5679a5ca297eb1d2b2a84d1b68c900b54d98ea7cd0c5ac672ec903e5a48ea
+    steps:
+      - name: Initialize Stage-A execution identity
+        id: identity
+        shell: bash
+        run: |
+          set -euo pipefail
+          UTC="$(date -u +%Y%m%dT%H%M%SZ)"
+          RAND="$(python3 - <<'PY'
+          import secrets
+          print(secrets.token_hex(4).upper())
+          PY
+          )"
+          RUN_ID="OTT-v0.5.6-SCA-${UTC}-${RAND}"
+          echo "run_id=$RUN_ID" >> "$GITHUB_OUTPUT"
+          echo "OTT_RUN_ID=$RUN_ID" >> "$GITHUB_ENV"
+          echo "PARENT_RUN_ID=OTT-v0.5.6-SCA-20260904T061758Z-AF83E092" >> "$GITHUB_ENV"
+          echo "PRIOR_PRESTART_STOP_RUN_ID=OTT-v0.5.6-SCA-20260904T061127Z-40797FC6" >> "$GITHUB_ENV"
+          printf 'NEW_STAGE_A_RUN_ID=%s\n' "$RUN_ID"
+      - name: Checkout execution branch
+        uses: actions/checkout@v4
+      - name: Runner identity
+        run: |
+          set -euo pipefail
+          echo "runner.name=${{ runner.name }} os=${{ runner.os }} arch=${{ runner.arch }}"
+          echo "OTT_RUN_ID=${{ steps.identity.outputs.run_id }}"
+          docker --version
+          if [ "${{ runner.os }}" != "Linux" ] || [ "${{ runner.arch }}" != "X64" ]; then
+            echo "STOP_STAGE_A_RUNNER_ARCH_MISMATCH" >&2
+            exit 1
+          fi
+      - name: Stage A (PRESTART → START → science → seal)
+        env:
+          OTT_RUN_ID: ${{ steps.identity.outputs.run_id }}
+          PARENT_RUN_ID: ${{ env.PARENT_RUN_ID }}
+          PRIOR_PRESTART_STOP_RUN_ID: ${{ env.PRIOR_PRESTART_STOP_RUN_ID }}
+          GHCR_PULL_TOKEN: ${{ secrets.GHCR_PULL_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_ACTOR: ${{ github.actor }}
+          GITHUB_SHA: ${{ github.sha }}
+          GITHUB_RUN_ID: ${{ github.run_id }}
+          GITHUB_RUN_ATTEMPT: ${{ github.run_attempt }}
+          GITHUB_JOB: ${{ github.job }}
+          GITHUB_WORKFLOW: ${{ github.workflow }}
+          GITHUB_WORKFLOW_REF: ${{ github.workflow_ref }}
+          GITHUB_REF: ${{ github.ref }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          RUNNER_NAME: ${{ runner.name }}
+          RUNNER_OS: ${{ runner.os }}
+          RUNNER_ARCH: ${{ runner.arch }}
+        run: bash tools/ott_v056_stage_a/gha_entrypoint.sh
+      - name: Upload Stage-A evidence (packaging only; no further science)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: OTT-v0.5.6-STAGE-A-RAW-${{ steps.identity.outputs.run_id }}
+          path: |
+            gha-receipts/
+            ott-run/
+            ott-evidence-zip/
+          if-no-files-found: warn
+          retention-days: 90
+
   # Run the pytest unit suite. We install the `neural` extra so torch is available;
   # NeuralModel is otherwise lazy-imported and torch is guarded behind try/except in
   # models/neural.py.
   test:
     name: Unit tests (py${{ matrix.python-version }})
+    if: github.event_name != 'workflow_dispatch'
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -35,6 +477,7 @@ jobs:
   # installed `tracr` (a git-only package) are deliberately excluded here.
   import-matrix:
     name: Import (${{ matrix.extra || 'base' }})
+    if: github.event_name != 'workflow_dispatch'
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false

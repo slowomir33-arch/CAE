@@ -1,0 +1,27 @@
+{
+  "RUNTIME_FINGERPRINT_BINDING": "PREPARED",
+  "actual_pulled_runtime_digest_source": "docker inspect RepoDigest after pull; injected as OTT_PULLED_RUNTIME_DIGEST",
+  "authorization_base_runtime_digest": "sha256:1f9fad0bb1f8d65282ff237e0538e47a4e940e472fee7e915ec9c74fffe265b8",
+  "authorization_runtime_fingerprint_root_sha256": "166068659b03c450b9ba2425f324bd4cfb2338a3784ee3c6fa764f0a8f256271",
+  "document": "RUNTIME_FINGERPRINT_EXTERNAL_BINDING",
+  "fingerprint_embedded_in_oci": false,
+  "fingerprint_file_synthesized": false,
+  "frozen_accepted_runtime_fingerprint_json_sha256": "8ab74b5d7bb737275daf9cb4fb13edfef21cacb9a5f3b6a20c5b0ad637a317dd",
+  "frozen_accepted_runtime_fingerprint_root_sha256": "166068659b03c450b9ba2425f324bd4cfb2338a3784ee3c6fa764f0a8f256271",
+  "frozen_base_runtime_digest": "sha256:1f9fad0bb1f8d65282ff237e0538e47a4e940e472fee7e915ec9c74fffe265b8",
+  "generation_2_run_authorization_sha256": "cb194c51d80937842a816544a3f377673f18e9206e48003c0c636711282f9e26",
+  "identity_model": "semantic/runtime fingerprint identity != OCI byte/registry identity",
+  "mandatory_oci_filesystem_fingerprint_presence": "REMOVED",
+  "new_authorization_required": "NO",
+  "oci_mutation_required": "NO",
+  "old_filesystem_presence_stop": "REMOVED",
+  "runtime_fingerprint_role": "EXTERNAL_FREEZE_EVIDENCE_IDENTITY",
+  "scientific_semantics_delta": 0,
+  "stage_a_gates": {
+    "RFP-1": "generation-2 RUN_AUTHORIZATION bytes SHA256 == cb194c51d80937842a816544a3f377673f18e9206e48003c0c636711282f9e26 else STOP_STAGE_A_RUN_AUTHORIZATION_IDENTITY_FAILURE",
+    "RFP-2": "authorization.runtime_fingerprint_root_sha256 == 166068659b03c450b9ba2425f324bd4cfb2338a3784ee3c6fa764f0a8f256271 else STOP_STAGE_A_RUNTIME_FINGERPRINT_BINDING_FAILURE",
+    "RFP-3": "authorization.base_runtime_digest == sha256:1f9fad0bb1f8d65282ff237e0538e47a4e940e472fee7e915ec9c74fffe265b8 else STOP_STAGE_A_RUNTIME_FINGERPRINT_BINDING_FAILURE",
+    "RFP-4": "actual pulled RepoDigest == sha256:1f9fad0bb1f8d65282ff237e0538e47a4e940e472fee7e915ec9c74fffe265b8 else STOP_STAGE_A_RUNTIME_IDENTITY_FAILURE",
+    "RFP-5": "pulled digest == authorization.base_runtime_digest == frozen digest AND authorization fingerprint root == frozen fingerprint root; persist RUNTIME_FINGERPRINT_BINDING = PASS"
+  }
+}

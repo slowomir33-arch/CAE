@@ -1,0 +1,11 @@
+DISPATCH_ATTEMPT = 0
+COMMAND = gh workflow run ci.yml --ref cursor/ott-v056-sca-gha-5ef6
+STOP = STOP_LIBISA6502_GHA_DISPATCH_UNAVAILABLE
+REASON = Cursor preparation MUST NOT dispatch. This integration is not authorized to workflow_dispatch (prior HTTP 403: Resource not accessible by integration).
+WORKAROUND = NONE
+STAGE_A_EXECUTION = NO
+START_STAGE_A = ABSENT
+RUN_AUTHORIZATION_CONSUMED = NO
+SCIENTIFIC_OBSERVATIONS = 0
+AUTHOR_ACTION = gh workflow run ci.yml --ref cursor/ott-v056-sca-gha-5ef6
+ATTEMPTED_AT_UTC = 2026-09-04T13:00:06Z

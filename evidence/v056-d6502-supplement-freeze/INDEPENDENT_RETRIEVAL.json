@@ -1,0 +1,34 @@
+{
+  "INDEPENDENT_GATESIMULATOR_SMOKE": "PASS",
+  "INDEPENDENT_SUPPLEMENT_RETRIEVAL": "PASS",
+  "content_root": "5bd5679a5ca297eb1d2b2a84d1b68c900b54d98ea7cd0c5ac672ec903e5a48ea",
+  "decoder_bytes": 272629760,
+  "decoder_sha256": "d231d459368c2049a73fd3b25377a657f08d4b95a7098112748b794abc673b62",
+  "identity_asset_sha256": "d231d459368c2049a73fd3b25377a657f08d4b95a7098112748b794abc673b62",
+  "smoke": {
+    "CPU6502_LIB_DIR": "/tmp/ott-d6502-smoke/lib",
+    "PASS": true,
+    "gate_init": "PASS",
+    "outputs": {
+      "A_out": 0,
+      "P_out": 0,
+      "S_out": 0,
+      "X_out": 0,
+      "Y_out": 0
+    },
+    "scientific": false,
+    "sentinel": {
+      "A_in": 0,
+      "P_in": 0,
+      "S_in": 0,
+      "X_in": 0,
+      "Y_in": 0,
+      "ilen": 1,
+      "opcode": 234,
+      "operand": 0
+    },
+    "wall_s": 0.0777476149999643
+  },
+  "supplement_oci_digest": "sha256:b5f0938a6706f33add9e624072c1a6cab542a2fbf5eea899880778243a74ee20",
+  "supplement_oci_ref": "ghcr.io/slowomir33-arch/cae-ott-v056-d6502-supplement@sha256:b5f0938a6706f33add9e624072c1a6cab542a2fbf5eea899880778243a74ee20"
+}

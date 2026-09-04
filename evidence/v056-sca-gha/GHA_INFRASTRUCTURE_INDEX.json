@@ -1,0 +1,15 @@
+{
+  "document": "GHA_STAGE_A_INFRASTRUCTURE_INDEX",
+  "run_id": "OTT-v0.5.6-SCA-20260904T061758Z-AF83E092",
+  "previous_prestart_stop_run_id": "OTT-v0.5.6-SCA-20260904T061127Z-40797FC6",
+  "branch": "cursor/ott-v056-sca-gha-5ef6",
+  "workflow_path": ".github/workflows/ott-v056-stage-a.yml",
+  "dispatch_fallback_workflow": ".github/workflows/ci.yml job ott-v056-stage-a (workflow_dispatch only)",
+  "executor": "tools/ott_v056_stage_a/stage_a_executor_v0.5.6.py",
+  "entrypoint": "tools/ott_v056_stage_a/gha_entrypoint.sh",
+  "science_delta": 0,
+  "start_stage_a": "ABSENT",
+  "run_authorization_consumed": false,
+  "dispatch": "UNAVAILABLE_FROM_THIS_AGENT",
+  "stop": "STOP_STAGE_A_GHA_DISPATCH_UNAVAILABLE"
+}

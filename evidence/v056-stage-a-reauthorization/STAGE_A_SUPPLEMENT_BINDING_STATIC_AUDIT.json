@@ -1,0 +1,168 @@
+{
+  "all_fourteen_checks": "PASS",
+  "authorization_status": {
+    "document": "AUTHORIZATION_STATUS",
+    "new_authorization_consumed": false,
+    "new_authorization_sha256": "cb194c51d80937842a816544a3f377673f18e9206e48003c0c636711282f9e26",
+    "new_start_stage_a": "ABSENT",
+    "old_authorization_sha256": "4c6d8aff18dac5fdaa55a8a5733244b96dc49761da88efc4827388622271d358",
+    "old_authorization_status": "SUPERSEDED_UNCONSUMED",
+    "run_authorization_supersession_sha256": "eff45241cab5bb77693928fa7e53480d17fc81ee21b3bb266b0ced79ff337636",
+    "scientific_observations": 0,
+    "stage_a_execution": "NO"
+  },
+  "base_runtime_digest": "sha256:1f9fad0bb1f8d65282ff237e0538e47a4e940e472fee7e915ec9c74fffe265b8",
+  "checks": [
+    {
+      "check": "old_authorization_file_remains_byte_identical",
+      "expected": "4c6d8aff18dac5fdaa55a8a5733244b96dc49761da88efc4827388622271d358",
+      "git_status": "clean",
+      "id": 1,
+      "old_run_authorization_sha256": "4c6d8aff18dac5fdaa55a8a5733244b96dc49761da88efc4827388622271d358",
+      "result": "PASS"
+    },
+    {
+      "canonical": true,
+      "check": "supersession_json_canonical_and_hashed",
+      "id": 2,
+      "result": "PASS",
+      "run_authorization_supersession_sha256": "eff45241cab5bb77693928fa7e53480d17fc81ee21b3bb266b0ced79ff337636",
+      "sidecar": "eff45241cab5bb77693928fa7e53480d17fc81ee21b3bb266b0ced79ff337636"
+    },
+    {
+      "canonical": true,
+      "check": "new_authorization_json_canonical_and_hashed",
+      "id": 3,
+      "new_run_authorization_sha256": "cb194c51d80937842a816544a3f377673f18e9206e48003c0c636711282f9e26",
+      "result": "PASS",
+      "sidecar": "cb194c51d80937842a816544a3f377673f18e9206e48003c0c636711282f9e26"
+    },
+    {
+      "check": "new_authorization_binds_exact_supplement_identities",
+      "concept_doi_present": false,
+      "id": 4,
+      "mismatch": {},
+      "required": {
+        "authorization_generation": 2,
+        "base_runtime_digest": "sha256:1f9fad0bb1f8d65282ff237e0538e47a4e940e472fee7e915ec9c74fffe265b8",
+        "decoder6502_bytes": 272629760,
+        "decoder6502_sha256": "d231d459368c2049a73fd3b25377a657f08d4b95a7098112748b794abc673b62",
+        "decoder6502_supplement_content_root_sha256": "5bd5679a5ca297eb1d2b2a84d1b68c900b54d98ea7cd0c5ac672ec903e5a48ea",
+        "decoder6502_supplement_oci_digest": "sha256:b5f0938a6706f33add9e624072c1a6cab542a2fbf5eea899880778243a74ee20",
+        "decoder6502_supplement_oci_ref": "ghcr.io/slowomir33-arch/cae-ott-v056-d6502-supplement@sha256:b5f0938a6706f33add9e624072c1a6cab542a2fbf5eea899880778243a74ee20",
+        "run_authorization_supersession_sha256": "eff45241cab5bb77693928fa7e53480d17fc81ee21b3bb266b0ced79ff337636",
+        "scope": "SCIENTIFIC_CHALLENGE_STAGE_A_RAW_EXECUTION_ONLY",
+        "stage_a_only": true,
+        "supersedes_run_authorization_sha256": "4c6d8aff18dac5fdaa55a8a5733244b96dc49761da88efc4827388622271d358"
+      },
+      "result": "PASS"
+    },
+    {
+      "check": "new_authorization_consumed_false",
+      "consumed": false,
+      "id": 5,
+      "result": "PASS"
+    },
+    {
+      "authorization_start_stage_a": "ABSENT",
+      "check": "start_stage_a_absent",
+      "id": 6,
+      "result": "PASS",
+      "start_stage_a_json_files": []
+    },
+    {
+      "check": "stage_a_is_only_registered_ci_workflow_dispatch_execution_job",
+      "dedicated_stage_a_workflow_if": "false",
+      "id": 7,
+      "job_if": {
+        "import-matrix": "github.event_name != 'workflow_dispatch'",
+        "ott-v056-d6502-diagnostic": "false",
+        "ott-v056-d6502-supplement-freeze": "false",
+        "ott-v056-d6502-supplement-retrieve": "false",
+        "ott-v056-stage-a": "github.event_name == 'workflow_dispatch'",
+        "test": "github.event_name != 'workflow_dispatch'"
+      },
+      "result": "PASS"
+    },
+    {
+      "check": "supplement_diagnostic_freeze_retrieve_jobs_disabled",
+      "id": 8,
+      "job_if": {
+        "ott-v056-d6502-diagnostic": "false",
+        "ott-v056-d6502-supplement-freeze": "false",
+        "ott-v056-d6502-supplement-retrieve": "false"
+      },
+      "result": "PASS"
+    },
+    {
+      "auth_src": "evidence/v056-stage-a-reauthorization/RUN_AUTHORIZATION.json",
+      "check": "stage_a_prestart_pulls_supplement_by_digest_only",
+      "docker_build_in_entrypoint": false,
+      "id": 9,
+      "result": "PASS",
+      "supplement_ref_pinned": "ghcr.io/slowomir33-arch/cae-ott-v056-d6502-supplement@sha256:b5f0938a6706f33add9e624072c1a6cab542a2fbf5eea899880778243a74ee20"
+    },
+    {
+      "check": "no_decoder_generation_in_stage_a_path",
+      "generation_hits": [],
+      "id": 10,
+      "load_path": "copy frozen supplement bytes only",
+      "result": "PASS"
+    },
+    {
+      "check": "cpu6502_lib_dir_set_before_cpu_module_import",
+      "entrypoint_env_before_prestart": true,
+      "id": 11,
+      "prestart_supplement_before_load_system": true,
+      "result": "PASS"
+    },
+    {
+      "check": "nop_sentinel_precedes_start",
+      "entrypoint_prestart_before_host_start": true,
+      "host_start_requires_supplement_identity_pass": true,
+      "id": 12,
+      "prestart_nop_before_ready": true,
+      "result": "PASS"
+    },
+    {
+      "authorization_flags": {
+        "candidate_selection_authorized": false,
+        "external_label_scoring_authorized": false,
+        "held_out_authorized": false,
+        "hypothesis_verdict_authorized": false,
+        "publication_mutation_authorized": false,
+        "stage_a_only": true
+      },
+      "check": "no_candidate_heldout_scoring_verdict_path_enabled",
+      "id": 13,
+      "result": "PASS"
+    },
+    {
+      "check": "no_workflow_dispatch_occurred_during_preparation",
+      "id": 14,
+      "live_dispatch_processes": "none",
+      "result": "PASS",
+      "workflow_dispatch": "NOT PERFORMED"
+    }
+  ],
+  "created_at_utc": "2026-09-04T12:36:33Z",
+  "decoder6502_bytes": 272629760,
+  "decoder6502_sha256": "d231d459368c2049a73fd3b25377a657f08d4b95a7098112748b794abc673b62",
+  "decoder6502_supplement_oci_digest": "sha256:b5f0938a6706f33add9e624072c1a6cab542a2fbf5eea899880778243a74ee20",
+  "decoder6502_supplement_oci_ref": "ghcr.io/slowomir33-arch/cae-ott-v056-d6502-supplement@sha256:b5f0938a6706f33add9e624072c1a6cab542a2fbf5eea899880778243a74ee20",
+  "document": "STAGE_A_SUPPLEMENT_BINDING_STATIC_AUDIT",
+  "new_run_authorization_consumed": false,
+  "new_run_authorization_sha256": "cb194c51d80937842a816544a3f377673f18e9206e48003c0c636711282f9e26",
+  "old_run_authorization_sha256": "4c6d8aff18dac5fdaa55a8a5733244b96dc49761da88efc4827388622271d358",
+  "old_run_authorization_status": "SUPERSEDED_UNCONSUMED",
+  "packet_sha256": "0c6a3191cf541a96a9b2b269611af20906c81d77a862a05abff7e53f139d80b2",
+  "preparation_run_id": "OTT-v0.5.6-RA2-20260904T123031Z-621C3A6A",
+  "protocol_version": "v0.5.6",
+  "run_authorization_supersession_sha256": "eff45241cab5bb77693928fa7e53480d17fc81ee21b3bb266b0ced79ff337636",
+  "scientific_observations": 0,
+  "stage_a_execution": "NO",
+  "start_stage_a": "ABSENT",
+  "supplement_content_root_sha256": "5bd5679a5ca297eb1d2b2a84d1b68c900b54d98ea7cd0c5ac672ec903e5a48ea",
+  "verdict": "PASS",
+  "workflow_dispatch": "NOT PERFORMED"
+}

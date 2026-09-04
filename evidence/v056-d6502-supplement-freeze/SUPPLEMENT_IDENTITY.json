@@ -1,0 +1,17 @@
+{
+  "asset": "Decoder6502.bin",
+  "asset_bytes": 272629760,
+  "asset_sha256": "d231d459368c2049a73fd3b25377a657f08d4b95a7098112748b794abc673b62",
+  "base_runtime_digest": "sha256:1f9fad0bb1f8d65282ff237e0538e47a4e940e472fee7e915ec9c74fffe265b8",
+  "break6502_commit": "922af6496a2fa3b0a999e24419b5f8187f0ee98e",
+  "cae_commit": "9164499c60ebe5ced32f0005009fc4e72aca77ca",
+  "document": "OTT_RUNTIME_SUPPLEMENT_IDENTITY",
+  "freeze_run_id": "OTT-v0.5.6-D6502F-20260904T121338Z-99A2AA83",
+  "generator": "libgate6502.so gate_init -> M6502Core::M6502(true,false) HLE",
+  "libgate6502_sha256": "ba8222d520c93ac8a3989857c8b2b3cb8573196ef185747eef60d8482dcf1964",
+  "parent_diagnostic_run_id": "OTT-v0.5.6-D6502-20260904T112609Z-5B452FB6",
+  "parent_github_run_id": "33867920935",
+  "protocol_version": "v0.5.6",
+  "scientific_observations_before_freeze": 0,
+  "scientific_semantics_delta": 0
+}

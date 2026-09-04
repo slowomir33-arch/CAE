@@ -1,0 +1,10 @@
+The push refers to repository [ghcr.io/slowomir33-arch/cae-ott-v056-d6502-supplement]
+e663dd6c4397: Preparing
+c4d3e374836a: Preparing
+209816e231dc: Preparing
+2708ffb45705: Preparing
+c4d3e374836a: Pushed
+e663dd6c4397: Pushed
+209816e231dc: Pushed
+2708ffb45705: Pushed
+OTT-v0.5.6-D6502F-20260904T121338Z-99A2AA83: digest: sha256:b5f0938a6706f33add9e624072c1a6cab542a2fbf5eea899880778243a74ee20 size: 1149

@@ -1,0 +1,5 @@
+FROM scratch
+COPY Decoder6502.bin /ott-supplement/Decoder6502.bin
+COPY SUPPLEMENT_IDENTITY.json /ott-supplement/SUPPLEMENT_IDENTITY.json
+COPY SUPPLEMENT_MANIFEST.sha256 /ott-supplement/SUPPLEMENT_MANIFEST.sha256
+COPY README.runtime-supplement.txt /ott-supplement/README.runtime-supplement.txt

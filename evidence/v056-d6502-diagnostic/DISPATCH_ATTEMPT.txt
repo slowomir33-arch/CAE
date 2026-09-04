@@ -1,0 +1,12 @@
+DISPATCH_ATTEMPT = 1
+COMMAND = gh workflow run ci.yml --ref cursor/ott-v056-sca-gha-5ef6
+HEAD = 3e33f223cab6dfa4fa6e51b9fd448d718fc69794
+HTTP = 403
+ERROR = Resource not accessible by integration
+WORKAROUND = NONE
+STAGE_A_EXECUTION = NO
+START_STAGE_A = ABSENT
+RUN_AUTHORIZATION_CONSUMED = NO
+SCIENTIFIC_OBSERVATIONS = 0
+AUTHOR_ACTION = gh workflow run ci.yml --ref cursor/ott-v056-sca-gha-5ef6
+ATTEMPTED_AT_UTC = 2026-09-04T11:14:30Z

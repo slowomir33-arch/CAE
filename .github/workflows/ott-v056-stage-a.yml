@@ -1,0 +1,106 @@
+# OTT v0.5.6 Stage A — GitHub Actions execution infrastructure.
+# Environment relocation only. Scientific semantics live in the Zenodo public
+# protocol and the external wrapper; this file is outside PUBLIC_PROTOCOL_ROOT.
+#
+# Trigger: workflow_dispatch only. Do not add push / pull_request / schedule.
+# RUN_ID is generated on the runner at dispatch start; never reuse a terminal STOP id.
+#
+# DISABLED during the Decoder6502 supplement-freeze window so a dedicated
+# dispatch cannot reach START_STAGE_A / RUN_AUTHORIZATION consumption.
+name: ott-v056-stage-a
+
+on:
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+  packages: read
+
+concurrency:
+  group: ott-v056-stage-a-one-shot
+  cancel-in-progress: false
+
+jobs:
+  stage-a:
+    name: Stage A raw execution (DISABLED during Decoder6502 diagnostic)
+    if: false
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    permissions:
+      contents: read
+      packages: read
+    env:
+      OTT_RUNTIME_REF: ghcr.io/slowomir33-arch/cae-ott-v055-runtime@sha256:1f9fad0bb1f8d65282ff237e0538e47a4e940e472fee7e915ec9c74fffe265b8
+      OTT_RUNTIME_DIGEST: sha256:1f9fad0bb1f8d65282ff237e0538e47a4e940e472fee7e915ec9c74fffe265b8
+    steps:
+      - name: Initialize Stage-A execution identity
+        id: identity
+        shell: bash
+        run: |
+          set -euo pipefail
+          UTC="$(date -u +%Y%m%dT%H%M%SZ)"
+          RAND="$(python3 - <<'PY'
+          import secrets
+          print(secrets.token_hex(4).upper())
+          PY
+          )"
+          RUN_ID="OTT-v0.5.6-SCA-${UTC}-${RAND}"
+          echo "run_id=$RUN_ID" >> "$GITHUB_OUTPUT"
+          echo "OTT_RUN_ID=$RUN_ID" >> "$GITHUB_ENV"
+          echo "PARENT_RUN_ID=OTT-v0.5.6-SCA-20260904T061758Z-AF83E092" >> "$GITHUB_ENV"
+          echo "PRIOR_PRESTART_STOP_RUN_ID=OTT-v0.5.6-SCA-20260904T061127Z-40797FC6" >> "$GITHUB_ENV"
+          printf 'NEW_STAGE_A_RUN_ID=%s\n' "$RUN_ID"
+
+      - name: Checkout execution branch
+        uses: actions/checkout@v4
+
+      - name: Runner identity
+        run: |
+          set -euo pipefail
+          echo "runner.name=${{ runner.name }}"
+          echo "runner.os=${{ runner.os }}"
+          echo "runner.arch=${{ runner.arch }}"
+          echo "ImageOS=${ImageOS:-}"
+          echo "ImageVersion=${ImageVersion:-}"
+          echo "OTT_RUN_ID=${{ steps.identity.outputs.run_id }}"
+          docker --version
+          docker info
+          df -h
+          if [ "${{ runner.os }}" != "Linux" ] || [ "${{ runner.arch }}" != "X64" ]; then
+            echo "STOP_STAGE_A_RUNNER_ARCH_MISMATCH" >&2
+            exit 1
+          fi
+
+      - name: Stage A (PRESTART → START → science → seal)
+        env:
+          OTT_RUN_ID: ${{ steps.identity.outputs.run_id }}
+          PARENT_RUN_ID: ${{ env.PARENT_RUN_ID }}
+          PRIOR_PRESTART_STOP_RUN_ID: ${{ env.PRIOR_PRESTART_STOP_RUN_ID }}
+          GHCR_PULL_TOKEN: ${{ secrets.GHCR_PULL_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_ACTOR: ${{ github.actor }}
+          GITHUB_SHA: ${{ github.sha }}
+          GITHUB_RUN_ID: ${{ github.run_id }}
+          GITHUB_RUN_ATTEMPT: ${{ github.run_attempt }}
+          GITHUB_JOB: ${{ github.job }}
+          GITHUB_WORKFLOW: ${{ github.workflow }}
+          GITHUB_WORKFLOW_REF: ${{ github.workflow_ref }}
+          GITHUB_REF: ${{ github.ref }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          RUNNER_NAME: ${{ runner.name }}
+          RUNNER_OS: ${{ runner.os }}
+          RUNNER_ARCH: ${{ runner.arch }}
+        run: bash tools/ott_v056_stage_a/gha_entrypoint.sh
+
+      - name: Upload Stage-A evidence (packaging only; no further science)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: OTT-v0.5.6-STAGE-A-RAW-${{ steps.identity.outputs.run_id }}
+          path: |
+            gha-receipts/
+            ott-run/
+            ott-evidence-zip/
+          if-no-files-found: warn
+          retention-days: 90
+          include-hidden-files: false

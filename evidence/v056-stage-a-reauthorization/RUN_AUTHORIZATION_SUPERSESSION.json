@@ -1,0 +1,18 @@
+{
+  "base_runtime_digest": "sha256:1f9fad0bb1f8d65282ff237e0538e47a4e940e472fee7e915ec9c74fffe265b8",
+  "created_at_utc": "2026-09-04T12:30:31Z",
+  "decoder6502_sha256": "d231d459368c2049a73fd3b25377a657f08d4b95a7098112748b794abc673b62",
+  "decoder6502_supplement_oci_digest": "sha256:b5f0938a6706f33add9e624072c1a6cab542a2fbf5eea899880778243a74ee20",
+  "document": "OTT_RUN_AUTHORIZATION_SUPERSESSION",
+  "old_authorization_consumed": false,
+  "old_authorization_scientific_observations": 0,
+  "old_authorization_start_stage_a": "ABSENT",
+  "old_authorization_status": "SUPERSEDED_UNCONSUMED",
+  "old_run_authorization_sha256": "4c6d8aff18dac5fdaa55a8a5733244b96dc49761da88efc4827388622271d358",
+  "protocol_version": "v0.5.6",
+  "public_protocol_root_sha256": "b699fea96417a244f7276575f91f0bddd3c7e4f965a84ef167ef077a9ef0d516",
+  "public_v0_5_6_doi": "10.5281/zenodo.22293061",
+  "scientific_observations_before_supersession": 0,
+  "scientific_semantics_delta": 0,
+  "supersession_reason": "PRESTART_RUNTIME_SUPPLEMENT_BINDING"
+}

@@ -1,0 +1,7 @@
+{
+  "break6502_head": "922af6496a2fa3b0a999e24419b5f8187f0ee98e",
+  "cae_head": "9164499c60ebe5ced32f0005009fc4e72aca77ca",
+  "libgate": "/opt/ott/sources/CAE/systems/10_cpu_6502_libs/libgate6502.so",
+  "libgate_sha256": "ba8222d520c93ac8a3989857c8b2b3cb8573196ef185747eef60d8482dcf1964",
+  "pulled_digest_env": "sha256:1f9fad0bb1f8d65282ff237e0538e47a4e940e472fee7e915ec9c74fffe265b8"
+}

@@ -1,0 +1,11 @@
+{
+  "document": "AUTHORIZATION_STATUS",
+  "new_authorization_consumed": false,
+  "new_authorization_sha256": "cb194c51d80937842a816544a3f377673f18e9206e48003c0c636711282f9e26",
+  "new_start_stage_a": "ABSENT",
+  "old_authorization_sha256": "4c6d8aff18dac5fdaa55a8a5733244b96dc49761da88efc4827388622271d358",
+  "old_authorization_status": "SUPERSEDED_UNCONSUMED",
+  "run_authorization_supersession_sha256": "eff45241cab5bb77693928fa7e53480d17fc81ee21b3bb266b0ced79ff337636",
+  "scientific_observations": 0,
+  "stage_a_execution": "NO"
+}
