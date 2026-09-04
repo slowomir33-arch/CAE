@@ -1,0 +1,131 @@
+name: ott-v055-ghcr-preflight
+
+on:
+  workflow_dispatch: {}
+  push:
+    branches: [ott/v0.5.5-ghcr-preflight]
+    paths:
+      - '.github/workflows/ott-v055-ghcr-preflight.yml'
+
+permissions:
+  contents: read
+  packages: write
+
+env:
+  CANARY_IMAGE: ghcr.io/slowomir33-arch/cae-ott-v055-freeze-canary
+  EXPECTED_PAYLOAD_SHA256: 1b5d48083a4e20da1f8ae1f8bf9dc5380dfe4819b3ca729ceb7049b838b3b379
+  CANARY_RUN_ID: OTT-v0.5.5-DCB-20260903T232500Z-4D2A9F17
+
+jobs:
+  publish:
+    name: Job A - publish canary
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    outputs:
+      digest: ${{ steps.push.outputs.digest }}
+      immutable_ref: ${{ steps.push.outputs.immutable_ref }}
+      runner: ${{ steps.meta.outputs.runner }}
+    steps:
+      - name: Runner identity
+        id: meta
+        run: |
+          echo "runner=${{ runner.name }} / ${{ runner.os }} / ${{ runner.arch }}" >> "$GITHUB_OUTPUT"
+          echo "JOB_A_RUNNER=${{ runner.name }} os=${{ runner.os }} arch=${{ runner.arch }} ImageVersion=${ImageVersion:-UNKNOWN}"
+
+      - name: Create deterministic canary payload
+        id: payload
+        working-directory: ${{ runner.temp }}
+        run: |
+          set -euo pipefail
+          mkdir -p canary && cd canary
+          cat > canary.txt <<'CANARY_EOF'
+          OTT v0.5.5 DURABLE CHANNEL CANARY
+          PURPOSE=GHCR_PREFLIGHT_ONLY
+          SCIENTIFIC_CHALLENGE_RUN=NO
+          RUN_AUTHORIZATION=NOT_ISSUED
+          RUN_ID=OTT-v0.5.5-DCB-20260903T232500Z-4D2A9F17
+          CANARY_EOF
+          ACTUAL=$(sha256sum canary.txt | awk '{print $1}')
+          echo "payload_sha256=$ACTUAL"
+          if [ "$ACTUAL" != "$EXPECTED_PAYLOAD_SHA256" ]; then
+            echo "PAYLOAD_SHA_MISMATCH expected=$EXPECTED_PAYLOAD_SHA256 actual=$ACTUAL" >&2
+            exit 1
+          fi
+          cat > Dockerfile <<'DOCKERFILE_EOF'
+          FROM scratch
+          COPY canary.txt /canary.txt
+          LABEL org.opencontainers.image.source="https://github.com/slowomir33-arch/CAE"
+          LABEL org.opencontainers.image.description="OTT v0.5.5 GHCR durable-channel preflight canary; infrastructure only; no scientific content"
+          DOCKERFILE_EOF
+
+      - name: GHCR login (repository-scoped GITHUB_TOKEN)
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u "${{ github.actor }}" --password-stdin
+
+      - name: Build and push canary
+        id: push
+        working-directory: ${{ runner.temp }}/canary
+        run: |
+          set -euo pipefail
+          docker build --no-cache -t "$CANARY_IMAGE:canary" .
+          docker push "$CANARY_IMAGE:canary"
+          REF=$(docker inspect --format '{{ index .RepoDigests 0 }}' "$CANARY_IMAGE:canary")
+          echo "PUSHED_IMMUTABLE_REF=$REF"
+          DIGEST="${REF##*@}"
+          echo "PUSHED_DIGEST=$DIGEST"
+          echo "digest=$DIGEST" >> "$GITHUB_OUTPUT"
+          echo "immutable_ref=$REF" >> "$GITHUB_OUTPUT"
+
+  verify:
+    name: Job B - independent pull-by-digest
+    needs: publish
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: read
+    env:
+      CANARY_DIGEST: ${{ needs.publish.outputs.digest }}
+      PUSHED_REF: ${{ needs.publish.outputs.immutable_ref }}
+      JOB_A_RUNNER: ${{ needs.publish.outputs.runner }}
+    steps:
+      - name: Runner identity
+        run: echo "JOB_B_RUNNER=${{ runner.name }} os=${{ runner.os }} arch=${{ runner.arch }} ImageVersion=${ImageVersion:-UNKNOWN}"
+
+      - name: GHCR login (independent, read-only)
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u "${{ github.actor }}" --password-stdin
+
+      - name: Pull canary BY DIGEST on fresh runner
+        run: |
+          set -euo pipefail
+          echo "PULLING=$CANARY_IMAGE@$CANARY_DIGEST"
+          docker pull "$CANARY_IMAGE@$CANARY_DIGEST"
+
+      - name: Verify immutable identity and payload
+        id: check
+        run: |
+          set -euo pipefail
+          PULLED_REF=$(docker inspect --format '{{ index .RepoDigests 0 }}' "$CANARY_IMAGE@$CANARY_DIGEST")
+          PULLED_DIGEST="${PULLED_REF##*@}"
+          echo "PUSHED_DIGEST=$CANARY_DIGEST"
+          echo "PULLED_DIGEST=$PULLED_DIGEST"
+          if [ "$PULLED_DIGEST" != "$CANARY_DIGEST" ]; then
+            echo "DIGEST_MISMATCH" >&2
+            exit 1
+          fi
+          echo "DIGEST_IDENTITY=EXACT_MATCH"
+          CID=$(docker create "$CANARY_IMAGE@$CANARY_DIGEST" /__ott_canary_never_executed__)
+          docker cp "$CID:/canary.txt" pulled_canary.txt
+          docker rm "$CID" >/dev/null
+          PULLED_PAYLOAD_SHA=$(sha256sum pulled_canary.txt | awk '{print $1}')
+          echo "PULLED_PAYLOAD_SHA256=$PULLED_PAYLOAD_SHA"
+          if [ "$PULLED_PAYLOAD_SHA" != "$EXPECTED_PAYLOAD_SHA256" ]; then
+            echo "PAYLOAD_MISMATCH_AFTER_PULL" >&2
+            exit 1
+          fi
+          grep -qx 'PURPOSE=GHCR_PREFLIGHT_ONLY' pulled_canary.txt
+          grep -qx 'SCIENTIFIC_CHALLENGE_RUN=NO' pulled_canary.txt
+          grep -qx 'RUN_AUTHORIZATION=NOT_ISSUED' pulled_canary.txt
+          grep -qx "RUN_ID=$CANARY_RUN_ID" pulled_canary.txt
+          echo "CANARY_PAYLOAD_VERIFIED=YES"
+          echo "DURABLE_CHANNEL_GHCR_PREFLIGHT = PASS"
