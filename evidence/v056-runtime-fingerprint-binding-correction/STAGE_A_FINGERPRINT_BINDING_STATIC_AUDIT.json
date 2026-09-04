@@ -1,0 +1,142 @@
+{
+  "all_twenty_checks": "PASS",
+  "checks": [
+    {
+      "check": "generation-2 authorization file byte-identical",
+      "id": 1,
+      "result": "PASS"
+    },
+    {
+      "check": "generation-2 authorization SHA exact",
+      "id": 2,
+      "result": "PASS",
+      "sha256": "cb194c51d80937842a816544a3f377673f18e9206e48003c0c636711282f9e26"
+    },
+    {
+      "check": "runtime_fingerprint_root in authorization exact",
+      "id": 3,
+      "result": "PASS"
+    },
+    {
+      "check": "base_runtime_digest in authorization exact",
+      "id": 4,
+      "result": "PASS"
+    },
+    {
+      "authorization_paths": [
+        "evidence/v056-sca-gha/RUN_AUTHORIZATION.json",
+        "evidence/v056-stage-a-reauthorization/RUN_AUTHORIZATION.json"
+      ],
+      "check": "no generation-3 authorization",
+      "generations": [
+        {
+          "authorization_generation": null,
+          "path": "evidence/v056-sca-gha/RUN_AUTHORIZATION.json"
+        },
+        {
+          "authorization_generation": 2,
+          "path": "evidence/v056-stage-a-reauthorization/RUN_AUTHORIZATION.json"
+        }
+      ],
+      "id": 5,
+      "result": "PASS"
+    },
+    {
+      "check": "no fingerprint file synthesized",
+      "id": 6,
+      "paths": [],
+      "result": "PASS"
+    },
+    {
+      "check": "old filesystem-presence STOP removed",
+      "id": 7,
+      "result": "PASS"
+    },
+    {
+      "check": "exact OCI digest check retained",
+      "id": 8,
+      "result": "PASS"
+    },
+    {
+      "check": "cross-binding check added",
+      "id": 9,
+      "result": "PASS"
+    },
+    {
+      "check": "CPU6502 3-file scratch retained",
+      "id": 10,
+      "result": "PASS"
+    },
+    {
+      "check": "Decoder SHA/bytes retained",
+      "id": 11,
+      "result": "PASS"
+    },
+    {
+      "check": "libgate SHA retained",
+      "id": 12,
+      "result": "PASS"
+    },
+    {
+      "check": "libisa SHA/bytes retained",
+      "id": 13,
+      "result": "PASS"
+    },
+    {
+      "check": "ISA smoke before START retained",
+      "id": 14,
+      "result": "PASS"
+    },
+    {
+      "check": "Gate smoke before START retained",
+      "id": 15,
+      "result": "PASS"
+    },
+    {
+      "check": "Stage A sole workflow_dispatch job",
+      "id": 16,
+      "job_if": {
+        "import-matrix": "github.event_name != 'workflow_dispatch'",
+        "ott-v056-d6502-diagnostic": "false",
+        "ott-v056-d6502-supplement-freeze": "false",
+        "ott-v056-d6502-supplement-retrieve": "false",
+        "ott-v056-libisa6502-diagnostic": "false",
+        "ott-v056-runtime-fingerprint-diagnostic": "false",
+        "ott-v056-stage-a": "github.event_name == 'workflow_dispatch'",
+        "test": "github.event_name != 'workflow_dispatch'"
+      },
+      "result": "PASS"
+    },
+    {
+      "check": "all diagnostics/freeze/retrieve disabled",
+      "id": 17,
+      "result": "PASS"
+    },
+    {
+      "check": "no dispatch during preparation",
+      "id": 18,
+      "result": "PASS",
+      "workflow_dispatch": "NOT PERFORMED"
+    },
+    {
+      "check": "START_STAGE_A absent",
+      "id": 19,
+      "paths": [],
+      "result": "PASS"
+    },
+    {
+      "check": "scientific observations zero",
+      "consumed": false,
+      "id": 20,
+      "result": "PASS",
+      "scientific_observations": 0
+    }
+  ],
+  "document": "STAGE_A_FINGERPRINT_BINDING_STATIC_AUDIT",
+  "generation_2_authorization_sha256": "cb194c51d80937842a816544a3f377673f18e9206e48003c0c636711282f9e26",
+  "scientific_observations": 0,
+  "stage_a_execution": "NO",
+  "start_stage_a": "ABSENT",
+  "verdict": "PASS",
+  "workflow_dispatch": "NOT PERFORMED"
+}

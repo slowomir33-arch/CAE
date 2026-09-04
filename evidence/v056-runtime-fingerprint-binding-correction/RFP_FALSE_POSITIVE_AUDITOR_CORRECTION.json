@@ -1,0 +1,16 @@
+{
+  "accepted_manifest_sha_hits_in_oci": 0,
+  "accepted_root_hits_in_oci": 0,
+  "auditor_classification": "B_FINGERPRINT_NOT_EMBEDDED_AUDITOR_DECISION_REQUIRED",
+  "document": "RFP_FALSE_POSITIVE_AUDITOR_CORRECTION",
+  "false_positive_hex64": "ef46037f57eef6b84b0a2bdca42543f9961b627c420aabc8ba4d055ded6f1b52",
+  "false_positive_hex64_role": "Solver.h patch SHA256; not runtime fingerprint authority",
+  "false_positive_path": "/opt/ott/source_closure_prefreeze.json",
+  "files_seen": 83653,
+  "parent_github_run_id": 33880765807,
+  "parent_rfp_run_id": "OTT-v0.5.6-RFP-20260904T135535Z-EC702FE2",
+  "read_errors": 0,
+  "runner_classification": "C_RUNTIME_FINGERPRINT_CONTRADICTION",
+  "runner_classification_status": "REJECTED_FALSE_POSITIVE",
+  "scientific_semantics_delta": 0
+}

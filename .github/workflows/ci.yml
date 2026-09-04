@@ -7,9 +7,9 @@ on:
   workflow_dispatch:
 
 jobs:
-  # Decoder6502 freeze/retrieve/diagnostic disabled. Registered CI
-  # workflow_dispatch executes the runtime-fingerprint PRESTART diagnostic
-  # only (not dispatched by this Cursor preparation).
+  # Decoder6502 freeze/retrieve/diagnostic and runtime-fingerprint diagnostic
+  # disabled. Registered CI workflow_dispatch executes Stage A only
+  # (not dispatched by this fingerprint-binding preparation).
   ott-v056-d6502-supplement-freeze:
     name: OTT v0.5.6 Decoder6502 supplement freeze (DISABLED during Stage-A window)
     if: false
@@ -289,11 +289,12 @@ jobs:
           retention-days: 90
           include-hidden-files: false
 
-  # Runtime fingerprint PRESTART diagnostic occupies registered CI
-  # workflow_dispatch. This Cursor preparation does NOT dispatch it.
+  # Runtime fingerprint PRESTART diagnostic disabled. Registered CI
+  # workflow_dispatch now executes Stage A only (not dispatched by this
+  # fingerprint-binding preparation).
   ott-v056-runtime-fingerprint-diagnostic:
-    name: OTT v0.5.6 runtime fingerprint PRESTART diagnostic (workflow_dispatch only)
-    if: github.event_name == 'workflow_dispatch'
+    name: OTT v0.5.6 runtime fingerprint PRESTART diagnostic (DISABLED during Stage-A window)
+    if: false
     runs-on: ubuntu-latest
     timeout-minutes: 90
     permissions:
@@ -368,11 +369,12 @@ jobs:
           retention-days: 90
           include-hidden-files: false
 
-  # DISABLED during the runtime-fingerprint PRESTART diagnostic window.
-  # Stage-A START / RUN_AUTHORIZATION consumption must stay unreachable.
+  # Stage A occupies registered CI workflow_dispatch. This Cursor
+  # preparation does NOT dispatch it. START / authorization consumption
+  # remain unreachable until an authorized author dispatch.
   ott-v056-stage-a:
-    name: OTT v0.5.6 Stage A (DISABLED during runtime-fingerprint diagnostic)
-    if: false
+    name: OTT v0.5.6 Stage A (workflow_dispatch only)
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 360
     permissions:

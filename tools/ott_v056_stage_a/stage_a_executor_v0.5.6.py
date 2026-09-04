@@ -332,6 +332,7 @@ def phase_host_public_protocol(args: argparse.Namespace) -> None:
         "decoder6502_supplement_content_root_sha256": SUPPLEMENT_CONTENT_ROOT,
         "decoder6502_sha256": DECODER6502_SHA256,
         "decoder6502_bytes": DECODER6502_BYTES,
+        "runtime_fingerprint_root_sha256": FP_ROOT,
         "consumed": False,
         "start_stage_a": "ABSENT",
         "candidate_selection_authorized": False,
@@ -385,6 +386,11 @@ def phase_host_start(args: argparse.Namespace) -> None:
         raise StopError("STOP_STAGE_A_SUPPLEMENT_IDENTITY_FAILURE", "PRESTART missing SUPPLEMENT_IDENTITY PASS")
     if ready_obj.get("ISA_PRESTART_SMOKE") != "PASS" or ready_obj.get("GATE_PRESTART_SMOKE") != "PASS":
         raise StopError("STOP_STAGE_A_CPU6502_NATIVE_SMOKE_FAILURE", "PRESTART missing ISA/Gate NOP PASS")
+    if ready_obj.get("RUNTIME_FINGERPRINT_BINDING") != "PASS":
+        raise StopError(
+            "STOP_STAGE_A_RUNTIME_FINGERPRINT_BINDING_FAILURE",
+            "PRESTART missing RUNTIME_FINGERPRINT_BINDING PASS",
+        )
     if sha256_file(auth_path) != AUTH_SHA256:
         raise StopError("STOP_STAGE_A_RUN_AUTHORIZATION_MISMATCH", "auth sha before START")
     if run_dir.exists():
@@ -739,6 +745,66 @@ def _fingerprint_check() -> Dict[str, Any]:
     }
 
 
+def _runtime_fingerprint_external_binding(auth_path: Path, locator: Dict[str, Any]) -> Dict[str, Any]:
+    """Exact cross-binding of generation-2 authorization, fingerprint root, and OCI digest.
+
+    Filesystem presence of a fingerprint JSON inside the OCI image is observational
+    only and is not a STOP condition. Do not synthesize a fingerprint file.
+    """
+    if not auth_path.is_file():
+        raise StopError("STOP_STAGE_A_RUN_AUTHORIZATION_IDENTITY_FAILURE", "authorization file missing")
+    auth_raw = auth_path.read_bytes()
+    auth_sha = sha256_bytes(auth_raw)
+    if auth_sha != AUTH_SHA256:
+        raise StopError("STOP_STAGE_A_RUN_AUTHORIZATION_IDENTITY_FAILURE", f"auth sha {auth_sha}")
+    try:
+        auth = json.loads(auth_raw.decode("utf-8"))
+    except Exception as e:
+        raise StopError("STOP_STAGE_A_RUN_AUTHORIZATION_IDENTITY_FAILURE", f"authorization json {e}") from e
+
+    auth_fp = auth.get("runtime_fingerprint_root_sha256")
+    if auth_fp != FP_ROOT:
+        raise StopError(
+            "STOP_STAGE_A_RUNTIME_FINGERPRINT_BINDING_FAILURE",
+            f"runtime_fingerprint_root_sha256={auth_fp!r}",
+        )
+    auth_digest = auth.get("base_runtime_digest")
+    if auth_digest != RUNTIME_DIGEST:
+        raise StopError(
+            "STOP_STAGE_A_RUNTIME_FINGERPRINT_BINDING_FAILURE",
+            f"base_runtime_digest={auth_digest!r}",
+        )
+
+    pulled = os.environ.get("OTT_PULLED_RUNTIME_DIGEST") or os.environ.get("OTT_RUNTIME_DIGEST", "")
+    if pulled != RUNTIME_DIGEST:
+        raise StopError("STOP_STAGE_A_RUNTIME_IDENTITY_FAILURE", f"pulled digest {pulled}")
+
+    if not (pulled == auth_digest == RUNTIME_DIGEST):
+        raise StopError(
+            "STOP_STAGE_A_RUNTIME_IDENTITY_FAILURE",
+            f"cross-binding digest pulled={pulled} auth={auth_digest} frozen={RUNTIME_DIGEST}",
+        )
+    if auth_fp != FP_ROOT:
+        raise StopError(
+            "STOP_STAGE_A_RUNTIME_FINGERPRINT_BINDING_FAILURE",
+            "cross-binding fingerprint root inequality",
+        )
+
+    embedded = locator.get("fingerprint_root_seen_in") is not None or locator.get("fingerprint_file_sha_match") is not None
+    return {
+        "RUNTIME_FINGERPRINT_BINDING": "PASS",
+        "run_authorization_sha256": auth_sha,
+        "authorization_runtime_fingerprint_root_sha256": auth_fp,
+        "authorization_base_runtime_digest": auth_digest,
+        "actual_pulled_runtime_digest": pulled,
+        "frozen_base_runtime_digest": RUNTIME_DIGEST,
+        "frozen_runtime_fingerprint_root_sha256": FP_ROOT,
+        "fingerprint_embedded_in_oci": bool(embedded),
+        "locator_fingerprint_root_seen_in": locator.get("fingerprint_root_seen_in"),
+        "locator_fingerprint_file_sha_match": locator.get("fingerprint_file_sha_match"),
+    }
+
+
 def _run_public_tests(protocol_dir: Path, receipts: Path) -> Dict[str, Any]:
     pytest_deps = receipts / "pytest-deps"
     env = os.environ.copy()
@@ -1090,8 +1156,12 @@ def phase_prestart(args: argparse.Namespace) -> None:
         if ipc_head != IPC_COMMIT:
             raise StopError("STOP_STAGE_A_RUNTIME_IDENTITY_FAILURE", f"IPC HEAD {ipc_head}")
 
-        if fp["fingerprint_root_seen_in"] is None and fp["fingerprint_file_sha_match"] is None:
-            raise StopError("STOP_STAGE_A_RUNTIME_IDENTITY_FAILURE", "fingerprint root not found in image")
+        binding = _runtime_fingerprint_external_binding(Path(args.auth_path), fp)
+        write_new_text(
+            receipts / "RUNTIME_FINGERPRINT_BINDING.json",
+            dumps_scientific(binding) + "\n",
+        )
+        write_new_text(receipts / "RUNTIME_FINGERPRINT_BINDING.txt", "PASS\n")
 
         tests = _run_public_tests(protocol_dir, receipts)
         conf = _wrapper_conformance(protocol_dir, receipts)
@@ -1099,6 +1169,9 @@ def phase_prestart(args: argparse.Namespace) -> None:
         digest_env = os.environ.get("OTT_RUNTIME_DIGEST", RUNTIME_DIGEST)
         if digest_env != RUNTIME_DIGEST:
             raise StopError("STOP_STAGE_A_RUNTIME_IDENTITY_FAILURE", f"digest env {digest_env}")
+        pulled_env = os.environ.get("OTT_PULLED_RUNTIME_DIGEST", digest_env)
+        if pulled_env != RUNTIME_DIGEST:
+            raise StopError("STOP_STAGE_A_RUNTIME_IDENTITY_FAILURE", f"pulled digest env {pulled_env}")
 
         runtime_doc = {
             "STAGE_A_RUNTIME_PRECHECK": "PASS",
@@ -1109,6 +1182,8 @@ def phase_prestart(args: argparse.Namespace) -> None:
             "pandapi_head": panda_head,
             "ipc_head": ipc_head,
             "fingerprint": fp,
+            "fingerprint_embedded_in_oci": binding["fingerprint_embedded_in_oci"],
+            "RUNTIME_FINGERPRINT_BINDING": "PASS",
             "native_bridges": native_detail,
             "native_ok": native_ok,
             "lilotane": {k: v for k, v in lilo.items() if k != "help_text"},
@@ -1132,6 +1207,7 @@ def phase_prestart(args: argparse.Namespace) -> None:
             "SUPPLEMENT_IDENTITY": "PASS",
             "ISA_PRESTART_SMOKE": "PASS",
             "GATE_PRESTART_SMOKE": "PASS",
+            "RUNTIME_FINGERPRINT_BINDING": "PASS",
             "START_STAGE_A": "ABSENT",
             "SCIENTIFIC_OBSERVATIONS": 0,
             "READY_TO_START_STAGE_A": "YES",

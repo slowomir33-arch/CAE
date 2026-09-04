@@ -153,6 +153,8 @@ if [ "$PULLED_DIGEST" != "$RUNTIME_DIGEST" ]; then
   fail_before_start STOP_STAGE_A_RUNTIME_IDENTITY_FAILURE "RepoDigest mismatch pulled=$PULLED_DIGEST"
 fi
 status "PULLED_DIGEST=$PULLED_DIGEST"
+printf '%s\n' "$PULLED_DIGEST" > "$RECEIPTS/PULLED_RUNTIME_DIGEST.txt"
+export OTT_PULLED_RUNTIME_DIGEST="$PULLED_DIGEST"
 
 # --- bind exact Decoder6502 supplement (host, before any START) ---
 # Do not generate Decoder6502.bin. Pull frozen OCI by digest only.
@@ -257,6 +259,7 @@ docker run --rm \
   -e PARENT_RUN_ID="$PARENT_RUN_ID" \
   -e PRIOR_PRESTART_STOP_RUN_ID="$PRIOR_PRESTART_STOP_RUN_ID" \
   -e OTT_RUNTIME_DIGEST="$RUNTIME_DIGEST" \
+  -e OTT_PULLED_RUNTIME_DIGEST="${OTT_PULLED_RUNTIME_DIGEST:-$PULLED_DIGEST}" \
   -e OTT_WRAPPER_SHA256="$WRAPPER_SHA256" \
   -e CPU6502_LIB_DIR=/ott/cpu6502-lib \
   -v "$RECEIPTS:/ott/receipts" \
@@ -320,6 +323,7 @@ docker run --rm \
   -e PARENT_RUN_ID="$PARENT_RUN_ID" \
   -e PRIOR_PRESTART_STOP_RUN_ID="$PRIOR_PRESTART_STOP_RUN_ID" \
   -e OTT_RUNTIME_DIGEST="$RUNTIME_DIGEST" \
+  -e OTT_PULLED_RUNTIME_DIGEST="${OTT_PULLED_RUNTIME_DIGEST:-$PULLED_DIGEST}" \
   -e OTT_WRAPPER_SHA256="$WRAPPER_SHA256" \
   -e CPU6502_LIB_DIR=/ott/cpu6502-lib \
   -v "$RECEIPTS:/ott/receipts" \
