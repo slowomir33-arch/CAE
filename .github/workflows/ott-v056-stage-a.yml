@@ -3,6 +3,7 @@
 # protocol and the external wrapper; this file is outside PUBLIC_PROTOCOL_ROOT.
 #
 # Trigger: workflow_dispatch only. Do not add push / pull_request / schedule.
+# RUN_ID is generated on the runner at dispatch start; never reuse a terminal STOP id.
 name: ott-v056-stage-a
 
 on:
@@ -25,11 +26,27 @@ jobs:
       contents: read
       packages: read
     env:
-      OTT_RUN_ID: OTT-v0.5.6-SCA-20260904T061758Z-AF83E092
-      OTT_PREVIOUS_STOP_RUN_ID: OTT-v0.5.6-SCA-20260904T061127Z-40797FC6
       OTT_RUNTIME_REF: ghcr.io/slowomir33-arch/cae-ott-v055-runtime@sha256:1f9fad0bb1f8d65282ff237e0538e47a4e940e472fee7e915ec9c74fffe265b8
       OTT_RUNTIME_DIGEST: sha256:1f9fad0bb1f8d65282ff237e0538e47a4e940e472fee7e915ec9c74fffe265b8
     steps:
+      - name: Initialize Stage-A execution identity
+        id: identity
+        shell: bash
+        run: |
+          set -euo pipefail
+          UTC="$(date -u +%Y%m%dT%H%M%SZ)"
+          RAND="$(python3 - <<'PY'
+          import secrets
+          print(secrets.token_hex(4).upper())
+          PY
+          )"
+          RUN_ID="OTT-v0.5.6-SCA-${UTC}-${RAND}"
+          echo "run_id=$RUN_ID" >> "$GITHUB_OUTPUT"
+          echo "OTT_RUN_ID=$RUN_ID" >> "$GITHUB_ENV"
+          echo "PARENT_RUN_ID=OTT-v0.5.6-SCA-20260904T061758Z-AF83E092" >> "$GITHUB_ENV"
+          echo "PRIOR_PRESTART_STOP_RUN_ID=OTT-v0.5.6-SCA-20260904T061127Z-40797FC6" >> "$GITHUB_ENV"
+          printf 'NEW_STAGE_A_RUN_ID=%s\n' "$RUN_ID"
+
       - name: Checkout execution branch
         uses: actions/checkout@v4
 
@@ -41,6 +58,7 @@ jobs:
           echo "runner.arch=${{ runner.arch }}"
           echo "ImageOS=${ImageOS:-}"
           echo "ImageVersion=${ImageVersion:-}"
+          echo "OTT_RUN_ID=${{ steps.identity.outputs.run_id }}"
           docker --version
           docker info
           df -h
@@ -51,6 +69,9 @@ jobs:
 
       - name: Stage A (PRESTART → START → science → seal)
         env:
+          OTT_RUN_ID: ${{ steps.identity.outputs.run_id }}
+          PARENT_RUN_ID: ${{ env.PARENT_RUN_ID }}
+          PRIOR_PRESTART_STOP_RUN_ID: ${{ env.PRIOR_PRESTART_STOP_RUN_ID }}
           GHCR_PULL_TOKEN: ${{ secrets.GHCR_PULL_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_ACTOR: ${{ github.actor }}
@@ -59,6 +80,8 @@ jobs:
           GITHUB_RUN_ATTEMPT: ${{ github.run_attempt }}
           GITHUB_JOB: ${{ github.job }}
           GITHUB_WORKFLOW: ${{ github.workflow }}
+          GITHUB_WORKFLOW_REF: ${{ github.workflow_ref }}
+          GITHUB_REF: ${{ github.ref }}
           GITHUB_REPOSITORY: ${{ github.repository }}
           RUNNER_NAME: ${{ runner.name }}
           RUNNER_OS: ${{ runner.os }}
@@ -69,7 +92,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: OTT-v0.5.6-STAGE-A-RAW-OTT-v0.5.6-SCA-20260904T061758Z-AF83E092
+          name: OTT-v0.5.6-STAGE-A-RAW-${{ steps.identity.outputs.run_id }}
           path: |
             gha-receipts/
             ott-run/

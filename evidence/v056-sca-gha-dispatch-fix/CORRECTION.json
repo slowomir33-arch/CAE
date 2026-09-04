@@ -1,0 +1,23 @@
+{
+  "document": "GHA_STAGE_A_DISPATCH_PROVENANCE_FIX",
+  "pr": 13,
+  "branch": "cursor/ott-v056-sca-gha-5ef6",
+  "parent_audited_head": "b94f234eea9158427283e117a98332e746275843",
+  "science_delta": 0,
+  "stage_a_dispatch": "NOT_PERFORMED",
+  "run_authorization_consumed": false,
+  "start_stage_a": "ABSENT",
+  "scientific_observations": 0,
+  "dynamic_run_id_at_dispatch": true,
+  "static_terminal_stop_run_id_reuse": false,
+  "parent_run_id_provenance_only": "OTT-v0.5.6-SCA-20260904T061758Z-AF83E092",
+  "prior_prestart_stop_run_id_historical": "OTT-v0.5.6-SCA-20260904T061127Z-40797FC6",
+  "historical_stop_evidence_preserved": "evidence/v056-sca-gha/",
+  "no_new_scientific_run_id_in_this_commit": true,
+  "modified_paths": [
+    ".github/workflows/ci.yml",
+    ".github/workflows/ott-v056-stage-a.yml",
+    "tools/ott_v056_stage_a/gha_entrypoint.sh",
+    "tools/ott_v056_stage_a/stage_a_executor_v0.5.6.py"
+  ]
+}

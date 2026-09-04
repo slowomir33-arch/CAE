@@ -7,8 +7,9 @@ set -euo pipefail
 ROOT="${GITHUB_WORKSPACE:-$(pwd)}"
 cd "$ROOT"
 
-RUN_ID="${OTT_RUN_ID:-OTT-v0.5.6-SCA-20260904T061758Z-AF83E092}"
-PREV_STOP="${OTT_PREVIOUS_STOP_RUN_ID:-OTT-v0.5.6-SCA-20260904T061127Z-40797FC6}"
+RUN_ID="${OTT_RUN_ID:?OTT_RUN_ID must be injected by workflow identity step}"
+PARENT_RUN_ID="${PARENT_RUN_ID:-OTT-v0.5.6-SCA-20260904T061758Z-AF83E092}"
+PRIOR_PRESTART_STOP_RUN_ID="${PRIOR_PRESTART_STOP_RUN_ID:-OTT-v0.5.6-SCA-20260904T061127Z-40797FC6}"
 RUNTIME_REF="${OTT_RUNTIME_REF:-ghcr.io/slowomir33-arch/cae-ott-v055-runtime@sha256:1f9fad0bb1f8d65282ff237e0538e47a4e940e472fee7e915ec9c74fffe265b8}"
 RUNTIME_DIGEST="${OTT_RUNTIME_DIGEST:-sha256:1f9fad0bb1f8d65282ff237e0538e47a4e940e472fee7e915ec9c74fffe265b8}"
 EXECUTOR="$ROOT/tools/ott_v056_stage_a/stage_a_executor_v0.5.6.py"
@@ -48,12 +49,25 @@ fail_before_start() {
   echo "github.run_attempt=${GITHUB_RUN_ATTEMPT:-}"
   echo "github.job=${GITHUB_JOB:-}"
   echo "github.workflow=${GITHUB_WORKFLOW:-}"
+  echo "github.workflow_ref=${GITHUB_WORKFLOW_REF:-}"
+  echo "github.ref=${GITHUB_REF:-}"
   echo "github.repository=${GITHUB_REPOSITORY:-}"
-  echo "workflow_path=.github/workflows/ott-v056-stage-a.yml"
-  echo "PREVIOUS_PRESTART_STOP_RUN_ID=$PREV_STOP"
+  echo "PARENT_RUN_ID=$PARENT_RUN_ID"
+  echo "PRIOR_PRESTART_STOP_RUN_ID=$PRIOR_PRESTART_STOP_RUN_ID"
   echo "RUN_ID=$RUN_ID"
   docker --version || true
 } > "$RECEIPTS/RUNNER_IDENTITY.txt"
+{
+  echo "GITHUB_WORKFLOW=${GITHUB_WORKFLOW:-}"
+  echo "GITHUB_WORKFLOW_REF=${GITHUB_WORKFLOW_REF:-}"
+  echo "GITHUB_SHA=${GITHUB_SHA:-}"
+  echo "GITHUB_REF=${GITHUB_REF:-}"
+  echo "GITHUB_RUN_ID=${GITHUB_RUN_ID:-}"
+  echo "GITHUB_RUN_ATTEMPT=${GITHUB_RUN_ATTEMPT:-}"
+} > "$RECEIPTS/WORKFLOW_PROVENANCE.txt"
+echo "$PARENT_RUN_ID" > "$RECEIPTS/PARENT_RUN_ID.txt"
+echo "$PRIOR_PRESTART_STOP_RUN_ID" > "$RECEIPTS/PRIOR_PRESTART_STOP_RUN_ID.txt"
+echo "$RUN_ID" > "$RECEIPTS/RUN_ID.txt"
 
 if [ "${RUNNER_OS:-}" != "Linux" ] || [ "${RUNNER_ARCH:-}" != "X64" ]; then
   fail_before_start STOP_STAGE_A_RUNNER_ARCH_MISMATCH "os=${RUNNER_OS:-} arch=${RUNNER_ARCH:-}"
@@ -65,7 +79,15 @@ echo "$WRAPPER_SHA256" > "$RECEIPTS/WRAPPER_SHA256.txt"
 cp -a "$EXECUTOR" "$RECEIPTS/stage_a_executor_v0.5.6.py"
 cp -a "$ROOT/tools/ott_v056_stage_a/gha_entrypoint.sh" "$RECEIPTS/gha_entrypoint.sh"
 sha256sum "$ROOT/tools/ott_v056_stage_a/gha_entrypoint.sh" | awk '{print $1}' > "$RECEIPTS/GHA_ENTRYPOINT_SHA256.txt"
-sha256sum "$ROOT/.github/workflows/ott-v056-stage-a.yml" | awk '{print $1}' > "$RECEIPTS/WORKFLOW_SHA256.txt"
+if [ -f "$ROOT/.github/workflows/ci.yml" ]; then
+  sha256sum "$ROOT/.github/workflows/ci.yml" | awk '{print $1}' > "$RECEIPTS/CI_WORKFLOW_SHA256.txt"
+fi
+if [ -f "$ROOT/.github/workflows/ott-v056-stage-a.yml" ]; then
+  sha256sum "$ROOT/.github/workflows/ott-v056-stage-a.yml" | awk '{print $1}' > "$RECEIPTS/DEDICATED_WORKFLOW_SHA256.txt"
+fi
+if [ -n "${GITHUB_WORKFLOW_REF:-}" ]; then
+  printf '%s\n' "$GITHUB_WORKFLOW_REF" > "$RECEIPTS/GITHUB_WORKFLOW_REF.txt"
+fi
 
 # --- public protocol + RUN_AUTHORIZATION (host, unauthenticated) ---
 status "HOST_PUBLIC_PROTOCOL begin"
@@ -138,6 +160,8 @@ docker run --rm \
   --network none \
   -e PYTHONUNBUFFERED=1 \
   -e OTT_RUN_ID="$RUN_ID" \
+  -e PARENT_RUN_ID="$PARENT_RUN_ID" \
+  -e PRIOR_PRESTART_STOP_RUN_ID="$PRIOR_PRESTART_STOP_RUN_ID" \
   -e OTT_RUNTIME_DIGEST="$RUNTIME_DIGEST" \
   -e OTT_WRAPPER_SHA256="$WRAPPER_SHA256" \
   -v "$RECEIPTS:/ott/receipts" \
@@ -197,6 +221,8 @@ docker run --rm \
   --network none \
   -e PYTHONUNBUFFERED=1 \
   -e OTT_RUN_ID="$RUN_ID" \
+  -e PARENT_RUN_ID="$PARENT_RUN_ID" \
+  -e PRIOR_PRESTART_STOP_RUN_ID="$PRIOR_PRESTART_STOP_RUN_ID" \
   -e OTT_RUNTIME_DIGEST="$RUNTIME_DIGEST" \
   -e OTT_WRAPPER_SHA256="$WRAPPER_SHA256" \
   -v "$RECEIPTS:/ott/receipts" \

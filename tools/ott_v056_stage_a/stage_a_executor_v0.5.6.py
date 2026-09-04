@@ -30,8 +30,9 @@ from typing import Any, Dict, List, Optional, Sequence, Tuple
 # Frozen identities (must match the Stage-A packet / P2B authorization)
 # ---------------------------------------------------------------------------
 PROTOCOL_VERSION = "v0.5.6"
-RUN_ID_DEFAULT = "OTT-v0.5.6-SCA-20260904T061758Z-AF83E092"
-PREV_STOP = "OTT-v0.5.6-SCA-20260904T061127Z-40797FC6"
+# Provenance only — never a default OTT_RUN_ID / scientific identity.
+PARENT_STOP_RUN_ID = "OTT-v0.5.6-SCA-20260904T061758Z-AF83E092"
+PRIOR_PRESTART_STOP_RUN_ID = "OTT-v0.5.6-SCA-20260904T061127Z-40797FC6"
 VERSION_DOI = "10.5281/zenodo.22293061"
 CONCEPT_DOI = "10.5281/zenodo.22293060"
 SENTINEL_DOI = "10.0000/OTT-V0.5.6-TEST-DO-NOT-PUBLISH"
@@ -120,6 +121,26 @@ def exclusive_create(path: Path, data: bytes) -> None:
         os.write(fd, data)
     finally:
         os.close(fd)
+
+
+def provenance_parent_run_id() -> str:
+    return os.environ.get("PARENT_RUN_ID") or PARENT_STOP_RUN_ID
+
+
+def provenance_prior_stop_run_id() -> str:
+    return os.environ.get("PRIOR_PRESTART_STOP_RUN_ID") or PRIOR_PRESTART_STOP_RUN_ID
+
+
+def require_run_id(args: argparse.Namespace) -> str:
+    rid = (args.run_id or os.environ.get("OTT_RUN_ID") or "").strip()
+    if not rid:
+        raise StopError("STOP_STAGE_A_OUTPUT_PATH_NOT_CLEAN", "OTT_RUN_ID/--run-id must be injected")
+    if rid in {PARENT_STOP_RUN_ID}:
+        raise StopError(
+            "STOP_STAGE_A_OUTPUT_PATH_NOT_CLEAN",
+            "refusing to reuse terminal STOP RUN_ID as the new OTT_RUN_ID",
+        )
+    return rid
 
 
 def utc_now() -> str:
@@ -353,7 +374,8 @@ def phase_host_start(args: argparse.Namespace) -> None:
         "run_authorization_sha256": AUTH_SHA256,
         "output_directory": str(run_dir.resolve()),
         "authorization_consumed": True,
-        "previous_prestart_stop_run_id": PREV_STOP,
+        "parent_run_id": provenance_parent_run_id(),
+        "prior_prestart_stop_run_id": provenance_prior_stop_run_id(),
         "execution_environment": "GitHub Actions ubuntu-latest linux/X64",
         "prestart_ready_sha256": sha256_file(ready),
         "wrapper_sha256": sha256_file(wrapper),
@@ -1002,7 +1024,8 @@ def phase_prestart(args: argparse.Namespace) -> None:
             "SCIENTIFIC_OBSERVATIONS": 0,
             "READY_TO_START_STAGE_A": "YES",
             "wrapper_sha256": os.environ.get("OTT_WRAPPER_SHA256") or sha256_file(Path(args.wrapper_path)),
-            "previous_prestart_stop_run_id": PREV_STOP,
+            "parent_run_id": provenance_parent_run_id(),
+            "prior_prestart_stop_run_id": provenance_prior_stop_run_id(),
             "timestamp_utc": utc_now(),
         }
         raw = (dumps_scientific(ready) + "\n").encode("utf-8")
@@ -1273,7 +1296,7 @@ def _run_lilotane(binary: str, domain: str, problem: str, work: Path) -> Dict[st
     }
 
 
-def _seal(run_dir: Path) -> str:
+def _seal(run_dir: Path, run_id: str) -> str:
     files = []
     for p in sorted(run_dir.rglob("*")):
         if p.is_file() and p.name != "manifest.json":
@@ -1285,7 +1308,7 @@ def _seal(run_dir: Path) -> str:
     man = {
         "document": "STAGE_A_MANIFEST",
         "protocol_version": PROTOCOL_VERSION,
-        "run_id": os.environ.get("OTT_RUN_ID", RUN_ID_DEFAULT),
+        "run_id": run_id,
         "files": files,
         "counters": {
             "candidate_selection_count": 0,
@@ -1511,7 +1534,7 @@ def phase_science(args: argparse.Namespace) -> None:
         if any(counters[k] != 0 for k in counters):
             raise StopError("STOP_STAGE_A_UNAUTHORIZED_LATER_STAGE", str(counters))
 
-        root = _seal(run_dir)
+        root = _seal(run_dir, args.run_id)
         counts_doc = {
             "TRACK_A_PROBES": n_a,
             "TRACK_B_ROWS": n_b,
@@ -1534,7 +1557,7 @@ def phase_science(args: argparse.Namespace) -> None:
         try:
             if not (run_dir / "manifest.json").exists():
                 # partial seal without overwrite
-                _seal(run_dir)
+                _seal(run_dir, args.run_id)
         except Exception:
             pass
         record_stop(receipts, e.code, e.detail, consumed=True)
@@ -1548,7 +1571,7 @@ def main() -> int:
     p.add_argument("--protocol-dir", default="")
     p.add_argument("--run-dir", default="")
     p.add_argument("--auth-path", default="")
-    p.add_argument("--run-id", default=RUN_ID_DEFAULT)
+    p.add_argument("--run-id", default="")
     p.add_argument("--wrapper-path", default="")
     p.add_argument("--zip-dir", default="")
     p.add_argument("--start-present", default="no")
@@ -1556,6 +1579,8 @@ def main() -> int:
     p.add_argument("--verdict", default="")
     args = p.parse_args()
     try:
+        if args.phase in {"host-public-protocol", "host-start", "host-package", "prestart", "science"}:
+            args.run_id = require_run_id(args)
         if args.phase == "host-public-protocol":
             phase_host_public_protocol(args)
         elif args.phase == "host-start":
