@@ -4,6 +4,9 @@
 #
 # Trigger: workflow_dispatch only. Do not add push / pull_request / schedule.
 # RUN_ID is generated on the runner at dispatch start; never reuse a terminal STOP id.
+#
+# DISABLED during the Decoder6502 PRESTART diagnostic window so a dedicated
+# dispatch cannot reach START_STAGE_A / RUN_AUTHORIZATION consumption.
 name: ott-v056-stage-a
 
 on:
@@ -19,7 +22,8 @@ concurrency:
 
 jobs:
   stage-a:
-    name: Stage A raw execution
+    name: Stage A raw execution (DISABLED during Decoder6502 diagnostic)
+    if: false
     runs-on: ubuntu-latest
     timeout-minutes: 360
     permissions:
