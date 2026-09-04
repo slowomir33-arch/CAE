@@ -1,0 +1,41 @@
+OTT v0.5.5 FINAL FREEZE EVIDENCE — mobile HTTPS downloads
+Repo is public. Open any URL below in the phone browser; GitHub will save/open the file.
+
+Folder (easiest on phone — tap a file, then Raw / Download):
+https://github.com/slowomir33-arch/CAE/tree/ott/v0.5.5-final-freeze/evidence
+
+Pinned commit (byte-identical to this export): 20deb5a201fbc9621345177a1b6b273b00bd89c1
+
+Direct download (tap to save):
+
+1) FINALIZE_FREEZE.json
+   1936 bytes
+   SHA-256 d0cc6aec46eafbd70f94e18d6ad8ee55b72b3803d979b626348bd5f97a4173cd
+   https://github.com/slowomir33-arch/CAE/raw/20deb5a201fbc9621345177a1b6b273b00bd89c1/evidence/FINALIZE_FREEZE.json
+   https://raw.githubusercontent.com/slowomir33-arch/CAE/20deb5a201fbc9621345177a1b6b273b00bd89c1/evidence/FINALIZE_FREEZE.json
+
+2) OTT_v0.5.5_FINAL_FREEZE_REPORT_20260904T013817Z_E0F1128A.md
+   11344 bytes
+   SHA-256 7f0c36ad6147c5e51ded285571a7ee1072e5f1e5206296e7836c2d7d19a5efe3
+   https://github.com/slowomir33-arch/CAE/raw/20deb5a201fbc9621345177a1b6b273b00bd89c1/evidence/OTT_v0.5.5_FINAL_FREEZE_REPORT_20260904T013817Z_E0F1128A.md
+   https://raw.githubusercontent.com/slowomir33-arch/CAE/20deb5a201fbc9621345177a1b6b273b00bd89c1/evidence/OTT_v0.5.5_FINAL_FREEZE_REPORT_20260904T013817Z_E0F1128A.md
+
+3) OTT_v0.5.5_FINAL_FREEZE_EVIDENCE_INDEX_20260904T020254Z_6A960332.json
+   4725 bytes
+   SHA-256 2d286cedd16c6b80f19105ef328d52d5de9b2fae7bfdb4ffb4fd25c3aa8c5417
+   https://github.com/slowomir33-arch/CAE/raw/20deb5a201fbc9621345177a1b6b273b00bd89c1/evidence/OTT_v0.5.5_FINAL_FREEZE_EVIDENCE_INDEX_20260904T020254Z_6A960332.json
+   https://raw.githubusercontent.com/slowomir33-arch/CAE/20deb5a201fbc9621345177a1b6b273b00bd89c1/evidence/OTT_v0.5.5_FINAL_FREEZE_EVIDENCE_INDEX_20260904T020254Z_6A960332.json
+
+4) ZIP bundle (all receipts + supporting evidence; no secrets; no sealed blind ZIP)
+   17036 bytes
+   SHA-256 6a169c4f5e43131c8f124fc4fdc9933c1cfd2c4cd8f044b0f62d061a4626d4e5
+   https://github.com/slowomir33-arch/CAE/raw/20deb5a201fbc9621345177a1b6b273b00bd89c1/evidence/OTT_v0.5.5_FINAL_FREEZE_EVIDENCE_EXPORT_20260904T020254Z_6A960332.zip
+   https://raw.githubusercontent.com/slowomir33-arch/CAE/20deb5a201fbc9621345177a1b6b273b00bd89c1/evidence/OTT_v0.5.5_FINAL_FREEZE_EVIDENCE_EXPORT_20260904T020254Z_6A960332.zip
+
+Do not merge this branch to main. Evidence-only export.
+SCIENTIFIC_CHALLENGE_RUN = NO
+RUN_AUTHORIZATION = NOT ISSUED
+
+5) OTT_v0.5.5_FINAL_FREEZE_EVIDENCE_CLOSURE_REPORT_20260904T020254Z_6A960332.md
+   (this evidence-closure report; hash filled after commit if rewritten)
+   https://github.com/slowomir33-arch/CAE/raw/ott/v0.5.5-final-freeze/evidence/OTT_v0.5.5_FINAL_FREEZE_EVIDENCE_CLOSURE_REPORT_20260904T020254Z_6A960332.md
