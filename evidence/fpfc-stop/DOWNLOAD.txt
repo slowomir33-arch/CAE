@@ -1,0 +1,4 @@
+OTT v0.5.5 FPFC STOP — specification insufficient
+Folder: https://github.com/slowomir33-arch/CAE/tree/cursor/ott-v055-fpfc-spec-stop-d621/evidence/fpfc-stop
+Verdict: STOP_FINAL_PUBLIC_FREEZE_CANDIDATE_SPEC_INSUFFICIENT
+No DOI, no publication, no science, no harness.

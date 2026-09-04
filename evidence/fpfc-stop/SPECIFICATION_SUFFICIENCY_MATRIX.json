@@ -1,0 +1,212 @@
+{
+  "document": "SPECIFICATION_SUFFICIENCY_MATRIX",
+  "run_id": "OTT-v0.5.5-FPFC-20260904T023620Z-D0CDAEE8",
+  "created_at_utc": "2026-09-04T02:37:06Z",
+  "parent_zip_sha256": "a1becacfa4b38104d4f7e47caf6f0a7e7da475152c0b5da3497b3a28d5451018",
+  "parent_prefreeze_root_sha256": "db6e1d45946b02c2226eb2a08c1ac431dfe74ff1d5241eec52ecd6eb55b7692b",
+  "verdict": "STOP_FINAL_PUBLIC_FREEZE_CANDIDATE_SPEC_INSUFFICIENT",
+  "specification_sufficiency": "FAIL",
+  "mechanical_harness": "NOT_IMPLEMENTED",
+  "authority_scope": "v0.5.5 PREFREEZE sealed files only. v0.4 Zenodo freeze inspected only as a gap diagnostic (v0.5.5 lacks protocol/seed_policy.json); v0.4 bytes are not used as substitute authority.",
+  "items": [
+    {
+      "id": "cae_systems_conditions",
+      "classification": "EXPLICITLY_FROZEN",
+      "sources": ["adapters/CAE_ADAPTER_SPEC.md", "protocol/external_tracks.json"],
+      "note": "Four systems and named positive/negative conditions including noise exclusion."
+    },
+    {
+      "id": "replicate_count",
+      "classification": "EXPLICITLY_FROZEN",
+      "sources": ["adapters/CAE_ADAPTER_SPEC.md", "protocol/external_tracks.json"],
+      "note": "32 replicates per condition."
+    },
+    {
+      "id": "probe_count",
+      "classification": "EXPLICITLY_FROZEN",
+      "sources": ["adapters/CAE_ADAPTER_SPEC.md", "protocol/external_tracks.json"],
+      "note": "128 intervention probes per replicate."
+    },
+    {
+      "id": "seed_input_fields",
+      "classification": "EXPLICITLY_FROZEN",
+      "sources": ["protocol/external_tracks.json"],
+      "note": "Formula fields: public_v0.5_DOI, CAE_commit, system, condition, replicate_index."
+    },
+    {
+      "id": "seed_byte_string_encoding",
+      "classification": "UNSPECIFIED",
+      "required_for_decisive_behavior": true,
+      "sources": ["protocol/external_tracks.json"],
+      "note": "No UTF-8/ASCII/hex rule. v0.5.5 has no protocol/seed_policy.json (present in v0.4 freeze, still without encoding)."
+    },
+    {
+      "id": "seed_delimiter_canonicalization",
+      "classification": "UNSPECIFIED",
+      "required_for_decisive_behavior": true,
+      "sources": ["protocol/external_tracks.json"],
+      "note": "`||` may mean cryptographic concatenation or a literal two-pipe delimiter. Unspecified."
+    },
+    {
+      "id": "cae_commit_token_for_seed",
+      "classification": "SCIENTIFIC_DECISION_REQUIRED",
+      "required_for_decisive_behavior": true,
+      "sources": ["adapters/CAE_ADAPTER_SPEC.md", "protocol/source_closure_prefreeze.json"],
+      "note": "Adapter cites MelouxM/CAE@d91f65b5620423d3eae98478bc9843f4a40e361a; closure pin is slowomir33-arch/CAE@9164499c60ebe5ced32f0005009fc4e72aca77ca. Which string is CAE_commit is a scientific identity choice."
+    },
+    {
+      "id": "replicate_indexing_origin",
+      "classification": "UNSPECIFIED",
+      "required_for_decisive_behavior": true,
+      "sources": ["protocol/external_tracks.json", "adapters/CAE_ADAPTER_SPEC.md"],
+      "note": "replicate_index 0..31 vs 1..32 not stated."
+    },
+    {
+      "id": "deterministic_output_ordering",
+      "classification": "UNSPECIFIED",
+      "required_for_decisive_behavior": true,
+      "sources": ["protocol/external_tracks.json"],
+      "note": "No frozen order for systems × conditions × replicates × probes."
+    },
+    {
+      "id": "cae_timeout_failure_behavior",
+      "classification": "UNSPECIFIED",
+      "required_for_decisive_behavior": true,
+      "sources": ["protocol/failure_policy.md"],
+      "note": "IPC ledger 20s/4GiB is frozen; CAE probe timeout/crash/NaN policy is not."
+    },
+    {
+      "id": "retry_behavior",
+      "classification": "UNSPECIFIED",
+      "required_for_decisive_behavior": true,
+      "sources": ["protocol/failure_policy.md"],
+      "note": "No protocol-defined retry for CAE or IPC attempts."
+    },
+    {
+      "id": "cae_command_api_entry",
+      "classification": "UNSPECIFIED",
+      "required_for_decisive_behavior": true,
+      "sources": ["protocol/external_tracks.json", "adapters/CAE_ADAPTER_SPEC.md"],
+      "note": "upstream_test paths name CAE unit-test modules, not a 32×128 interventional V API. How to draw 128 probes, apply HL/LL interventions, and compute per-probe equivalence is not specified as an executable entrypoint."
+    },
+    {
+      "id": "ipc_domain_inventory",
+      "classification": "EXPLICITLY_FROZEN",
+      "sources": ["adapters/IPC_HTN_CX_ADAPTER_SPEC.md", "protocol/external_tracks.json"],
+      "note": "Rover-GTOHP, Satellite-GTOHP, Transport, Woodworking; total order only."
+    },
+    {
+      "id": "ipc_split_salt_doi_field",
+      "classification": "SCIENTIFIC_DECISION_REQUIRED",
+      "required_for_decisive_behavior": true,
+      "sources": ["adapters/IPC_HTN_CX_ADAPTER_SPEC.md", "protocol/external_tracks.json", "RELEASE_NOTES.md"],
+      "note": "Adapter instance split uses public_v0.4_DOI; external_tracks.json and RELEASE_NOTES use public_v0.5_DOI. Conflicting frozen texts."
+    },
+    {
+      "id": "relative_path_canonicalization",
+      "classification": "UNSPECIFIED",
+      "required_for_decisive_behavior": true,
+      "sources": ["adapters/IPC_HTN_CX_ADAPTER_SPEC.md", "protocol/external_tracks.json"],
+      "note": "relative_problem_path: base directory, POSIX separators, total-order prefix, symlink/case rules unspecified."
+    },
+    {
+      "id": "eligible_problem_definition",
+      "classification": "UNSPECIFIED",
+      "required_for_decisive_behavior": true,
+      "sources": ["adapters/IPC_HTN_CX_ADAPTER_SPEC.md"],
+      "note": "'eligible problem paths' not defined (extension, total-order subtree, parser-accepted only, etc.)."
+    },
+    {
+      "id": "split_hash_sort_representation",
+      "classification": "UNSPECIFIED",
+      "required_for_decisive_behavior": true,
+      "sources": ["protocol/external_tracks.json"],
+      "note": "Sort by SHA256: raw 32 bytes vs lowercase hex vs uppercase hex is unspecified."
+    },
+    {
+      "id": "split_threshold_bucket_rule",
+      "classification": "EXPLICITLY_FROZEN",
+      "sources": ["adapters/IPC_HTN_CX_ADAPTER_SPEC.md", "protocol/external_tracks.json"],
+      "note": "After sort: keep first 20; first 8 development, next 12 evaluation."
+    },
+    {
+      "id": "baseline_feasibility_definition",
+      "classification": "UNSPECIFIED",
+      "required_for_decisive_behavior": true,
+      "sources": ["adapters/IPC_HTN_CX_ADAPTER_SPEC.md", "protocol/external_tracks.json"],
+      "note": "'solves' under 20s/4GiB: exit code, plan file, verifier, SAT/UNSAT, partial plans unspecified. Planner CLI/options unspecified beyond pin."
+    },
+    {
+      "id": "where_stage_a_ends",
+      "classification": "SCIENTIFIC_DECISION_REQUIRED",
+      "required_for_decisive_behavior": true,
+      "sources": ["protocol/phase_gates.md", "adapters/IPC_HTN_CX_ADAPTER_SPEC.md"],
+      "note": "v0.5 phase_gates: Gates 2–7 identical to v0.4. v0.4 Gate 4 chains DOI-salted CAE seeds, HTN split, development baselines, AND candidate selection in one gate. Adapter sections distinguish split, feasibility, and selection, but inherited Gate 4 does not isolate a Stage-A-only command."
+    },
+    {
+      "id": "where_candidate_selection_begins",
+      "classification": "EXPLICITLY_FROZEN",
+      "sources": ["adapters/IPC_HTN_CX_ADAPTER_SPEC.md", "protocol/external_tracks.json"],
+      "note": "Semantic start is parsing Lilotane development witnesses under reused/unused rules. Isolation from Gate 4 remainder is the unresolved item above."
+    },
+    {
+      "id": "persistence_output_schema",
+      "classification": "UNSPECIFIED",
+      "required_for_decisive_behavior": true,
+      "sources": ["src/adapter_contract.py"],
+      "note": "ExternalRecord validates scoring-time fields, not a Stage-A raw-output schema."
+    },
+    {
+      "id": "duplicate_collision_handling",
+      "classification": "UNSPECIFIED",
+      "required_for_decisive_behavior": true,
+      "sources": [],
+      "note": "No rule for hash collisions or duplicate paths after sort."
+    },
+    {
+      "id": "existing_output_behavior",
+      "classification": "UNSPECIFIED",
+      "required_for_decisive_behavior": true,
+      "sources": [],
+      "note": "Overwrite vs refuse vs merge not frozen."
+    },
+    {
+      "id": "resume_behavior",
+      "classification": "UNSPECIFIED",
+      "required_for_decisive_behavior": true,
+      "sources": [],
+      "note": "No frozen resume/restart rule for partial Stage A."
+    }
+  ],
+  "unresolved_required_for_decisive_behavior": [
+    "seed_byte_string_encoding",
+    "seed_delimiter_canonicalization",
+    "cae_commit_token_for_seed",
+    "replicate_indexing_origin",
+    "deterministic_output_ordering",
+    "cae_timeout_failure_behavior",
+    "retry_behavior",
+    "cae_command_api_entry",
+    "ipc_split_salt_doi_field",
+    "relative_path_canonicalization",
+    "eligible_problem_definition",
+    "split_hash_sort_representation",
+    "baseline_feasibility_definition",
+    "where_stage_a_ends",
+    "persistence_output_schema",
+    "duplicate_collision_handling",
+    "existing_output_behavior",
+    "resume_behavior"
+  ],
+  "counts": {
+    "EXPLICITLY_FROZEN": 7,
+    "MECHANICALLY_DERIVABLE": 0,
+    "SCIENTIFIC_DECISION_REQUIRED": 3,
+    "UNSPECIFIED": 15
+  },
+  "harness_rule_applied": "Do not invent delimiter, 0/1 index, timeout, feasibility meaning, retry, or CAE API. STOP.",
+  "scientific_challenge_run": "NO",
+  "run_authorization": "NOT ISSUED",
+  "publication": "NO",
+  "public_v0_5_doi": "NOT RESERVED"
+}

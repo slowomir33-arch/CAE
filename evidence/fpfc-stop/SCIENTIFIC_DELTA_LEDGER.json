@@ -1,0 +1,15 @@
+{
+  "document": "SCIENTIFIC_DELTA_LEDGER",
+  "run_id": "OTT-v0.5.5-FPFC-20260904T023620Z-D0CDAEE8",
+  "created_at_utc": "2026-09-04T02:37:06Z",
+  "parent_prefreeze_zip_sha256": "a1becacfa4b38104d4f7e47caf6f0a7e7da475152c0b5da3497b3a28d5451018",
+  "parent_prefreeze_root_sha256": "db6e1d45946b02c2226eb2a08c1ac431dfe74ff1d5241eec52ecd6eb55b7692b",
+  "parent_bytes_modified": [],
+  "added_in_this_stop_evidence_only": [
+    {"path": "SPECIFICATION_SUFFICIENCY_MATRIX.json", "class": "DOCUMENTATION_ONLY"},
+    {"path": "SCIENTIFIC_DELTA_LEDGER.json", "class": "DOCUMENTATION_ONLY"},
+    {"path": "OTT_v0.5.5_FPFC_STOP_REPORT.md", "class": "DOCUMENTATION_ONLY"}
+  ],
+  "SCIENTIFIC_SEMANTICS_CHANGE": 0,
+  "note": "No mechanical harness and no runtime-binding rewrite of parent files. STOP before candidate protocol mutation."
+}
