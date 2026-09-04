@@ -1,0 +1,19 @@
+{
+  "cae_commit": "9164499c60ebe5ced32f0005009fc4e72aca77ca",
+  "d19": "digest -> 8 uint32 BE words -> SeedSequence -> spawn(128) -> spawn(3) SAMPLER/GROUND/PATH",
+  "decisive_derivation": "NOT_RUN",
+  "double_pipe": "length-prefixed concatenation FIELD(x)=uint32_be(len(BYTES(x)))||BYTES(x); no literal delimiter",
+  "encoding": "Unicode NFC, UTF-8 no BOM, no surrounding whitespace, no silent trim",
+  "forbidden": [
+    "local clock seed",
+    "pilot-based seeds",
+    "v0.3 synthetic seeds",
+    "legacy MelouxM commit in preimage"
+  ],
+  "numpy_version": "2.2.0",
+  "probe_index": "0..127",
+  "public_v0_5_6_DOI": "10.5281/zenodo.22293061",
+  "replicate_index": "0..31",
+  "split_doi_field": "public_v0.5.6_DOI (not public_v0.4_DOI)",
+  "status": "FROZEN_FOR_V0.5.6_CANDIDATE_P1"
+}

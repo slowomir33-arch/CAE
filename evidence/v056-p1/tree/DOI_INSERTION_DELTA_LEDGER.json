@@ -1,0 +1,105 @@
+{
+  "R3_TO_P1_SCIENTIFIC_SEMANTICS_CHANGE": 0,
+  "UNEXPECTED": [],
+  "added": [
+    "CANDIDATE_MANIFEST.sha256",
+    "CANDIDATE_ROOT_SHA256.txt",
+    "DOI_INSERTION_DELTA_LEDGER.json",
+    "REPORT.md",
+    "ZENODO_DOI_RESERVATION_RECEIPT.json",
+    "ZENODO_DOI_RESERVATION_RECEIPT.sha256",
+    "ZENODO_PUBLICATION_METADATA.json",
+    "tests/test_v056_p1.py"
+  ],
+  "changed": [
+    "README.md",
+    "parent/PARENT_IDENTITY.json",
+    "protocol/RUN_AUTHORIZATION.template.json",
+    "protocol/execution_spec_v0.5.6.json",
+    "protocol/seed_policy_v0.5.6.json",
+    "src/ott_v056/__init__.py"
+  ],
+  "classification": {
+    "DERIVED_HASH_OR_MANIFEST": [
+      "CANDIDATE_MANIFEST.sha256",
+      "CANDIDATE_ROOT_SHA256.txt",
+      "DOI_INSERTION_DELTA_LEDGER.json"
+    ],
+    "DOI_BINDING": [
+      "protocol/execution_spec_v0.5.6.json",
+      "protocol/seed_policy_v0.5.6.json",
+      "protocol/RUN_AUTHORIZATION.template.json",
+      "README.md"
+    ],
+    "PUBLICATION_METADATA": [
+      "ZENODO_DOI_RESERVATION_RECEIPT.json",
+      "ZENODO_DOI_RESERVATION_RECEIPT.sha256",
+      "ZENODO_PUBLICATION_METADATA.json",
+      "src/ott_v056/__init__.py",
+      "parent/PARENT_IDENTITY.json",
+      "REPORT.md"
+    ],
+    "TEST_EXPECTATION": [
+      "tests/test_v056_p1.py"
+    ],
+    "UNEXPECTED": []
+  },
+  "deposition_id": 22293061,
+  "document": "DOI_INSERTION_DELTA_LEDGER",
+  "parent_r3_commit": "91d95b369b7bd2b10a5d03dc59dc259cd66de22d",
+  "parent_r3_root": "041bb7f771f1baf814119bc5030cfcca9669f31e5ab289639247c8939aef9aab",
+  "parent_r3_run_id": "OTT-v0.5.6-IPC-R3-20260904T040804Z-4F600593",
+  "parent_r3_zip_sha256": "0b36d0f7747a756c18da49b91302920d4a18dea9453be9172fa8eeea9a2fb64e",
+  "removed": [],
+  "reserved_doi": "10.5281/zenodo.22293061",
+  "scientific_files_byte_identical": [
+    "protocol/CAE_EXECUTION_MAPPING_v0.5.6.json",
+    "protocol/D21_SUPERSESSION_v0.5.6.json",
+    "protocol/IPC_ELIGIBLE_PROBLEM_MANIFEST_v0.5.6.json",
+    "protocol/NUMPY_RNG_TEST_VECTORS_v0.5.6.json",
+    "protocol/decisions_v0.5.6.json",
+    "protocol/runtime_binding_v0.5.6.json",
+    "src/ott_v056/cae_raw.py",
+    "src/ott_v056/canonical.py",
+    "src/ott_v056/cli.py",
+    "src/ott_v056/grounding.py",
+    "src/ott_v056/ipc_official.py",
+    "src/ott_v056/mapping.py",
+    "src/ott_v056/output.py",
+    "src/ott_v056/paths.py",
+    "src/ott_v056/rng.py",
+    "src/ott_v056/stages.py",
+    "src/ott_v056/v_metric.py",
+    "tests/test_v056.py",
+    "tests/test_v056_r2.py",
+    "tests/test_v056_r3.py",
+    "tests/test_vectors.json"
+  ],
+  "unchanged_byte_identical": [
+    "R2_TO_R3_DELTA_LEDGER.json",
+    "REPORT.md",
+    "SCIENTIFIC_DELTA_LEDGER_v0.5.6.json",
+    "protocol/CAE_EXECUTION_MAPPING_v0.5.6.json",
+    "protocol/D21_SUPERSESSION_v0.5.6.json",
+    "protocol/IPC_ELIGIBLE_PROBLEM_MANIFEST_v0.5.6.json",
+    "protocol/NUMPY_RNG_TEST_VECTORS_v0.5.6.json",
+    "protocol/decisions_v0.5.6.json",
+    "protocol/runtime_binding_v0.5.6.json",
+    "src/ott_v056/cae_raw.py",
+    "src/ott_v056/canonical.py",
+    "src/ott_v056/cli.py",
+    "src/ott_v056/grounding.py",
+    "src/ott_v056/ipc_official.py",
+    "src/ott_v056/mapping.py",
+    "src/ott_v056/output.py",
+    "src/ott_v056/paths.py",
+    "src/ott_v056/rng.py",
+    "src/ott_v056/stages.py",
+    "src/ott_v056/v_metric.py",
+    "tests/test_v056.py",
+    "tests/test_v056_r2.py",
+    "tests/test_v056_r3.py",
+    "tests/test_vectors.json"
+  ],
+  "unexpected_count": 0
+}
