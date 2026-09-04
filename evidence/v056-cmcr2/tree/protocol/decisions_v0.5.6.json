@@ -1,0 +1,122 @@
+[
+  {
+    "decision": "All textual seed/split fields are Unicode NFC, encoded as UTF-8 without BOM. Surrounding whitespace is forbidden and MUST NOT be silently trimmed. DOI is used exactly as reserved/published; git SHA is lowercase 40-hex; protocol identifiers are used byte-for-byte after NFC.",
+    "id": "D01",
+    "topic": "seed_text_encoding"
+  },
+  {
+    "decision": "In all v0.5.6 hash preimages, `||` means concatenation of canonical length-prefixed fields. FIELD(x)=uint32_be(len(BYTES(x))) || BYTES(x). Integer fields use canonical ASCII decimal (no sign, no leading zero except `0`) as BYTES(x). No literal delimiter byte is inserted.",
+    "id": "D02",
+    "topic": "meaning_of_double_pipe"
+  },
+  {
+    "decision": "`CAE_commit` is the exact CAE source commit executed by the immutable runtime: 9164499c60ebe5ced32f0005009fc4e72aca77ca. Any upstream/legacy CAE commit may be recorded as provenance only and MUST NOT enter the v0.5.6 seed preimage.",
+    "id": "D03",
+    "topic": "CAE_commit_for_seed"
+  },
+  {
+    "decision": "Replicate indices are zero-based integers 0..31. Where probe indices are materialized, they are zero-based 0..127. The frozen 32×128 cardinality is unchanged.",
+    "id": "D04",
+    "topic": "replicate_index_origin"
+  },
+  {
+    "decision": "Preserve explicit array order from the frozen track specification. If a collection has no explicit order, sort identifiers by canonical UTF-8 byte sequence. Within each system/condition: replicate_index ascending, then probe_index ascending. Track-B domains follow explicit frozen order; otherwise canonical UTF-8 sort; problems sort by the split rule defined in D12.",
+    "id": "D05",
+    "topic": "deterministic_output_order"
+  },
+  {
+    "decision": "No new per-replicate scientific timeout is imposed on CAE. A stage-level infrastructure watchdog may exist only to prevent orphaned execution; watchdog expiry, exception, crash, non-finite mandatory value, or harness/runtime error is INFRASTRUCTURE_FAILURE and terminates the run with STOP. It is never converted into a negative scientific result.",
+    "id": "D06",
+    "topic": "CAE_timeout_failure"
+  },
+  {
+    "decision": "No automatic retry of a scientific unit after its execution begins. Pre-start transport/authentication retries are allowed if they cannot affect scientific state. Any post-start unit failure causes STOP with partial evidence preserved. Result-dependent retry is forbidden.",
+    "id": "D07",
+    "topic": "retry_policy"
+  },
+  {
+    "decision": "The v0.5.6 harness is the canonical OTT execution surface. It must invoke the pinned CAE implementation directly through the unique code path that computes the quantities named by the frozen CAE adapter specification; CAE unit-test runners are not the challenge API. Glue/wrapper code is authorized, but mathematical definitions, metric parameters, systems, conditions and probe-generation semantics may not change. If two plausible CAE call paths produce materially different semantics and the adapter spec cannot disambiguate them, STOP_IMPLEMENTATION_MAPPING_AMBIGUOUS.",
+    "id": "D08",
+    "topic": "CAE_execution_API"
+  },
+  {
+    "decision": "Track-B split salt uses `public_v0.5_DOI`/the DOI of the final public v0.5.6 protocol record. The `public_v0.4_DOI` reference is historical/legacy and MUST NOT be used for the new decisive split.",
+    "id": "D09",
+    "topic": "IPC_split_DOI"
+  },
+  {
+    "decision": "Canonical path is the POSIX relative path from the frozen domain root: `/` separators, Unicode NFC, no leading `./`, no empty segment, no `.` or `..`, no symlink traversal, and UTF-8 encoding under D01. Absolute paths are forbidden.",
+    "id": "D10",
+    "topic": "relative_problem_path_canonicalization"
+  },
+  {
+    "decision": "Eligible problems are all regular non-symlink files under each frozen Track-B domain root that the pinned problem parser accepts as a problem instance with its declared companion domain model. Domain-definition files themselves are excluded. Before DOI reservation, generate and freeze an `IPC_ELIGIBLE_PROBLEM_MANIFEST.json` containing canonical paths, file SHA-256 and parser-acceptance result. Any parser ambiguity or duplicate canonical path is STOP.",
+    "id": "D11",
+    "topic": "eligible_problem_definition"
+  },
+  {
+    "decision": "Sort by the raw 32-byte SHA-256 digest in unsigned lexicographic byte order. Lowercase hexadecimal is display-only and has the same primary ordering. Exact digest ties are broken by canonical path UTF-8 bytes. A true digest collision between distinct canonical inputs is fatal STOP.",
+    "id": "D12",
+    "topic": "SHA256_sort_representation"
+  },
+  {
+    "decision": "For the frozen 20 s / 4 GiB Track-B ledger, `SOLVED` means: process starts successfully, completes before wall-clock 20.000 s, peak RSS does not exceed 4 GiB, exits with code 0, emits a non-empty plan/result in the expected frozen format, and that result is parseable by the pinned parser; if a pinned validator is available for the track, it must also accept. Timeout, OOM, non-zero exit, empty/malformed plan, or validator rejection => `UNSOLVED`. Harness/runtime/infrastructure faults => STOP, not UNSOLVED.",
+    "id": "D13",
+    "topic": "baseline_solves_semantics"
+  },
+  {
+    "decision": "Stage A consists only of: runtime/protocol precheck; DOI-salted CAE seed derivation; decisive CAE 32×128 raw execution; Track-B eligible-manifest verification; DOI-salted split derivation; and frozen baseline-feasibility execution/ledger. Stage A ENDS after raw outputs + baseline ledger are sealed. Candidate selection begins Stage B and is separately authorized. Held-out ablation, external-label scoring and hypothesis verdict remain later stages.",
+    "id": "D14",
+    "topic": "Stage_A_boundary"
+  },
+  {
+    "decision": "Stage-A evidence uses canonical UTF-8 JSONL plus a canonical manifest. Track-A has one row per probe with protocol/run/runtime IDs, system, condition, replicate_index, probe_index, replicate seed SHA-256, status, raw metric payload, raw payload SHA-256, timing and error_class. Track-B has one row per eligible problem with domain, canonical_path, file SHA-256, split digest, assigned split, baseline status, resource-ledger fields, raw planner-output SHA-256, timing and error_class. `manifest.json` lists every output path, byte size and SHA-256. Timestamps are provenance only and are excluded from scientific hashes/sorting.",
+    "id": "D15",
+    "topic": "raw_output_schema"
+  },
+  {
+    "decision": "Duplicate canonical problem path, duplicate canonical Stage-A unit ID, seed collision across distinct seed tuples, or split-digest collision across distinct canonical inputs is a fatal pre-scoring STOP. Nothing is deduplicated silently.",
+    "id": "D16",
+    "topic": "collision_duplicate_policy"
+  },
+  {
+    "decision": "Decisive execution requires a new non-existent run directory. Existing non-empty output path => hard refusal. No scientific output may be overwritten, truncated, appended-to, or reused as current-run input.",
+    "id": "D17",
+    "topic": "existing_output_behavior"
+  },
+  {
+    "decision": "No in-place resume after the prospective START_STAGE_A marker. If interrupted after that marker, preserve the partial run and terminate it; any rerun uses a new RUN_ID, new explicit authorization, a clean output directory and is reported as a rerun of the failed attempt. Before START_STAGE_A, failed prechecks do not consume the scientific authorization.",
+    "id": "D18",
+    "topic": "resume_behavior"
+  },
+  {
+    "decision": "For each Track-A replicate, take the 32-byte replicate SHA-256 digest and split it into eight consecutive unsigned 32-bit big-endian words. Pass that 8-word vector as entropy to numpy.random.SeedSequence. Call spawn(128) exactly once, in probe-index order 0..127. Probe i uses numpy.random.default_rng(child_ss[i]). Each probe child SeedSequence is further split by spawn(3) in fixed order SAMPLER, GROUND, PATH. The pinned runtime NumPy version 2.2.0 is execution provenance. Sentinel vectors live in protocol/NUMPY_RNG_TEST_VECTORS_v0.5.6.json for probes 0,1,127.",
+    "id": "D19",
+    "topic": "replicate_digest_to_probe_rng"
+  },
+  {
+    "decision": "SAMPLER RNG is used for the pinned intervention sampler and background-root sampling. GROUND RNG materializes every sampled abstract label via value_map.ground(name,label,rng=GROUND_RNG) and stores micro_values in the intervention spec before low-level path execution. PATH RNG is used for path execution. High-level and mapped-low-level paths receive the same intervention spec. After grounding, value_map.abstract(name, grounded_micro_value) must equal the sampled label under declared label semantics. Failure is STOP_GROUNDING_ROUNDTRIP_FAILURE. Do not resample.",
+    "id": "D20",
+    "topic": "seeded_top_down_grounding"
+  },
+  {
+    "decision": "Track-B eligibility is restricted to official IPC 2020 total-order benchmark problem instances for the four frozen domains. Explicitly exclude generators, README/Makefile/domain definitions and any path/directory marked as not used in IPC (including further-instances-not-used-in-ipc). Frozen required pre-split counts: Rover-GTOHP=30, Satellite-GTOHP=20, Transport=40, Woodworking=40, TOTAL=130. Count/path mismatch => STOP_IPC_OFFICIAL_BENCHMARK_MANIFEST_MISMATCH. No DOI-salted split in this candidate.",
+    "id": "D21",
+    "topic": "official_ipc2020_problem_eligibility"
+  },
+  {
+    "decision": "An otherwise successfully executed probe whose mapped lower-level frozen output contains CAE UNMAPPED or cannot be matched to the declared output label is a scientific non-equivalence and contributes probe_match=0. A harness/runtime exception or mandatory non-finite numeric output remains INFRASTRUCTURE_FAILURE under D06 and STOPs the attempt; it is not converted to probe_match=0. NaN is never equal, including GRN tolerance comparisons.",
+    "id": "D22",
+    "topic": "V_unmapped_and_nonfinite_policy"
+  },
+  {
+    "decision": "Use top-down intervention orientation for frozen V. Logic: TopDownSampler over [Operand_A, Operand_B, Carry_In, Internal_Carries], batch_size=1, max_interventions=2. Tracr: TopDownSampler over [token_0, token_1, token_2], batch_size=1, max_interventions=3. GRN: TopDownSampler over [wg_src], batch_size=1, max_interventions=1. CPU6502: InstructionSampler over [A_in,X_in,Y_in,S_in,P_in,opcode,operand], batch_size=1, max_interventions=7. For each probe, reproduce CAE engine background-root completion for missing roots. Do not intervene directly on frozen output-vector variables.",
+    "id": "D23",
+    "topic": "track_a_probe_generation_domains"
+  },
+  {
+    "decision": "Noise-only conditions remain excluded from primary Track A. logic_circuit: positive valid, negatives fail and inv_internal, outputs [Result_Sum, Result_Carry], exact equality. tracr: positive valid, negative fail, outputs [rank_0, rank_1, rank_2], exact equality. grn: positive valid, negatives wrong_map and wrong_high_level_model, output [fz_tgt], rtol=0, atol=1e-9. cpu_6502: positives [valid_gate_isa, valid_transistor_gate, valid_transistor_isa], negatives [broken_gate_isa, broken_transistor_gate, broken_transistor_isa], outputs [A_out, X_out, Y_out, S_out, P_out], exact equality. Sealed adapter identifiers were byte-reconciled as naming synonyms where the adapter said all rank_i / declared register outputs.",
+    "id": "D24",
+    "topic": "track_a_primary_conditions_and_output_vectors"
+  }
+]

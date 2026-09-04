@@ -1,0 +1,18 @@
+OTT v0.5.6 CAE mapping closure / candidate R2
+Verdict: STOP_IPC_OFFICIAL_BENCHMARK_MANIFEST_MISMATCH
+D08 CAE mapping: RESOLVED (CAE_down exact-vector V)
+D21: Woodworking official-root 30 != required 40; no DOI split
+
+RUN_ID: OTT-v0.5.6-CMCR2-20260904T033323Z-448BB00F
+ZIP: OTT_v0.5.6_EXECUTION_SPEC_CANDIDATE_R2_20260904T033323Z_448BB00F.zip
+ZIP SHA-256: 4e7d8b372764a34fe1f76071d024a28af17cdabbded377b22741f8a31a597034
+ZIP bytes: 47222
+CANDIDATE_ROOT_SHA256: 98238e25b2ec71724666107f6b51612bff9bbba087daa380f17a6d5cef09de25
+
+Phone / HTTPS downloads (after push):
+ZIP: https://github.com/slowomir33-arch/CAE/raw/cursor/ott-v056-cmcr2-d621/evidence/v056-cmcr2/OTT_v0.5.6_EXECUTION_SPEC_CANDIDATE_R2_20260904T033323Z_448BB00F.zip
+Folder: https://github.com/slowomir33-arch/CAE/tree/cursor/ott-v056-cmcr2-d621/evidence/v056-cmcr2
+Report: https://github.com/slowomir33-arch/CAE/blob/cursor/ott-v056-cmcr2-d621/evidence/v056-cmcr2/tree/REPORT.md
+Manifest: https://github.com/slowomir33-arch/CAE/blob/cursor/ott-v056-cmcr2-d621/evidence/v056-cmcr2/tree/CANDIDATE_MANIFEST.sha256
+
+No DOI, no publication, no science.

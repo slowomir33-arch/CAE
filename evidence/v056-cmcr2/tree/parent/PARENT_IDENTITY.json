@@ -1,0 +1,11 @@
+{
+  "contract": "7/7 PASS",
+  "manifest": "27/27",
+  "parent_r1_candidate_root": "589918bb59df31be2815aba0074d8c5ff0d4ac011f47f0eda8c723dc31b71417",
+  "parent_r1_commit": "eeb59077d5dbc6a9021ac847e47eb666ffd828ec",
+  "parent_r1_run_id": "OTT-v0.5.6-ESC-20260904T025456Z-98AAB42F",
+  "parent_r1_zip_sha256": "c29d9605f920ca83c571a5e3da963f12f4e1f0e22c196440a4093811598840a4",
+  "prefreeze_root_sha256": "db6e1d45946b02c2226eb2a08c1ac431dfe74ff1d5241eec52ecd6eb55b7692b",
+  "zip": "OTT_External_Blind_Challenge_v0.5.5_PREFREEZE_EXECUTION_CLOSURE.zip",
+  "zip_sha256": "a1becacfa4b38104d4f7e47caf6f0a7e7da475152c0b5da3497b3a28d5451018"
+}

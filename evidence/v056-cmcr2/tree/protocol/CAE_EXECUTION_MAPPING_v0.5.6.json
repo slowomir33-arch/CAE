@@ -1,0 +1,248 @@
+{
+  "D08_resolution": "OTT exact/full-vector equivalence over raw paired CAE-down/top-down paths; NOT MSE, IIA, DCC or another CAE scalar metric",
+  "D24_adapter_reconciliation": {
+    "STOP_CAE_ADAPTER_PRIMARY_CONDITION_CONFLICT": false,
+    "cpu_6502": {
+      "adapter_conditions": [
+        "valid_gate_isa",
+        "valid_transistor_gate",
+        "valid_transistor_isa",
+        "broken_gate_isa",
+        "broken_transistor_gate",
+        "broken_transistor_isa"
+      ],
+      "adapter_observables": "upstream declared register outputs",
+      "d24_outputs": [
+        "A_out",
+        "X_out",
+        "Y_out",
+        "S_out",
+        "P_out"
+      ],
+      "status": "NAMING_SYNONYM_declared_registers_equals_five_star_out",
+      "systems_OUTPUTS": [
+        "A_out",
+        "X_out",
+        "Y_out",
+        "S_out",
+        "P_out"
+      ]
+    },
+    "grn": {
+      "adapter_conditions": [
+        "valid",
+        "wrong_map",
+        "wrong_high_level_model"
+      ],
+      "adapter_equivalence": "absolute difference <= 1e-9",
+      "adapter_observable": "fz_tgt",
+      "d24_conditions": [
+        "valid",
+        "wrong_map",
+        "wrong_high_level_model"
+      ],
+      "d24_equivalence": "rtol=0 atol=1e-9",
+      "status": "EXACT_MATCH_PLUS_EQUIVALENT_TOLERANCE_PARAMETERIZATION"
+    },
+    "logic_circuit": {
+      "adapter_conditions": [
+        "valid",
+        "fail",
+        "inv_internal"
+      ],
+      "adapter_observables": [
+        "Result_Sum",
+        "Result_Carry"
+      ],
+      "d24_conditions": [
+        "valid",
+        "fail",
+        "inv_internal"
+      ],
+      "d24_outputs": [
+        "Result_Sum",
+        "Result_Carry"
+      ],
+      "status": "EXACT_MATCH"
+    },
+    "status": "RECONCILED_NAMING_SYNONYM",
+    "tracr": {
+      "adapter_observables": "all rank_i",
+      "cae_SEQ_LEN": 3,
+      "d24_outputs": [
+        "rank_0",
+        "rank_1",
+        "rank_2"
+      ],
+      "status": "NAMING_SYNONYM_all_rank_i_equals_rank_0_1_2"
+    }
+  },
+  "OTT_reduction": "custom_exact_vector_V",
+  "V": "fraction of 128 probe-level full-output-vector matches",
+  "document": "CAE_EXECUTION_MAPPING_v0.5.6",
+  "intervention_generation": "system-specific pinned sampler under D23",
+  "orientation": "CAE_down / top-down",
+  "paired_execution": {
+    "high_level": "DiagramBuilder.build_path_standard_high_level_model",
+    "mapped_low_level": "DiagramBuilder.build_path_standard_low_level_model"
+  },
+  "primary_conditions": {
+    "cpu_6502": {
+      "negative": [
+        "broken_gate_isa",
+        "broken_transistor_gate",
+        "broken_transistor_isa"
+      ],
+      "positive": [
+        "valid_gate_isa",
+        "valid_transistor_gate",
+        "valid_transistor_isa"
+      ]
+    },
+    "grn": {
+      "negative": [
+        "wrong_map",
+        "wrong_high_level_model"
+      ],
+      "positive": [
+        "valid"
+      ]
+    },
+    "logic_circuit": {
+      "negative": [
+        "fail",
+        "inv_internal"
+      ],
+      "positive": [
+        "valid"
+      ]
+    },
+    "tracr": {
+      "negative": [
+        "fail"
+      ],
+      "positive": [
+        "valid"
+      ]
+    }
+  },
+  "raw_cae_surface": "DiagramBuilder standard paths; EvaluationEngine._process_batch_raw missing-root completion reproduced; _score_collected_results bypassed",
+  "scalar_CAE_metric": null,
+  "source_commit": "9164499c60ebe5ced32f0005009fc4e72aca77ca",
+  "status": "RESOLVED",
+  "systems": {
+    "cpu_6502": {
+      "batch_size": 1,
+      "cg_map_builder": "CPU CG maps in systems/10_cpu_6502.py",
+      "condition_builders": {
+        "broken_gate_isa": "broken gate vs ISA",
+        "broken_transistor_gate": "broken transistor vs gate",
+        "broken_transistor_isa": "broken transistor vs ISA",
+        "valid_gate_isa": "ISA high-level vs gate low-level",
+        "valid_transistor_gate": "gate high-level vs transistor low-level",
+        "valid_transistor_isa": "ISA high-level vs transistor low-level"
+      },
+      "equivalence_relation": "exact",
+      "frozen_output_vector": [
+        "A_out",
+        "X_out",
+        "Y_out",
+        "S_out",
+        "P_out"
+      ],
+      "high_level_model_constructor": "condition-specific builders above",
+      "intervention_domain": [
+        "A_in",
+        "X_in",
+        "Y_in",
+        "S_in",
+        "P_in",
+        "opcode",
+        "operand"
+      ],
+      "low_level_model_constructor": "layer-specific simulator",
+      "max_interventions": 7,
+      "module": "systems/10_cpu_6502.py",
+      "pinned_cae_source_commit": "9164499c60ebe5ced32f0005009fc4e72aca77ca",
+      "sampler_callable": "systems/10_cpu_6502.py::InstructionSampler",
+      "value_map_builder": "CPU value maps in systems/10_cpu_6502.py"
+    },
+    "grn": {
+      "batch_size": 1,
+      "cg_map_builder": "GRN CG builders",
+      "condition_builders": {
+        "valid": "valid high-level / valid CG map",
+        "wrong_high_level_model": "reversed high-level rule",
+        "wrong_map": "wrong CG map"
+      },
+      "equivalence_relation": "abs(a-b)<=1e-9 rtol=0",
+      "frozen_output_vector": [
+        "fz_tgt"
+      ],
+      "high_level_model_constructor": "condition-specific builders above",
+      "intervention_domain": [
+        "wg_src"
+      ],
+      "low_level_model_constructor": "GRN low-level model",
+      "max_interventions": 1,
+      "module": "systems/09_grn/grn.py",
+      "pinned_cae_source_commit": "9164499c60ebe5ced32f0005009fc4e72aca77ca",
+      "sampler_callable": "causal_abstraction.sampling.TopDownSampler",
+      "value_map_builder": "GRN value-map builders"
+    },
+    "logic_circuit": {
+      "batch_size": 1,
+      "cg_map_builder": "build_cg_and_vm",
+      "condition_builders": {
+        "fail": "build_failing_high_level_model",
+        "inv_internal": "build_inverted_internal_high_level_model",
+        "valid": "build_valid_high_level_model"
+      },
+      "equivalence_relation": "exact",
+      "frozen_output_vector": [
+        "Result_Sum",
+        "Result_Carry"
+      ],
+      "high_level_model_constructor": "condition-specific builders above",
+      "intervention_domain": [
+        "Operand_A",
+        "Operand_B",
+        "Carry_In",
+        "Internal_Carries"
+      ],
+      "low_level_model_constructor": "NetlistSimulator",
+      "max_interventions": 2,
+      "module": "systems/01_logic_circuit.py",
+      "pinned_cae_source_commit": "9164499c60ebe5ced32f0005009fc4e72aca77ca",
+      "sampler_callable": "causal_abstraction.sampling.TopDownSampler",
+      "value_map_builder": "build_cg_and_vm"
+    },
+    "tracr": {
+      "batch_size": 1,
+      "cg_map_builder": "_build_shared_maps",
+      "condition_builders": {
+        "fail": "_build_high_level_model(_make_failing_rank_equation)",
+        "valid": "_build_high_level_model(_make_rank_equation)"
+      },
+      "equivalence_relation": "exact",
+      "frozen_output_vector": [
+        "rank_0",
+        "rank_1",
+        "rank_2"
+      ],
+      "high_level_model_constructor": "condition-specific builders above",
+      "intervention_domain": [
+        "token_0",
+        "token_1",
+        "token_2"
+      ],
+      "low_level_model_constructor": "TracrLowLevelModel",
+      "max_interventions": 3,
+      "module": "systems/08_tracr.py",
+      "pinned_cae_source_commit": "9164499c60ebe5ced32f0005009fc4e72aca77ca",
+      "sampler_callable": "causal_abstraction.sampling.TopDownSampler",
+      "value_map_builder": "_build_shared_maps"
+    }
+  },
+  "unresolved": []
+}
