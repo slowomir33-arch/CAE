@@ -1,0 +1,19 @@
+{
+  "document": "PUBLIC_PROTOCOL_BYTE_IDENTITY",
+  "protocol_version": "v0.5.6",
+  "run_id": "OTT-v0.5.6-SCA-20260904T061127Z-40797FC6",
+  "source": "unauthenticated GET https://zenodo.org/api/records/22293061",
+  "record_id": 22293061,
+  "status": "published",
+  "access_right": "open",
+  "html_status": 200,
+  "api_status": 200,
+  "filename": "OTT_v0.5.6_FINAL_PUBLIC_FREEZE_CANDIDATE_20260904T043759Z_74EB9712.zip",
+  "bytes": 58243,
+  "zip_sha256": "41d5f23edd5d3fb44b6df8a746c4432ea09c781bc080855dd2949f993331314f",
+  "manifest_rows": 35,
+  "manifest_matches": 35,
+  "public_protocol_root_sha256": "b699fea96417a244f7276575f91f0bddd3c7e4f965a84ef167ef077a9ef0d516",
+  "PUBLIC_PROTOCOL_BYTE_IDENTITY": "PASS",
+  "zenodo_authenticated": false
+}
