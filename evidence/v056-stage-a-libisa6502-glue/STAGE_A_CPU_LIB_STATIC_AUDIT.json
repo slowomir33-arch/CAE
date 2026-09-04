@@ -1,0 +1,117 @@
+{
+  "all_sixteen_checks": "PASS",
+  "checks": [
+    {
+      "check": "generation_2_run_authorization_byte_identical",
+      "id": 1,
+      "result": "PASS",
+      "sha256": "cb194c51d80937842a816544a3f377673f18e9206e48003c0c636711282f9e26"
+    },
+    {
+      "check": "authorization_sha_remains_cb194c51",
+      "id": 2,
+      "result": "PASS"
+    },
+    {
+      "authorization_paths": [
+        "evidence/v056-sca-gha/RUN_AUTHORIZATION.json",
+        "evidence/v056-stage-a-reauthorization/RUN_AUTHORIZATION.json"
+      ],
+      "check": "no_generation_3_authorization_created",
+      "id": 3,
+      "result": "PASS"
+    },
+    {
+      "check": "stage_a_scratch_has_exactly_3_cpu_native_assets",
+      "id": 4,
+      "result": "PASS"
+    },
+    {
+      "check": "libisa_exact_path_hard_bound",
+      "id": 5,
+      "path": "/opt/ott/sources/CAE/systems/10_cpu_6502_libs/libisa6502.so",
+      "result": "PASS"
+    },
+    {
+      "check": "libisa_bytes_47576",
+      "id": 6,
+      "result": "PASS"
+    },
+    {
+      "check": "libisa_sha_exact",
+      "id": 7,
+      "result": "PASS"
+    },
+    {
+      "check": "libgate_sha_exact",
+      "id": 8,
+      "result": "PASS"
+    },
+    {
+      "check": "decoder_bytes_sha_exact",
+      "id": 9,
+      "result": "PASS"
+    },
+    {
+      "check": "cpu6502_lib_dir_set_before_import",
+      "id": 10,
+      "result": "PASS"
+    },
+    {
+      "check": "isa_smoke_before_start",
+      "id": 11,
+      "result": "PASS"
+    },
+    {
+      "check": "gate_smoke_before_start",
+      "id": 12,
+      "result": "PASS"
+    },
+    {
+      "check": "stage_a_only_workflow_dispatch_execution_job",
+      "id": 13,
+      "job_if": {
+        "import-matrix": "github.event_name != 'workflow_dispatch'",
+        "ott-v056-d6502-diagnostic": "false",
+        "ott-v056-d6502-supplement-freeze": "false",
+        "ott-v056-d6502-supplement-retrieve": "false",
+        "ott-v056-libisa6502-diagnostic": "false",
+        "ott-v056-stage-a": "github.event_name == 'workflow_dispatch'",
+        "test": "github.event_name != 'workflow_dispatch'"
+      },
+      "result": "PASS"
+    },
+    {
+      "check": "diagnostic_freeze_retrieve_jobs_disabled",
+      "id": 14,
+      "job_if": {
+        "ott-v056-d6502-diagnostic": "false",
+        "ott-v056-d6502-supplement-freeze": "false",
+        "ott-v056-d6502-supplement-retrieve": "false",
+        "ott-v056-libisa6502-diagnostic": "false"
+      },
+      "result": "PASS"
+    },
+    {
+      "check": "no_workflow_dispatch_during_preparation",
+      "id": 15,
+      "result": "PASS",
+      "workflow_dispatch": "NOT PERFORMED"
+    },
+    {
+      "check": "no_science",
+      "id": 16,
+      "result": "PASS",
+      "scientific_observations": 0
+    }
+  ],
+  "created_at_utc": "2026-09-04T13:30:03Z",
+  "document": "STAGE_A_CPU_LIB_STATIC_AUDIT",
+  "generation_2_authorization_sha256": "cb194c51d80937842a816544a3f377673f18e9206e48003c0c636711282f9e26",
+  "preparation_run_id": "OTT-v0.5.6-ISA6502A-20260904T133003Z-F12C1B35",
+  "scientific_observations": 0,
+  "stage_a_execution": "NO",
+  "start_stage_a": "ABSENT",
+  "verdict": "PASS",
+  "workflow_dispatch": "NOT PERFORMED"
+}

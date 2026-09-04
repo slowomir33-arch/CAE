@@ -8,8 +8,7 @@ on:
 
 jobs:
   # Decoder6502 freeze/retrieve/diagnostic disabled. Registered CI
-  # workflow_dispatch executes the libisa6502 PRESTART diagnostic only
-  # (not dispatched by this Cursor preparation).
+  # workflow_dispatch executes Stage A only (not dispatched by this packet).
   ott-v056-d6502-supplement-freeze:
     name: OTT v0.5.6 Decoder6502 supplement freeze (DISABLED during Stage-A window)
     if: false
@@ -207,11 +206,11 @@ jobs:
           retention-days: 90
           include-hidden-files: false
 
-  # libisa6502 PRESTART diagnostic occupies registered CI workflow_dispatch.
-  # This Cursor preparation does NOT dispatch it.
+  # libisa6502 PRESTART diagnostic disabled. Registered CI workflow_dispatch
+  # now executes Stage A only (not dispatched by this glue-correction packet).
   ott-v056-libisa6502-diagnostic:
-    name: OTT v0.5.6 libisa6502 PRESTART diagnostic (workflow_dispatch only)
-    if: github.event_name == 'workflow_dispatch'
+    name: OTT v0.5.6 libisa6502 PRESTART diagnostic (DISABLED during Stage-A window)
+    if: false
     runs-on: ubuntu-latest
     timeout-minutes: 90
     permissions:
@@ -289,11 +288,11 @@ jobs:
           retention-days: 90
           include-hidden-files: false
 
-  # DISABLED during the libisa6502 PRESTART diagnostic window.
-  # Stage-A START / RUN_AUTHORIZATION consumption must stay unreachable.
+  # Stage A is the only workflow_dispatch execution job on registered CI.
+  # This glue-correction packet does NOT dispatch it.
   ott-v056-stage-a:
-    name: OTT v0.5.6 Stage A (DISABLED during libisa6502 diagnostic)
-    if: false
+    name: OTT v0.5.6 Stage A (workflow_dispatch only)
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 360
     permissions:

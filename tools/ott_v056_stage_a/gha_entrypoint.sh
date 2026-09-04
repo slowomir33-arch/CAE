@@ -181,7 +181,9 @@ echo "required=$SUPPLEMENT_DIGEST pulled=$GOT_DIGEST" | tee "$RECEIPTS/DOCKER_PU
 if [ "$GOT_DIGEST" != "$SUPPLEMENT_DIGEST" ]; then
   fail_before_start STOP_STAGE_A_SUPPLEMENT_IDENTITY_FAILURE "supplement digest mismatch pulled=$GOT_DIGEST"
 fi
-mkdir -p "$SUPPLEMENT_EXTRACT" "$CPU_LIB"
+mkdir -p "$SUPPLEMENT_EXTRACT"
+rm -rf "$CPU_LIB"
+mkdir -p "$CPU_LIB"
 SUP_CID="$(docker create --platform linux/amd64 "$SUPPLEMENT_REF" /bin/true)"
 docker cp "$SUP_CID:/ott-supplement/." "$SUPPLEMENT_EXTRACT/"
 docker rm "$SUP_CID" >/dev/null
@@ -190,24 +192,48 @@ if ! python3 "$ROOT/tools/ott_v056_d6502_freeze/verify_extracted.py" "$SUPPLEMEN
 fi
 BASE_CID="$(docker create --platform linux/amd64 "$RUNTIME_REF" /bin/true)"
 docker cp "$BASE_CID:/opt/ott/sources/CAE/systems/10_cpu_6502_libs/libgate6502.so" "$CPU_LIB/libgate6502.so"
+set +e
+docker cp "$BASE_CID:/opt/ott/sources/CAE/systems/10_cpu_6502_libs/libisa6502.so" "$CPU_LIB/libisa6502.so"
+ISA_CP_RC=$?
+set -e
 docker rm "$BASE_CID" >/dev/null
+if [ "$ISA_CP_RC" -ne 0 ] || [ ! -f "$CPU_LIB/libisa6502.so" ]; then
+  fail_before_start STOP_STAGE_A_LIBISA6502_IDENTITY_FAILURE "canonical libisa6502.so copy failed"
+fi
 cp -a "$SUPPLEMENT_EXTRACT/Decoder6502.bin" "$CPU_LIB/Decoder6502.bin"
 set +e
 CPU_LIB="$CPU_LIB" python3 - <<'PY'
 import hashlib, os, sys
 from pathlib import Path
 lib = Path(os.environ["CPU_LIB"])
+names = {p.name for p in lib.iterdir() if p.is_file()}
+if names != {"Decoder6502.bin", "libgate6502.so", "libisa6502.so"}:
+    sys.exit(3)
+def sha(p):
+    h = hashlib.sha256()
+    with p.open("rb") as f:
+        for chunk in iter(lambda: f.read(1024 * 1024), b""):
+            h.update(chunk)
+    return h.hexdigest()
 dec = lib / "Decoder6502.bin"
-h = hashlib.sha256()
-with dec.open("rb") as f:
-    for chunk in iter(lambda: f.read(1024 * 1024), b""):
-        h.update(chunk)
-if dec.stat().st_size != 272629760 or h.hexdigest() != "d231d459368c2049a73fd3b25377a657f08d4b95a7098112748b794abc673b62":
+gate = lib / "libgate6502.so"
+isa = lib / "libisa6502.so"
+if dec.stat().st_size != 272629760 or sha(dec) != "d231d459368c2049a73fd3b25377a657f08d4b95a7098112748b794abc673b62":
     sys.exit(2)
-print("SUPPLEMENT_SCRATCH_LIB_PASS")
+if sha(gate) != "ba8222d520c93ac8a3989857c8b2b3cb8573196ef185747eef60d8482dcf1964":
+    sys.exit(5)
+if isa.stat().st_size != 47576 or sha(isa) != "33df0fa6c649e7a3240a536337b00f0b8ef120eea05edeaec0910817a560f075":
+    sys.exit(4)
+print("CPU_SCRATCH_LIB_PASS")
 PY
 LIB_RC=$?
 set -e
+if [ "$LIB_RC" -eq 4 ] || [ "$LIB_RC" -eq 3 ]; then
+  fail_before_start STOP_STAGE_A_LIBISA6502_IDENTITY_FAILURE "scratch libisa identity rc=$LIB_RC"
+fi
+if [ "$LIB_RC" -eq 5 ]; then
+  fail_before_start STOP_STAGE_A_RUNTIME_IDENTITY_FAILURE "scratch libgate identity"
+fi
 if [ "$LIB_RC" -ne 0 ]; then
   fail_before_start STOP_STAGE_A_SUPPLEMENT_IDENTITY_FAILURE "scratch lib decoder identity"
 fi

@@ -66,6 +66,11 @@ SUPPLEMENT_CONTENT_ROOT = "5bd5679a5ca297eb1d2b2a84d1b68c900b54d98ea7cd0c5ac672e
 DECODER6502_SHA256 = "d231d459368c2049a73fd3b25377a657f08d4b95a7098112748b794abc673b62"
 DECODER6502_BYTES = 272629760
 OLD_AUTH_SHA256 = "4c6d8aff18dac5fdaa55a8a5733244b96dc49761da88efc4827388622271d358"
+LIBGATE6502_SHA256 = "ba8222d520c93ac8a3989857c8b2b3cb8573196ef185747eef60d8482dcf1964"
+LIBISA6502_PATH = "/opt/ott/sources/CAE/systems/10_cpu_6502_libs/libisa6502.so"
+LIBISA6502_SHA256 = "33df0fa6c649e7a3240a536337b00f0b8ef120eea05edeaec0910817a560f075"
+LIBISA6502_BYTES = 47576
+SCRATCH_CPU_NATIVE_NAMES = ("Decoder6502.bin", "libgate6502.so", "libisa6502.so")
 
 PAIRS: List[Tuple[str, str]] = [
     ("logic_circuit", "valid"),
@@ -378,6 +383,8 @@ def phase_host_start(args: argparse.Namespace) -> None:
         raise StopError("STOP_STAGE_A_OUTPUT_PATH_NOT_CLEAN", "not ready")
     if ready_obj.get("SUPPLEMENT_IDENTITY") != "PASS":
         raise StopError("STOP_STAGE_A_SUPPLEMENT_IDENTITY_FAILURE", "PRESTART missing SUPPLEMENT_IDENTITY PASS")
+    if ready_obj.get("ISA_PRESTART_SMOKE") != "PASS" or ready_obj.get("GATE_PRESTART_SMOKE") != "PASS":
+        raise StopError("STOP_STAGE_A_CPU6502_NATIVE_SMOKE_FAILURE", "PRESTART missing ISA/Gate NOP PASS")
     if sha256_file(auth_path) != AUTH_SHA256:
         raise StopError("STOP_STAGE_A_RUN_AUTHORIZATION_MISMATCH", "auth sha before START")
     if run_dir.exists():
@@ -936,41 +943,65 @@ def _logic_bundle():
 
 
 def _supplement_lib_prestart() -> Dict[str, Any]:
-    """Require frozen supplement bytes via CPU6502_LIB_DIR before any CPU import."""
+    """Require frozen CPU native assets via CPU6502_LIB_DIR before any CPU import."""
     lib_dir = os.environ.get("CPU6502_LIB_DIR", "")
     if not lib_dir:
         raise StopError("STOP_STAGE_A_SUPPLEMENT_IDENTITY_FAILURE", "CPU6502_LIB_DIR unset")
     lib_path = Path(lib_dir)
-    decoder = lib_path / "Decoder6502.bin"
-    so = lib_path / "libgate6502.so"
-    if not decoder.is_file() or not so.is_file():
+    names = {p.name for p in lib_path.iterdir() if p.is_file()} if lib_path.is_dir() else set()
+    if names != set(SCRATCH_CPU_NATIVE_NAMES):
         raise StopError(
-            "STOP_STAGE_A_SUPPLEMENT_IDENTITY_FAILURE",
-            f"scratch lib incomplete decoder={decoder.is_file()} so={so.is_file()}",
+            "STOP_STAGE_A_LIBISA6502_IDENTITY_FAILURE",
+            f"scratch CPU native files {sorted(names)}",
         )
+    decoder = lib_path / "Decoder6502.bin"
+    gate = lib_path / "libgate6502.so"
+    isa = lib_path / "libisa6502.so"
     if decoder.stat().st_size != DECODER6502_BYTES:
         raise StopError(
             "STOP_STAGE_A_SUPPLEMENT_IDENTITY_FAILURE",
             f"decoder bytes {decoder.stat().st_size}",
         )
-    got = sha256_file(decoder)
-    if got != DECODER6502_SHA256:
-        raise StopError("STOP_STAGE_A_SUPPLEMENT_IDENTITY_FAILURE", f"decoder sha {got}")
+    dec_sha = sha256_file(decoder)
+    if dec_sha != DECODER6502_SHA256:
+        raise StopError("STOP_STAGE_A_SUPPLEMENT_IDENTITY_FAILURE", f"decoder sha {dec_sha}")
+    gate_sha = sha256_file(gate)
+    if gate_sha != LIBGATE6502_SHA256:
+        raise StopError("STOP_STAGE_A_RUNTIME_IDENTITY_FAILURE", f"libgate sha {gate_sha}")
+    if isa.stat().st_size != LIBISA6502_BYTES:
+        raise StopError(
+            "STOP_STAGE_A_LIBISA6502_IDENTITY_FAILURE",
+            f"libisa bytes {isa.stat().st_size}",
+        )
+    isa_sha = sha256_file(isa)
+    if isa_sha != LIBISA6502_SHA256:
+        raise StopError("STOP_STAGE_A_LIBISA6502_IDENTITY_FAILURE", f"libisa sha {isa_sha}")
     os.environ["CPU6502_LIB_DIR"] = str(lib_path)
     return {
         "CPU6502_LIB_DIR": str(lib_path),
         "decoder_bytes": DECODER6502_BYTES,
-        "decoder_sha256": got,
-        "libgate6502": str(so),
+        "decoder_sha256": dec_sha,
+        "libgate6502_sha256": gate_sha,
+        "libisa6502_path_canonical": LIBISA6502_PATH,
+        "libisa6502_bytes": LIBISA6502_BYTES,
+        "libisa6502_sha256": isa_sha,
+        "scratch_names": sorted(names),
     }
 
 
-def _nop_gatesimulator_smoke(cpu: Any) -> Dict[str, Any]:
-    sim = cpu.GateSimulator()
+def _nop_smoke(cpu: Any, which: str) -> Dict[str, Any]:
+    if which == "isa":
+        sim = cpu.ISASimulator()
+        init_key = "isa_init"
+    elif which == "gate":
+        sim = cpu.GateSimulator()
+        init_key = "gate_init"
+    else:
+        raise StopError("STOP_STAGE_A_CPU6502_NATIVE_SMOKE_FAILURE", which)
     ao, xo, yo, so, po = sim._exec(0xEA, 0, 1, 0, 0, 0, 0, 0)
     return {
-        "gate_init": "PASS",
-        "sentinel": {"opcode": 0xEA, "ilen": 1},
+        init_key: "PASS",
+        "sentinel": {"opcode": 0xEA, "ilen": 1, "A": 0, "X": 0, "Y": 0, "S": 0, "P": 0},
         "outputs": {"A_out": ao, "X_out": xo, "Y_out": yo, "S_out": so, "P_out": po},
         "scientific": False,
         "PASS": True,
@@ -990,10 +1021,16 @@ def phase_prestart(args: argparse.Namespace) -> None:
         supp = _supplement_lib_prestart()
         cpu = _load_system("10_cpu_6502.py", "cpu_6502_precheck")
         try:
-            smoke = _nop_gatesimulator_smoke(cpu)
+            isa_smoke = _nop_smoke(cpu, "isa")
+            gate_smoke = _nop_smoke(cpu, "gate")
+        except StopError:
+            raise
         except Exception as e:
-            raise StopError("STOP_STAGE_A_SUPPLEMENT_IDENTITY_FAILURE", f"NOP smoke: {e}") from e
-        write_new_text(receipts / "SUPPLEMENT_PRESTART_SMOKE.json", dumps_scientific({**supp, "smoke": smoke}) + "\n")
+            raise StopError("STOP_STAGE_A_CPU6502_NATIVE_SMOKE_FAILURE", f"NOP smoke: {e}") from e
+        write_new_text(
+            receipts / "SUPPLEMENT_PRESTART_SMOKE.json",
+            dumps_scientific({**supp, "isa_smoke": isa_smoke, "gate_smoke": gate_smoke}) + "\n",
+        )
         fp = _fingerprint_check()
         cae_head = git_head(ws) or git_head(Path("/opt/ott/sources/CAE"))
         lilo_head = git_head(Path("/opt/ott/sources/Lilotane")) or git_head(Path("/opt/ott/sources/lilotane"))
@@ -1093,6 +1130,8 @@ def phase_prestart(args: argparse.Namespace) -> None:
             "LILOTANE_INVOCATION": "RESOLVED",
             "IPC_MANIFEST": "120_AND_PASS",
             "SUPPLEMENT_IDENTITY": "PASS",
+            "ISA_PRESTART_SMOKE": "PASS",
+            "GATE_PRESTART_SMOKE": "PASS",
             "START_STAGE_A": "ABSENT",
             "SCIENTIFIC_OBSERVATIONS": 0,
             "READY_TO_START_STAGE_A": "YES",
