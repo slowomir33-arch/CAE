@@ -1,0 +1,79 @@
+{
+  "adapter_named_quantity": "V = fraction of 128 probes whose full predeclared output vector is equivalent between high-level intervention result and mapped low-level intervention result",
+  "competing_call_paths": [
+    {
+      "callable": "causal_abstraction.tasks.StandardTasks.score",
+      "id": "CAE_down",
+      "notes": "MSE/config metric, not exact vector fraction",
+      "sampler": "TopDownSampler"
+    },
+    {
+      "callable": "causal_abstraction.tasks.StandardTasks.score",
+      "id": "CAE_up",
+      "notes": "opposite direction from CAE_down",
+      "sampler": "BottomUpSampler"
+    },
+    {
+      "callable": "causal_abstraction.analytical_metrics.IIAMetric",
+      "id": "IIAMetric_mse",
+      "inner_metric": "mse",
+      "notes": "used in CAE tests; average disagreement not 128-probe exact V"
+    },
+    {
+      "callable": "causal_abstraction.analytical_metrics.IIAMetric",
+      "id": "IIAMetric_hard",
+      "inner_metric": "hard",
+      "notes": "class default inner_metric, not the test wiring"
+    },
+    {
+      "callable": "causal_abstraction.analytical_metrics.DCCMetric",
+      "id": "DCCMetric_hard",
+      "inner_metric": "hard"
+    },
+    {
+      "callable": "not present as a named CAE function",
+      "id": "custom_exact_vector_V",
+      "notes": "matches adapter prose but is not a unique existing callable"
+    }
+  ],
+  "document": "CAE_EXECUTION_MAPPING_v0.5.6",
+  "harness_behavior": "stage-a-cae in non-fixture mode returns STOP_IMPLEMENTATION_MAPPING_AMBIGUOUS and does not invoke CAE",
+  "source_commit": "9164499c60ebe5ced32f0005009fc4e72aca77ca",
+  "status": "STOP_IMPLEMENTATION_MAPPING_AMBIGUOUS",
+  "systems": {
+    "cpu_6502": {
+      "equivalence": "exact",
+      "module": "systems/10_cpu_6502.py",
+      "outputs": "declared register outputs",
+      "upstream_test": "test/10_cpu_6502.py"
+    },
+    "grn": {
+      "equivalence": "abs diff <= 1e-9",
+      "module": "systems/09_grn/grn.py",
+      "outputs": [
+        "fz_tgt"
+      ],
+      "upstream_test": "test/09_grn.py"
+    },
+    "logic_circuit": {
+      "equivalence": "exact",
+      "module": "systems/01_logic_circuit.py",
+      "outputs": [
+        "Result_Sum",
+        "Result_Carry"
+      ],
+      "upstream_test": "test/01_logic_circuit.py"
+    },
+    "tracr": {
+      "equivalence": "exact",
+      "module": "systems/08_tracr.py",
+      "outputs": "all rank_i",
+      "upstream_test": "test/08_tracr.py"
+    }
+  },
+  "unresolved": [
+    "Which CAE path equals frozen V",
+    "TopDown vs BottomUp probe generation",
+    "How DOI-salted digest seeds CAE numpy RNG / intervention sample_intervention"
+  ]
+}
