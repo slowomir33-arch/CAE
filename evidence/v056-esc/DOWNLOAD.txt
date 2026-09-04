@@ -1,0 +1,5 @@
+OTT v0.5.6 execution-spec candidate
+Verdict: STOP_IMPLEMENTATION_MAPPING_AMBIGUOUS (CAE path not unique)
+ZIP: OTT_v0.5.6_EXECUTION_SPEC_COMPLETION_CANDIDATE_20260904T025456Z_98AAB42F.zip
+Folder: https://github.com/slowomir33-arch/CAE/tree/cursor/ott-v056-esc-candidate-d621/evidence/v056-esc
+No DOI, no publication, no science.

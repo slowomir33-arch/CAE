@@ -1,0 +1,52 @@
+{
+  "SCIENTIFIC_DELTA": "EXPLICIT_AND_PRE_REGISTERED",
+  "SCIENTIFIC_OBSERVATIONS_BEFORE_DELTA": 0,
+  "cae_mapping": "STOP_IMPLEMENTATION_MAPPING_AMBIGUOUS",
+  "classification": "AUTHORIZED_PRE_RESULT_PROTOCOL_COMPLETION",
+  "decisions": {
+    "D01": "AUTHORIZED_PRE_RESULT_PROTOCOL_COMPLETION",
+    "D02": "AUTHORIZED_PRE_RESULT_PROTOCOL_COMPLETION",
+    "D03": "AUTHORIZED_PRE_RESULT_PROTOCOL_COMPLETION",
+    "D04": "AUTHORIZED_PRE_RESULT_PROTOCOL_COMPLETION",
+    "D05": "AUTHORIZED_PRE_RESULT_PROTOCOL_COMPLETION",
+    "D06": "AUTHORIZED_PRE_RESULT_PROTOCOL_COMPLETION",
+    "D07": "AUTHORIZED_PRE_RESULT_PROTOCOL_COMPLETION",
+    "D08": "AUTHORIZED_PRE_RESULT_PROTOCOL_COMPLETION",
+    "D09": "AUTHORIZED_PRE_RESULT_PROTOCOL_COMPLETION",
+    "D10": "AUTHORIZED_PRE_RESULT_PROTOCOL_COMPLETION",
+    "D11": "AUTHORIZED_PRE_RESULT_PROTOCOL_COMPLETION",
+    "D12": "AUTHORIZED_PRE_RESULT_PROTOCOL_COMPLETION",
+    "D13": "AUTHORIZED_PRE_RESULT_PROTOCOL_COMPLETION",
+    "D14": "AUTHORIZED_PRE_RESULT_PROTOCOL_COMPLETION",
+    "D15": "AUTHORIZED_PRE_RESULT_PROTOCOL_COMPLETION",
+    "D16": "AUTHORIZED_PRE_RESULT_PROTOCOL_COMPLETION",
+    "D17": "AUTHORIZED_PRE_RESULT_PROTOCOL_COMPLETION",
+    "D18": "AUTHORIZED_PRE_RESULT_PROTOCOL_COMPLETION"
+  },
+  "do_not_claim_scientific_semantics_change_zero": true,
+  "document": "SCIENTIFIC_DELTA_LEDGER_v0.5.6",
+  "mechanical_harness": [
+    "src/ott_v056"
+  ],
+  "new_operational_semantics": [
+    "length-prefixed CAT hashing",
+    "zero-based indices",
+    "Stage A vs B cut",
+    "SOLVED/UNSOLVED/INFRA",
+    "output schema D15-D18"
+  ],
+  "preserved_parent_definitions": [
+    "VCX thresholds",
+    "systems/conditions",
+    "32x128 cardinality",
+    "IPC domains",
+    "20s/4GiB ledger numbers"
+  ],
+  "runtime_binding_only": [
+    "oci digest recorded in candidate binding file; parent PREFREEZE bytes not rewritten"
+  ],
+  "tests_docs": [
+    "tests/",
+    "protocol/*.json"
+  ]
+}

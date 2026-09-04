@@ -1,0 +1,28 @@
+{
+  "PEAK_RSS_LIMIT": 4294967296,
+  "PUBLIC_V0_5_6_DOI": null,
+  "WALL_CLOCK_LIMIT": 20.0,
+  "cae_commit": "9164499c60ebe5ced32f0005009fc4e72aca77ca",
+  "cae_mapping_status": "STOP_IMPLEMENTATION_MAPPING_AMBIGUOUS",
+  "document": "execution_spec_v0.5.6",
+  "field": "UINT32_BE(len(TEXT(x))) || TEXT(x)",
+  "fingerprint_json_sha256": "8ab74b5d7bb737275daf9cb4fb13edfef21cacb9a5f3b6a20c5b0ad637a317dd",
+  "fingerprint_root": "166068659b03c450b9ba2425f324bd4cfb2338a3784ee3c6fa764f0a8f256271",
+  "parent_protocol_version": "v0.5.5",
+  "protocol_version": "v0.5.6-candidate",
+  "runtime": "ghcr.io/slowomir33-arch/cae-ott-v055-runtime@sha256:1f9fad0bb1f8d65282ff237e0538e47a4e940e472fee7e915ec9c74fffe265b8",
+  "sentinel_doi_tests_only": "10.0000/OTT-V0.5.6-TEST-DO-NOT-PUBLISH",
+  "stage_a": [
+    "precheck",
+    "DOI-salted CAE seeds",
+    "decisive CAE 32x128 raw",
+    "IPC eligible manifest verify",
+    "DOI-salted split",
+    "baseline feasibility"
+  ],
+  "stage_a_ends_after": "raw outputs + baseline ledger sealed",
+  "stage_b": "candidate selection (NOT authorized in this candidate)",
+  "text": "UTF8(NFC(str)) or ASCII decimal integers",
+  "track_a_seed": "SHA256(CAT(public_v0.5.6_DOI, CAE_commit, system, condition, replicate_index))",
+  "track_b_split": "SHA256(CAT(public_v0.5.6_DOI, domain, canonical_relative_problem_path))"
+}
