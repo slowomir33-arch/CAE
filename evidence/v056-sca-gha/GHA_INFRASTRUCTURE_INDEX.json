@@ -8,6 +8,8 @@
   "executor": "tools/ott_v056_stage_a/stage_a_executor_v0.5.6.py",
   "entrypoint": "tools/ott_v056_stage_a/gha_entrypoint.sh",
   "science_delta": 0,
-  "start_stage_a": "ABSENT_UNTIL_GHA_PRESTART_PASS",
-  "run_authorization_consumed": false
+  "start_stage_a": "ABSENT",
+  "run_authorization_consumed": false,
+  "dispatch": "UNAVAILABLE_FROM_THIS_AGENT",
+  "stop": "STOP_STAGE_A_GHA_DISPATCH_UNAVAILABLE"
 }
