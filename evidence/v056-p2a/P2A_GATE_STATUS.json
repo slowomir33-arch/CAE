@@ -1,0 +1,114 @@
+{
+  "document": "P2A_GATE_STATUS",
+  "protocol_version": "v0.5.6-P2A",
+  "stage": "PREPUBLICATION_SECURITY_RELOCK_AND_AUTHOR_HANDOFF",
+  "run_id": "OTT-v0.5.6-P2A-20260904T054511Z-DA150E60",
+  "verdict": "P2A_PREPUBLICATION_SECURITY_RELOCK = PASS",
+  "packet_sha256": "5b5cf6a60785f3b91e434cb9406e87a8cd97e3ac812b8aef4227432ae6a62f06",
+  "PARENT_P1_IDENTITY": "PASS",
+  "P1_LOCAL_TREE_LOCK": "PASS",
+  "OLD_COMPROMISED_ZENODO_TOKEN": "REVOKED_BY_AUTHOR",
+  "NEW_TOKEN_SOURCE": "CURRENT_RUNTIME_SECRET_ONLY",
+  "NEW_TOKEN_SCOPE_INTENT": "deposit:write only",
+  "DEPOSIT_ACTIONS_USED": "NO",
+  "ZENODO_DEPOSITION_ID": 22293061,
+  "PUBLIC_V0_5_6_DOI": "10.5281/zenodo.22293061",
+  "ZENODO_PUBLICATION": "NO",
+  "AUTHOR_PUBLISH_WINDOW": "OPEN",
+  "DRAFT_FILESET": "EXACT",
+  "DRAFT_ZIP_SHA256": "41d5f23edd5d3fb44b6df8a746c4432ea09c781bc080855dd2949f993331314f",
+  "DRAFT_FILE_BYTE_IDENTITY": "PASS",
+  "DRAFT_METADATA_IDENTITY": "PASS",
+  "REAL_DOI_DERIVED_SCIENTIFIC_SEEDS": 0,
+  "REAL_DOI_DERIVED_IPC_SPLIT": 0,
+  "RUN_AUTHORIZATION": "NOT ISSUED",
+  "SCIENTIFIC_OBSERVATIONS": 0,
+  "SCIENTIFIC_CHALLENGE_RUN": "NO",
+  "parent_p1": {
+    "run_id": "OTT-v0.5.6-DOI-P1-20260904T043759Z-74EB9712",
+    "commit": "57c7b561bba4cb1fa8ab0c1e6db037658025f7be",
+    "zip": "OTT_v0.5.6_FINAL_PUBLIC_FREEZE_CANDIDATE_20260904T043759Z_74EB9712.zip",
+    "zip_sha256": "41d5f23edd5d3fb44b6df8a746c4432ea09c781bc080855dd2949f993331314f",
+    "candidate_root": "b699fea96417a244f7276575f91f0bddd3c7e4f965a84ef167ef077a9ef0d516",
+    "doi": "10.5281/zenodo.22293061",
+    "deposition_id": 22293061,
+    "evidence_pr": 8
+  },
+  "local_p1_reverify": {
+    "zip_bytes": 58243,
+    "zip_sha256": "41d5f23edd5d3fb44b6df8a746c4432ea09c781bc080855dd2949f993331314f",
+    "candidate_root_file": "b699fea96417a244f7276575f91f0bddd3c7e4f965a84ef167ef077a9ef0d516",
+    "candidate_root_from_zip_manifest": "b699fea96417a244f7276575f91f0bddd3c7e4f965a84ef167ef077a9ef0d516",
+    "mapping_sha256": "48b3fa3059e55cde2794209db62cd00a348cc04200253525e084fff023506d52",
+    "ipc_counts": {
+      "Rover-GTOHP": 30,
+      "Satellite-GTOHP": 20,
+      "Transport": 40,
+      "Woodworking": 30,
+      "TOTAL": 120,
+      "manifest_total": 120,
+      "official_ipc2020_counts": {
+        "Rover-GTOHP": 30,
+        "Satellite-GTOHP": 20,
+        "Transport": 40,
+        "Woodworking": 30
+      },
+      "doi_assigned": false,
+      "split_assigned": false
+    },
+    "runtime_digest": "sha256:1f9fad0bb1f8d65282ff237e0538e47a4e940e472fee7e915ec9c74fffe265b8",
+    "runtime_ref": "ghcr.io/slowomir33-arch/cae-ott-v055-runtime@sha256:1f9fad0bb1f8d65282ff237e0538e47a4e940e472fee7e915ec9c74fffe265b8",
+    "run_authorization_json": "ABSENT",
+    "forbidden_names_in_tree": [],
+    "forbidden_names_in_zip": [],
+    "reserved_doi_in_sentinel_vectors": false,
+    "p1_zip_sha_match": true,
+    "p1_root_match": true,
+    "mapping_match": true,
+    "ipc_match": true,
+    "runtime_match": true,
+    "auth_absent": true,
+    "randomization_leak": false,
+    "zenodo_zip_root": "b699fea96417a244f7276575f91f0bddd3c7e4f965a84ef167ef077a9ef0d516",
+    "zenodo_zip_forbidden": []
+  },
+  "public_record": {
+    "api_status": 404,
+    "html_status": 404,
+    "expected": 404
+  },
+  "http_calls": [
+    {
+      "method": "GET",
+      "url": "https://zenodo.org/api/deposit/depositions/22293061",
+      "authenticated": true,
+      "status": 200,
+      "bytes": 3812,
+      "publish_endpoint": false
+    },
+    {
+      "method": "GET",
+      "url": "https://zenodo.org/api/records/22293061",
+      "authenticated": false,
+      "status": 404,
+      "bytes": 74,
+      "publish_endpoint": false
+    },
+    {
+      "method": "GET",
+      "url": "https://zenodo.org/records/22293061",
+      "authenticated": false,
+      "status": 404,
+      "bytes": 13980,
+      "publish_endpoint": false
+    },
+    {
+      "method": "GET",
+      "url": "https://zenodo.org/api/records/22293061/draft/files/OTT_v0.5.6_FINAL_PUBLIC_FREEZE_CANDIDATE_20260904T043759Z_74EB9712.zip/content",
+      "authenticated": true,
+      "status": 200,
+      "bytes": 58243,
+      "publish_endpoint": false
+    }
+  ]
+}

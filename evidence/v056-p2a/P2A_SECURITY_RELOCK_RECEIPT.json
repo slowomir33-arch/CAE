@@ -1,0 +1,30 @@
+{
+  "document": "P2A_SECURITY_RELOCK_RECEIPT",
+  "protocol_version": "v0.5.6-P2A",
+  "run_id": "OTT-v0.5.6-P2A-20260904T054511Z-DA150E60",
+  "old_compromised_token": "REVOKED_BY_AUTHOR",
+  "old_token_independent_verification": "NOT_PERFORMED",
+  "old_token_independent_verification_reason": "P2A forbids using or recovering the old credential; author attested revocation in the executor request. This VM has no ZENODO_TOKEN.",
+  "author_stated_old_token_revoked": true,
+  "new_secret_name": "ZENODO_P2A_WRITE_TOKEN",
+  "new_token_source": "current runtime secret only",
+  "new_secret_in_os_environ": true,
+  "new_secret_in_any_proc_environ": true,
+  "ZENODO_TOKEN_in_os_environ": false,
+  "cloud_agent_secret_names": "ZENODO_P2A_WRITE_TOKEN",
+  "token_recovered_from_history": false,
+  "old_credential_used": false,
+  "deposit_actions_used": false,
+  "publish_endpoint_called": false,
+  "zenodo_api_called": true,
+  "http_methods_used": [
+    "GET"
+  ],
+  "deposition_id": 22293061,
+  "reserved_doi": "10.5281/zenodo.22293061",
+  "draft_published": false,
+  "draft_file_sha256": "41d5f23edd5d3fb44b6df8a746c4432ea09c781bc080855dd2949f993331314f",
+  "draft_file_byte_identity": true,
+  "new_token_scope_intent": "deposit:write only",
+  "new_token_scope_exercised": "GET deposit + GET file download only"
+}
