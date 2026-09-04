@@ -1,0 +1,14 @@
+{
+  "document": "P2A_DRAFT_FILE_READBACK",
+  "protocol_version": "v0.5.6-P2A",
+  "run_id": "OTT-v0.5.6-P2A-20260904T050425Z-392795B8",
+  "status": "NOT_PERFORMED",
+  "reason": "ZENODO_P2A_WRITE_TOKEN absent from current runtime environment",
+  "expected_filename": "OTT_v0.5.6_FINAL_PUBLIC_FREEZE_CANDIDATE_20260904T043759Z_74EB9712.zip",
+  "expected_bytes": 58243,
+  "expected_sha256": "41d5f23edd5d3fb44b6df8a746c4432ea09c781bc080855dd2949f993331314f",
+  "authenticated_list": null,
+  "downloaded": false,
+  "byte_identity": null,
+  "zenodo_api_called": false
+}

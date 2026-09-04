@@ -1,0 +1,19 @@
+{
+  "document": "P2A_DRAFT_METADATA_READBACK",
+  "protocol_version": "v0.5.6-P2A",
+  "run_id": "OTT-v0.5.6-P2A-20260904T050425Z-392795B8",
+  "status": "NOT_PERFORMED",
+  "reason": "ZENODO_P2A_WRITE_TOKEN absent from current runtime environment",
+  "expected": {
+    "title": "OTT v0.5.6 — External Blind Challenge Protocol and Execution Specification",
+    "version": "v0.5.6",
+    "reserved_doi": "10.5281/zenodo.22293061",
+    "creator": "Gątkowski, Sławomir Grzegorz",
+    "orcid": "0009-0000-4086-4493",
+    "affiliation": "LOGOS-44 / The Axis",
+    "license": "cc-by-4.0",
+    "publication_status": "UNPUBLISHED"
+  },
+  "observed": null,
+  "zenodo_api_called": false
+}
