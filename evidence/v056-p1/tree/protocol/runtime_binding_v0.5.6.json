@@ -1,0 +1,9 @@
+{
+  "final_runtime_digest": "sha256:1f9fad0bb1f8d65282ff237e0538e47a4e940e472fee7e915ec9c74fffe265b8",
+  "final_runtime_fingerprint_json_sha256": "8ab74b5d7bb737275daf9cb4fb13edfef21cacb9a5f3b6a20c5b0ad637a317dd",
+  "final_runtime_fingerprint_root": "166068659b03c450b9ba2425f324bd4cfb2338a3784ee3c6fa764f0a8f256271",
+  "final_runtime_immutable_ref": "ghcr.io/slowomir33-arch/cae-ott-v055-runtime@sha256:1f9fad0bb1f8d65282ff237e0538e47a4e940e472fee7e915ec9c74fffe265b8",
+  "parent_prefreeze_root_sha256": "db6e1d45946b02c2226eb2a08c1ac431dfe74ff1d5241eec52ecd6eb55b7692b",
+  "parent_prefreeze_zip_sha256": "a1becacfa4b38104d4f7e47caf6f0a7e7da475152c0b5da3497b3a28d5451018",
+  "parent_sealed_oci_digest_field": "left_null_in_parent_tree_not_rewritten"
+}

@@ -1,0 +1,144 @@
+{
+  "NON_SCIENTIFIC_TEST_FIXTURE": "YES",
+  "cae_commit": "9164499c60ebe5ced32f0005009fc4e72aca77ca",
+  "condition": "valid",
+  "document": "NUMPY_RNG_TEST_VECTORS_v0.5.6",
+  "doi": "10.0000/OTT-V0.5.6-TEST-DO-NOT-PUBLISH",
+  "entropy_words": [
+    2387686178,
+    2143894255,
+    788041329,
+    71360625,
+    221102776,
+    2609930445,
+    1939132152,
+    148836983
+  ],
+  "n_probes": 128,
+  "numpy_version": "2.2.0",
+  "probes": {
+    "0": {
+      "probe_index": 0,
+      "probe_spawn_key": [
+        0
+      ],
+      "streams": {
+        "GROUND": {
+          "first_draws": {
+            "integers_uint32": 2177220519,
+            "random_float64": 0.843888639388876
+          },
+          "spawn_key": [
+            0,
+            1
+          ]
+        },
+        "PATH": {
+          "first_draws": {
+            "integers_uint32": 126654657,
+            "random_float64": 0.1536442923944501
+          },
+          "spawn_key": [
+            0,
+            2
+          ]
+        },
+        "SAMPLER": {
+          "first_draws": {
+            "integers_uint32": 1556401931,
+            "random_float64": 0.046029514001859284
+          },
+          "spawn_key": [
+            0,
+            0
+          ]
+        }
+      }
+    },
+    "1": {
+      "probe_index": 1,
+      "probe_spawn_key": [
+        1
+      ],
+      "streams": {
+        "GROUND": {
+          "first_draws": {
+            "integers_uint32": 2006439240,
+            "random_float64": 0.08737960171039205
+          },
+          "spawn_key": [
+            1,
+            1
+          ]
+        },
+        "PATH": {
+          "first_draws": {
+            "integers_uint32": 1718657120,
+            "random_float64": 0.5947740787361688
+          },
+          "spawn_key": [
+            1,
+            2
+          ]
+        },
+        "SAMPLER": {
+          "first_draws": {
+            "integers_uint32": 3092020067,
+            "random_float64": 0.6435352208535875
+          },
+          "spawn_key": [
+            1,
+            0
+          ]
+        }
+      }
+    },
+    "127": {
+      "probe_index": 127,
+      "probe_spawn_key": [
+        127
+      ],
+      "streams": {
+        "GROUND": {
+          "first_draws": {
+            "integers_uint32": 2606779534,
+            "random_float64": 0.7407032085556866
+          },
+          "spawn_key": [
+            127,
+            1
+          ]
+        },
+        "PATH": {
+          "first_draws": {
+            "integers_uint32": 4032337526,
+            "random_float64": 0.22379719123844788
+          },
+          "spawn_key": [
+            127,
+            2
+          ]
+        },
+        "SAMPLER": {
+          "first_draws": {
+            "integers_uint32": 2536600303,
+            "random_float64": 0.4189056320094755
+          },
+          "spawn_key": [
+            127,
+            0
+          ]
+        }
+      }
+    }
+  },
+  "replicate_index": 0,
+  "replicate_preimage_hex": "0000002631302e303030302f4f54542d56302e352e362d544553542d444f2d4e4f542d5055424c49534800000028393136343439396336306562653563656433326630303035303039666334653732616361373763610000000d6c6f6769635f636972637569740000000576616c69640000000130",
+  "replicate_sha256": "8e5133227fc93aef2ef88e710440e0710d2dc2b89b9060cd7394cef808df1277",
+  "stream_order": [
+    "SAMPLER",
+    "GROUND",
+    "PATH"
+  ],
+  "system": "logic_circuit"
+}

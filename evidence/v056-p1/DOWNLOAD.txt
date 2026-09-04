@@ -1,0 +1,26 @@
+OTT v0.5.6 DOI reservation / final public freeze candidate P1
+Verdict: READY_FOR_AUDIT
+Reserved DOI: 10.5281/zenodo.22293061
+Zenodo deposition: 22293061 (unpublished / unsubmitted)
+Publication: NO
+Tests: 48/48 PASS
+IPC: Rover 30 / Satellite 20 / Transport 40 / Woodworking 30 = 120
+CAE mapping: unchanged COMPLETE_AND_UNAMBIGUOUS
+
+RUN_ID: OTT-v0.5.6-DOI-P1-20260904T043759Z-74EB9712
+ZIP: OTT_v0.5.6_FINAL_PUBLIC_FREEZE_CANDIDATE_20260904T043759Z_74EB9712.zip
+ZIP bytes: 58243
+ZIP SHA-256: 41d5f23edd5d3fb44b6df8a746c4432ea09c781bc080855dd2949f993331314f
+CANDIDATE_ROOT_SHA256: b699fea96417a244f7276575f91f0bddd3c7e4f965a84ef167ef077a9ef0d516
+Draft upload readback SHA-256: 41d5f23edd5d3fb44b6df8a746c4432ea09c781bc080855dd2949f993331314f (byte-identical)
+Public record: not registered (HTTP 404)
+
+Phone / HTTPS downloads (after push):
+ZIP: https://github.com/slowomir33-arch/CAE/raw/cursor/ott-v056-doi-p1-d621/evidence/v056-p1/OTT_v0.5.6_FINAL_PUBLIC_FREEZE_CANDIDATE_20260904T043759Z_74EB9712.zip
+Folder: https://github.com/slowomir33-arch/CAE/tree/cursor/ott-v056-doi-p1-d621/evidence/v056-p1
+Report: https://github.com/slowomir33-arch/CAE/blob/cursor/ott-v056-doi-p1-d621/evidence/v056-p1/tree/REPORT.md
+Receipt: https://github.com/slowomir33-arch/CAE/blob/cursor/ott-v056-doi-p1-d621/evidence/v056-p1/tree/ZENODO_DOI_RESERVATION_RECEIPT.json
+Metadata: https://github.com/slowomir33-arch/CAE/blob/cursor/ott-v056-doi-p1-d621/evidence/v056-p1/tree/ZENODO_PUBLICATION_METADATA.json
+Gate: https://github.com/slowomir33-arch/CAE/blob/cursor/ott-v056-doi-p1-d621/evidence/v056-p1/GATE_STATUS.json
+
+No publication. No real-DOI seeds/split. No RUN_AUTHORIZATION.json. No science.

@@ -1,0 +1,12 @@
+{
+  "assertion": "authorization_timestamp_utc MUST be strictly later than publication_timestamp_utc; identities MUST match frozen v0.5.6 digest/root. Final RUN_AUTHORIZATION.json is forbidden until after publication.",
+  "authorization_timestamp_utc": null,
+  "protocol_root_sha256": null,
+  "public_v0_5_6_DOI": "10.5281/zenodo.22293061",
+  "publication_timestamp_utc": null,
+  "record_url": null,
+  "runtime_fingerprint_root": "166068659b03c450b9ba2425f324bd4cfb2338a3784ee3c6fa764f0a8f256271",
+  "runtime_immutable_digest": "sha256:1f9fad0bb1f8d65282ff237e0538e47a4e940e472fee7e915ec9c74fffe265b8",
+  "stage_scope": null,
+  "status": "TEMPLATE_ONLY_NOT_AUTHORIZATION"
+}

@@ -1,0 +1,20 @@
+{
+  "credentials_present_in_this_file": false,
+  "deposit_html": "https://zenodo.org/deposit/22293061",
+  "deposition_id": 22293061,
+  "doi_registered_as_published": false,
+  "draft_status": "unpublished/unsubmitted",
+  "packet_sha256": "6f2f2f2491762a421f3102e34558c8c97825b1b664925a154fcf15c8027e1c06",
+  "parent_r3_commit": "91d95b369b7bd2b10a5d03dc59dc259cd66de22d",
+  "parent_r3_root": "041bb7f771f1baf814119bc5030cfcca9669f31e5ab289639247c8939aef9aab",
+  "parent_r3_run_id": "OTT-v0.5.6-IPC-R3-20260904T040804Z-4F600593",
+  "parent_r3_zip": "OTT_v0.5.6_EXECUTION_SPEC_CANDIDATE_R3_20260904T040804Z_4F600593.zip",
+  "parent_r3_zip_sha256": "0b36d0f7747a756c18da49b91302920d4a18dea9453be9172fa8eeea9a2fb64e",
+  "published": false,
+  "reserved_at_utc": "2026-09-04T04:35:56.644658Z",
+  "reserved_doi": "10.5281/zenodo.22293061",
+  "reserved_doi_url": "https://doi.org/10.5281/zenodo.22293061",
+  "submitted": false,
+  "zenodo_api_base": "https://zenodo.org",
+  "zenodo_environment": "production"
+}
