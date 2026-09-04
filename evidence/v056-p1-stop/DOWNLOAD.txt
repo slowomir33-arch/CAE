@@ -1,0 +1,12 @@
+OTT v0.5.6 DOI P1 STOP
+Verdict: STOP_ZENODO_WRITE_CREDENTIAL_MISSING
+No DOI reserved. No publication. No science.
+
+Author action (do not paste the token in chat or git):
+1. Create a production zenodo.org personal access token with deposit:write only (not deposit:actions).
+2. Add it to this Cloud Agent environment as secret name ZENODO_TOKEN.
+3. Re-issue the same P1 packet.
+
+Folder: https://github.com/slowomir33-arch/CAE/tree/cursor/ott-v056-doi-p1-stop-d621/evidence/v056-p1-stop
+Report: https://github.com/slowomir33-arch/CAE/blob/cursor/ott-v056-doi-p1-stop-d621/evidence/v056-p1-stop/REPORT.md
+Gate: https://github.com/slowomir33-arch/CAE/blob/cursor/ott-v056-doi-p1-stop-d621/evidence/v056-p1-stop/GATE_STATUS.json
