@@ -1,0 +1,69 @@
+{
+  "document": "PUBLIC_ZENODO_METADATA",
+  "protocol_version": "v0.5.6-P2B",
+  "run_id": "OTT-v0.5.6-P2B-20260904T055902Z-1D12E2EF",
+  "source": "unauthenticated GET https://zenodo.org/api/records/22293061",
+  "record_id": 22293061,
+  "doi": "10.5281/zenodo.22293061",
+  "conceptdoi": "10.5281/zenodo.22293060",
+  "conceptrecid": "22293060",
+  "created": "2026-09-04T05:49:13.619399+00:00",
+  "updated": "2026-09-04T05:49:13.814694+00:00",
+  "modified": "2026-09-04T05:49:13.814694+00:00",
+  "state": "done",
+  "status": "published",
+  "submitted": true,
+  "title": "OTT v0.5.6 — External Blind Challenge Protocol and Execution Specification",
+  "version": "v0.5.6",
+  "creators": [
+    {
+      "name": "Gątkowski, Sławomir Grzegorz",
+      "affiliation": "LOGOS-44 / The Axis",
+      "orcid": "0009-0000-4086-4493"
+    }
+  ],
+  "license": {
+    "id": "cc-by-4.0"
+  },
+  "access_right": "open",
+  "publication_date": "2026-09-04",
+  "description_plain": "This record is a preregistered protocol and execution specification for the Operational Transition Test (OTT) External Blind Challenge v0.5.6. It binds the reserved production DOI into the frozen candidate bytes and records the accepted R3 execution mapping (CAE_down exact-vector V) and the official IPC-2020 evaluation population (Rover-GTOHP 30, Satellite-GTOHP 20, Transport 40, Woodworking 30; TOTAL 120). This deposit does not contain challenge results. No CAE 32×128, no DOI-derived scientific seeds, no DOI-derived IPC split, no baselines, no candidate selection, no scoring, and no H1–H4 verdicts are included. The Zenodo record remains an unpublished draft at P1. No RUN_AUTHORIZATION.json is issued. Immutable runtime: ghcr.io/slowomir33-arch/cae-ott-v055-runtime@sha256:1f9fad0bb1f8d65282ff237e0538e47a4e940e472fee7e915ec9c74fffe265b8. Runtime fingerprint root: 166068659b03c450b9ba2425f324bd4cfb2338a3784ee3c6fa764f0a8f256271. Parent R3 ZIP SHA-256: 0b36d0f7747a756c18da49b91302920d4a18dea9453be9172fa8eeea9a2fb64e. Parent R3 candidate root: 041bb7f771f1baf814119bc5030cfcca9669f31e5ab289639247c8939aef9aab.",
+  "notes": "P1 DOI RESERVATION ONLY — RECORD UNPUBLISHED. v0.5.6 challenge not run. No RUN_AUTHORIZATION.json. Creator/license copied from author-approved v0.4 public record 10.5281/zenodo.22117680. Do not invent identity.",
+  "keywords": [
+    "Operational Transition Test",
+    "OTT",
+    "external blind challenge",
+    "frozen prospective protocol",
+    "pre-result protocol",
+    "causal abstraction",
+    "IPC 2020",
+    "LOGOS-44"
+  ],
+  "communities": [
+    {
+      "id": "logos-44"
+    }
+  ],
+  "related_identifiers": [
+    {
+      "identifier": "10.5281/zenodo.22117680",
+      "relation": "isDerivedFrom",
+      "scheme": "doi"
+    }
+  ],
+  "doi_url": "https://doi.org/10.5281/zenodo.22293061",
+  "links_parent_doi": "https://doi.org/10.5281/zenodo.22293060",
+  "notes_still_contain_p1_unpublished_wording": true,
+  "notes_wording_note": "Author was instructed not to edit metadata at publish; P1 notes text is unchanged. Publication is established by status=published, state=done, HTTP 200, and DOI resolution.",
+  "field_checks": {
+    "title": true,
+    "version": true,
+    "creator": true,
+    "orcid": true,
+    "affiliation": true,
+    "license": true,
+    "access_open": true,
+    "doi": true,
+    "description_required_statements": true
+  }
+}
