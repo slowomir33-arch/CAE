@@ -1,0 +1,16 @@
+OTT v0.5.5 STAGE A STOP — mobile HTTPS downloads
+No scientific outputs. No sealed ZIP. Do not merge to main.
+
+Folder:
+https://github.com/slowomir33-arch/CAE/tree/cursor/ott-v055-stage-a-stop-d621/evidence/stage-a-stop
+
+1) STOP report
+https://github.com/slowomir33-arch/CAE/raw/cursor/ott-v055-stage-a-stop-d621/evidence/stage-a-stop/OTT_v0.5.5_STAGE_A_STOP_REPORT_20260904T021650Z_0E895732.md
+
+2) GATE report
+https://github.com/slowomir33-arch/CAE/raw/cursor/ott-v055-stage-a-stop-d621/evidence/stage-a-stop/OTT_v0.5.5_STAGE_A_GATE_REPORT_20260904T021650Z_0E895732.md
+
+3) Execution map JSON
+https://github.com/slowomir33-arch/CAE/raw/cursor/ott-v055-stage-a-stop-d621/evidence/stage-a-stop/OTT_v0.5.5_STAGE_A_EXECUTION_MAP_20260904T021650Z_0E895732.json
+
+Verdict: STOP_STAGE_A_EXECUTION_PATH_AMBIGUOUS
