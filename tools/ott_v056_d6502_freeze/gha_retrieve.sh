@@ -97,7 +97,7 @@ if [ "$GOT_DIGEST" != "$DIGEST" ]; then
   stop STOP_D6502_SUPPLEMENT_RETRIEVAL_FAILURE
 fi
 
-CID="$(docker create --platform linux/amd64 "$SUPPLEMENT_REF")"
+CID="$(docker create --platform linux/amd64 "$SUPPLEMENT_REF" /bin/true)"
 docker cp "$CID:/ott-supplement/." "$EXTRACT/"
 docker rm "$CID" >/dev/null
 COMPUTED_ROOT="$(python3 "$TOOLS/verify_extracted.py" "$EXTRACT" "$CONTENT_ROOT")"

@@ -104,7 +104,7 @@ cp -a "$TOOLS/Dockerfile.scratch" "$CTX/Dockerfile"
 docker build --platform linux/amd64 -t "$STAGING_TAG" "$CTX"
 
 mkdir -p "$EXTRACT"
-CID="$(docker create --platform linux/amd64 "$STAGING_TAG")"
+CID="$(docker create --platform linux/amd64 "$STAGING_TAG" /bin/true)"
 docker cp "$CID:/ott-supplement/." "$EXTRACT/"
 docker rm "$CID" >/dev/null
 python3 "$TOOLS/verify_extracted.py" "$EXTRACT" "$CONTENT_ROOT"
