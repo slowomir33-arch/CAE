@@ -1,0 +1,75 @@
+{
+  "D08_RESOLUTION_SOURCE": "frozen V definition + pinned CAE raw standard-path mechanics",
+  "D21_REASON": "previous parser-only eligibility admitted explicitly non-IPC instances; corrected before DOI/split/results to the official IPC 2020 benchmark population",
+  "D21_STATUS": "STOP_IPC_OFFICIAL_BENCHMARK_MANIFEST_MISMATCH",
+  "D24_STATUS": "RECONCILED_WITH_SEALED_ADAPTER",
+  "SCIENTIFIC_DELTA": "EXPLICIT_AND_PRE_REGISTERED",
+  "SCIENTIFIC_OBSERVATIONS": 0,
+  "SCIENTIFIC_OBSERVATIONS_BEFORE_D01_D18": 0,
+  "SCIENTIFIC_OBSERVATIONS_BEFORE_D19_D24": 0,
+  "cae_mapping": "RESOLVED_CAE_down_exact_vector_V",
+  "classification": "AUTHORIZED_PRE_RESULT_PROTOCOL_COMPLETION",
+  "decision_count": 24,
+  "decisions": {
+    "D01": "AUTHORIZED_PRE_RESULT_PROTOCOL_COMPLETION",
+    "D02": "AUTHORIZED_PRE_RESULT_PROTOCOL_COMPLETION",
+    "D03": "AUTHORIZED_PRE_RESULT_PROTOCOL_COMPLETION",
+    "D04": "AUTHORIZED_PRE_RESULT_PROTOCOL_COMPLETION",
+    "D05": "AUTHORIZED_PRE_RESULT_PROTOCOL_COMPLETION",
+    "D06": "AUTHORIZED_PRE_RESULT_PROTOCOL_COMPLETION",
+    "D07": "AUTHORIZED_PRE_RESULT_PROTOCOL_COMPLETION",
+    "D08": "AUTHORIZED_PRE_RESULT_PROTOCOL_COMPLETION",
+    "D09": "AUTHORIZED_PRE_RESULT_PROTOCOL_COMPLETION",
+    "D10": "AUTHORIZED_PRE_RESULT_PROTOCOL_COMPLETION",
+    "D11": "AUTHORIZED_PRE_RESULT_PROTOCOL_COMPLETION",
+    "D12": "AUTHORIZED_PRE_RESULT_PROTOCOL_COMPLETION",
+    "D13": "AUTHORIZED_PRE_RESULT_PROTOCOL_COMPLETION",
+    "D14": "AUTHORIZED_PRE_RESULT_PROTOCOL_COMPLETION",
+    "D15": "AUTHORIZED_PRE_RESULT_PROTOCOL_COMPLETION",
+    "D16": "AUTHORIZED_PRE_RESULT_PROTOCOL_COMPLETION",
+    "D17": "AUTHORIZED_PRE_RESULT_PROTOCOL_COMPLETION",
+    "D18": "AUTHORIZED_PRE_RESULT_PROTOCOL_COMPLETION",
+    "D19": "AUTHORIZED_PRE_RESULT_PROTOCOL_COMPLETION",
+    "D20": "AUTHORIZED_PRE_RESULT_PROTOCOL_COMPLETION",
+    "D21": "AUTHORIZED_PRE_RESULT_PROTOCOL_COMPLETION",
+    "D22": "AUTHORIZED_PRE_RESULT_PROTOCOL_COMPLETION",
+    "D23": "AUTHORIZED_PRE_RESULT_PROTOCOL_COMPLETION",
+    "D24": "AUTHORIZED_PRE_RESULT_PROTOCOL_COMPLETION"
+  },
+  "do_not_claim_D19_D24_were_frozen_in_v0.5.5": true,
+  "do_not_claim_scientific_semantics_change_zero": true,
+  "document": "SCIENTIFIC_DELTA_LEDGER_v0.5.6",
+  "mechanical_harness": [
+    "src/ott_v056"
+  ],
+  "new_operational_semantics": [
+    "length-prefixed CAT hashing",
+    "zero-based indices",
+    "Stage A vs B cut",
+    "SOLVED/UNSOLVED/INFRA",
+    "output schema D15-D18",
+    "D19 numpy SeedSequence probe RNG",
+    "D20 seeded grounding",
+    "D08 exact-vector V on DiagramBuilder standard paths",
+    "D21 official IPC membership"
+  ],
+  "parent_r1": {
+    "run_id": "OTT-v0.5.6-ESC-20260904T025456Z-98AAB42F",
+    "verdict": "STOP_IMPLEMENTATION_MAPPING_AMBIGUOUS",
+    "zip_sha256": "c29d9605f920ca83c571a5e3da963f12f4e1f0e22c196440a4093811598840a4"
+  },
+  "preserved_parent_definitions": [
+    "VCX thresholds",
+    "systems/conditions",
+    "32x128 cardinality",
+    "IPC domains",
+    "20s/4GiB ledger numbers"
+  ],
+  "runtime_binding_only": [
+    "oci digest recorded in candidate binding file; parent PREFREEZE bytes not rewritten"
+  ],
+  "tests_docs": [
+    "tests/",
+    "protocol/*.json"
+  ]
+}
