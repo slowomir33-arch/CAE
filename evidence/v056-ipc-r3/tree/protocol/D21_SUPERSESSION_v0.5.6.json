@@ -1,0 +1,27 @@
+{
+  "decisive_split_before_correction": false,
+  "document": "D21_SUPERSESSION_v0.5.6",
+  "doi_reserved_before_correction": false,
+  "excluded_extra_count": 10,
+  "new_woodworking_official_ipc2020_count": 30,
+  "official_total_four_domains": 120,
+  "old_woodworking_required_count": 40,
+  "parent_r2": {
+    "artifact_run_id": "OTT-v0.5.6-CMCR2-20260904T033323Z-448BB00F",
+    "candidate_root": "98238e25b2ec71724666107f6b51612bff9bbba087daa380f17a6d5cef09de25",
+    "commit": "bdfa80f5ca2203482480bcc29b2c77c4237707e0",
+    "later_stop_report_run_id": "OTT-v0.5.6-CMCR2-20260904T040331Z-84CFREAF",
+    "verdict": "STOP_IPC_OFFICIAL_BENCHMARK_MANIFEST_MISMATCH",
+    "zip_sha256": "4e7d8b372764a34fe1f76071d024a28af17cdabbded377b22741f8a31a597034"
+  },
+  "pinned_readme_distinction": {
+    "extras_directory": "total-order/Woodworking/further-instances-not-used-in-ipc/",
+    "woodworking_ipc2020_evaluation_population": 30,
+    "woodworking_repository_population": 40
+  },
+  "reason": "repository-total count was confused with IPC-2020 evaluation population",
+  "scientific_observations_before_correction": 0,
+  "source_commit": "9e313248244a0a13302ae262f42ef446f43e4182",
+  "source_repo": "panda-planner-dev/ipc2020-domains",
+  "supersedes": "D21 official count assertion in Candidate R2"
+}
