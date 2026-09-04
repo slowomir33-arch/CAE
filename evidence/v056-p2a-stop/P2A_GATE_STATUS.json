@@ -1,0 +1,59 @@
+{
+  "document": "P2A_GATE_STATUS",
+  "protocol_version": "v0.5.6-P2A",
+  "stage": "PREPUBLICATION_SECURITY_RELOCK_AND_AUTHOR_HANDOFF",
+  "run_id": "OTT-v0.5.6-P2A-20260904T050425Z-392795B8",
+  "verdict": "STOP_P2A_SECURITY_RELOCK_NOT_ESTABLISHED",
+  "packet_sha256": "5b5cf6a60785f3b91e434cb9406e87a8cd97e3ac812b8aef4227432ae6a62f06",
+  "PARENT_P1_IDENTITY": "PASS",
+  "P1_LOCAL_TREE_LOCK": "PASS",
+  "OLD_COMPROMISED_ZENODO_TOKEN": "AUTHOR_DECLARED_REVOKED",
+  "NEW_TOKEN_SOURCE": "NOT_PRESENT_IN_CURRENT_RUNTIME",
+  "NEW_TOKEN_SCOPE_INTENT": "deposit:write only (author-stated; not exercised)",
+  "DEPOSIT_ACTIONS_USED": "NO",
+  "ZENODO_DEPOSITION_ID": 22293061,
+  "PUBLIC_V0_5_6_DOI": "10.5281/zenodo.22293061",
+  "ZENODO_PUBLICATION": "NO",
+  "AUTHOR_PUBLISH_WINDOW": "CLOSED",
+  "DRAFT_FILESET": "NOT_RECHECKED",
+  "DRAFT_FILE_BYTE_IDENTITY": "NOT_PROVEN_THIS_STAGE",
+  "DRAFT_METADATA_IDENTITY": "NOT_PROVEN_THIS_STAGE",
+  "REAL_DOI_DERIVED_SCIENTIFIC_SEEDS": 0,
+  "REAL_DOI_DERIVED_IPC_SPLIT": 0,
+  "RUN_AUTHORIZATION": "NOT ISSUED",
+  "SCIENTIFIC_OBSERVATIONS": 0,
+  "SCIENTIFIC_CHALLENGE_RUN": "NO",
+  "parent_p1": {
+    "run_id": "OTT-v0.5.6-DOI-P1-20260904T043759Z-74EB9712",
+    "commit": "57c7b561bba4cb1fa8ab0c1e6db037658025f7be",
+    "zip": "OTT_v0.5.6_FINAL_PUBLIC_FREEZE_CANDIDATE_20260904T043759Z_74EB9712.zip",
+    "zip_sha256": "41d5f23edd5d3fb44b6df8a746c4432ea09c781bc080855dd2949f993331314f",
+    "candidate_root": "b699fea96417a244f7276575f91f0bddd3c7e4f965a84ef167ef077a9ef0d516",
+    "doi": "10.5281/zenodo.22293061",
+    "deposition_id": 22293061
+  },
+  "local_p1_reverify": {
+    "zip_bytes": 58243,
+    "zip_sha256": "41d5f23edd5d3fb44b6df8a746c4432ea09c781bc080855dd2949f993331314f",
+    "candidate_root": "b699fea96417a244f7276575f91f0bddd3c7e4f965a84ef167ef077a9ef0d516",
+    "mapping_sha256": "48b3fa3059e55cde2794209db62cd00a348cc04200253525e084fff023506d52",
+    "ipc_counts": {
+      "Rover-GTOHP": 30,
+      "Satellite-GTOHP": 20,
+      "Transport": 40,
+      "Woodworking": 30,
+      "TOTAL": 120
+    },
+    "runtime": "ghcr.io/slowomir33-arch/cae-ott-v055-runtime@sha256:1f9fad0bb1f8d65282ff237e0538e47a4e940e472fee7e915ec9c74fffe265b8",
+    "run_authorization_json": "ABSENT",
+    "forbidden_randomization_artifacts": 0
+  },
+  "author_action": {
+    "do_not_paste_token_in_chat": true,
+    "required_secret_name": "ZENODO_P2A_WRITE_TOKEN",
+    "required_scope": ["deposit:write"],
+    "forbidden_scope": ["deposit:actions"],
+    "why_missing": "This already-running Cloud Agent VM does not have ZENODO_P2A_WRITE_TOKEN in its process environment. Cursor injects dashboard secrets at agent start; adding a secret mid-run does not update the live VM.",
+    "required_next_step": "Keep the secret named exactly ZENODO_P2A_WRITE_TOKEN on this Cloud Agent environment, then start a new agent (or restart this one) so the secret is injected, and re-issue the same P2A packet. Do not paste the token."
+  }
+}

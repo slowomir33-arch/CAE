@@ -1,0 +1,13 @@
+OTT v0.5.6 P2A STOP
+Verdict: STOP_P2A_SECURITY_RELOCK_NOT_ESTABLISHED
+AUTHOR_PUBLISH_WINDOW = CLOSED
+ZENODO_PUBLICATION = NO
+
+ZENODO_P2A_WRITE_TOKEN is not in this already-running VM.
+Do not paste the token. Restart / start a new Cloud Agent so the secret is injected, then re-issue the same P2A packet. Do not publish.
+
+Phone / HTTPS:
+Folder: https://github.com/slowomir33-arch/CAE/tree/cursor/ott-v056-p2a-stop-d621/evidence/v056-p2a-stop
+Report: https://github.com/slowomir33-arch/CAE/blob/cursor/ott-v056-p2a-stop-d621/evidence/v056-p2a-stop/P2A_FINAL_REPORT.md
+Gate: https://github.com/slowomir33-arch/CAE/blob/cursor/ott-v056-p2a-stop-d621/evidence/v056-p2a-stop/P2A_GATE_STATUS.json
+Receipt: https://github.com/slowomir33-arch/CAE/blob/cursor/ott-v056-p2a-stop-d621/evidence/v056-p2a-stop/P2A_SECURITY_RELOCK_RECEIPT.json
