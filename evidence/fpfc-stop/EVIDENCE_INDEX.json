@@ -1,0 +1,21 @@
+{
+  "document": "FPFC_STOP_EVIDENCE_INDEX",
+  "run_id": "OTT-v0.5.5-FPFC-20260904T023620Z-D0CDAEE8",
+  "files": [
+    {
+      "path": "OTT_v0.5.5_FPFC_STOP_REPORT.md",
+      "bytes": 4069,
+      "sha256": "34d7dcf3c796f87ec486ab24fad7f8ced854cd409c6b93694215a3f289ec703e"
+    },
+    {
+      "path": "SCIENTIFIC_DELTA_LEDGER.json",
+      "bytes": 825,
+      "sha256": "026e25e6428fbfd038ad0b121305cfa106e636c116825704071245a2a6f7ef2c"
+    },
+    {
+      "path": "SPECIFICATION_SUFFICIENCY_MATRIX.json",
+      "bytes": 9511,
+      "sha256": "8d563b491cc8cd4d9d9f1e742836d15c074566974e47ec4bba790f1a4d9cd481"
+    }
+  ]
+}
