@@ -1,0 +1,41 @@
+{
+  "run_id": "OTT-v0.5.5-SCA-20260904T021650Z-0E895732",
+  "created_at_utc": "2026-09-04T02:24:07Z",
+  "stage_a_execution_map": "NOT_FROZEN_AND_UNAMBIGUOUS",
+  "verdict": "STOP_STAGE_A_EXECUTION_PATH_AMBIGUOUS",
+  "commands_taken_from_sealed_package": [],
+  "sealed_files_inspected": [
+    "README.md",
+    "BUILD_INSTRUCTIONS_FOR_KIMI.md",
+    "RELEASE_NOTES.md",
+    "protocol/phase_gates.md",
+    "protocol/failure_policy.md",
+    "protocol/external_tracks.json",
+    "protocol/RUN_AUTHORIZATION.template.json",
+    "protocol/source_closure_prefreeze.json",
+    "adapters/CAE_ADAPTER_SPEC.md",
+    "adapters/IPC_HTN_CX_ADAPTER_SPEC.md",
+    "blind/INDEPENDENT_CHALLENGE_AUTHOR_INSTRUCTIONS.md",
+    "src/adapter_contract.py",
+    "tests/test_prefreeze_contract.py",
+    "environment/Dockerfile.prefreeze"
+  ],
+  "what_the_sealed_package_does_define": {
+    "track_A_sampling_spec": "adapters/CAE_ADAPTER_SPEC.md and protocol/external_tracks.json describe 32 replicates x 128 probes and seed_rule SHA256(public_v0.5_DOI || CAE_commit || system || condition || replicate_index)",
+    "track_B_split_spec": "adapters/IPC_HTN_CX_ADAPTER_SPEC.md and protocol/external_tracks.json describe SHA256(public_v0.5_DOI || domain || relative_problem_path) split, then baseline feasibility, then method candidate selection",
+    "only_executable_commands_in_package": "docker build --no-cache --platform linux/amd64 -f environment/Dockerfile.prefreeze (BUILD_INSTRUCTIONS_FOR_KIMI.md) — runtime-closure builder only, not Stage A"
+  },
+  "why_unambiguous_stage_a_invocation_does_not_exist": [
+    "No script, CLI, Makefile target, or command sequence in the sealed tree executes CAE 32x128, DOI-salted seeds, or IPC split.",
+    "README.md status: PREFREEZE / DO NOT RUN DECISIVE BENCHMARK.",
+    "BUILD_INSTRUCTIONS_FOR_KIMI.md absolutely prohibits CAE 32x128, DOI-salted scientific seeds, and IPC problem split.",
+    "protocol/failure_policy.md forbids decisive CAE replicates, HTN development split/candidate selection, held-out ablation, label join or scoring before final public freeze.",
+    "protocol/phase_gates.md Gate 0 requires inserting runtime evidence into a published frozen protocol and hashing protocol root; Gate 1 requires v0.5 DOI and authorization timestamp later than publication. Gate 0 is not present in this archive.",
+    "protocol/RUN_AUTHORIZATION.template.json has public_v0.5_DOI=null; RUN_AUTHORIZATION.json is absent (contract test_not_frozen_and_no_run_authorization asserts this).",
+    "source_closure_prefreeze.json final_runtime_image.oci_digest is null.",
+    "RELEASE_NOTES.md: DOI-derived salts will use the future public v0.5 DOI. Seed and split rules cannot be instantiated without inventing a DOI, which is forbidden.",
+    "Track B spec chains split + baseline + candidate selection in one adapter; there is no frozen subcommand that stops before candidate selection.",
+    "Runtime image /opt/ott/sources/CAE/test/runner.py is CAE's unbounded metric suite, not the OTT 32x128 protocol. No CAE file matches 32x128 / public_v0.5_DOI / DOI-salt."
+  ],
+  "not_invented": "No Stage-A harness, DOI substitute, or CAE-test-as-challenge mapping was designed or executed."
+}
