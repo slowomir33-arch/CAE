@@ -1,0 +1,21 @@
+{
+  "diagnostic_run_id": "OTT-v0.5.6-D6502-20260904T112609Z-5B452FB6",
+  "github_run_id": 33867920935,
+  "github_artifact_id": 9934805106,
+  "artifact_name": "OTT-v0.5.6-D6502-OTT-v0.5.6-D6502-20260904T112609Z-5B452FB6",
+  "artifact_sha256": "1e09bc6ff1377599db09bc7f06bf063dab066570ae0c23ec561baec8b1cab45d",
+  "classification": "B_DETERMINISTIC_RUNTIME_SUPPLEMENT_REQUIRED",
+  "decoder_bytes": 272629760,
+  "decoder_sha256": "d231d459368c2049a73fd3b25377a657f08d4b95a7098112748b794abc673b62",
+  "libgate_sha256": "ba8222d520c93ac8a3989857c8b2b3cb8573196ef185747eef60d8482dcf1964",
+  "runtime_digest": "sha256:1f9fad0bb1f8d65282ff237e0538e47a4e940e472fee7e915ec9c74fffe265b8",
+  "cae_commit": "9164499c60ebe5ced32f0005009fc4e72aca77ca",
+  "break6502_commit": "922af6496a2fa3b0a999e24419b5f8187f0ee98e",
+  "run_authorization_sha256": "4c6d8aff18dac5fdaa55a8a5733244b96dc49761da88efc4827388622271d358",
+  "D6502_DIAGNOSTIC_AUDIT": "PASS",
+  "D6502_DETERMINISTIC_GENERATION": "PASS",
+  "D6502_GENERATED_SCRATCH_SMOKE": "PASS",
+  "RUN_AUTHORIZATION_CONSUMED": "NO",
+  "START_STAGE_A": "ABSENT",
+  "SCIENTIFIC_OBSERVATIONS": 0
+}

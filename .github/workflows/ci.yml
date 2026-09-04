@@ -7,13 +7,133 @@ on:
   workflow_dispatch:
 
 jobs:
-  # Decoder6502 PRESTART diagnostic only.
-  # Temporarily occupies the registered `CI` workflow_dispatch path so that
-  # Stage A (START_STAGE_A / RUN_AUTHORIZATION consumption) is unreachable.
-  # Push / pull_request still run only the unit-test jobs below.
-  ott-v056-d6502-diagnostic:
-    name: OTT v0.5.6 Decoder6502 PRESTART diagnostic (workflow_dispatch only)
+  # Decoder6502 immutable runtime supplement freeze.
+  # Occupies the registered `CI` workflow_dispatch path. Stage A and the
+  # Decoder6502 diagnostic job stay unreachable (if: false).
+  ott-v056-d6502-supplement-freeze:
+    name: OTT v0.5.6 Decoder6502 supplement freeze (workflow_dispatch only)
     if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    permissions:
+      contents: read
+      packages: write
+    env:
+      OTT_RUNTIME_REF: ghcr.io/slowomir33-arch/cae-ott-v055-runtime@sha256:1f9fad0bb1f8d65282ff237e0538e47a4e940e472fee7e915ec9c74fffe265b8
+      OTT_RUNTIME_DIGEST: sha256:1f9fad0bb1f8d65282ff237e0538e47a4e940e472fee7e915ec9c74fffe265b8
+    outputs:
+      freeze_id: ${{ steps.identity.outputs.freeze_id }}
+      oci_digest: ${{ steps.freeze.outputs.oci_digest }}
+      oci_ref: ${{ steps.freeze.outputs.oci_ref }}
+      content_root: ${{ steps.freeze.outputs.content_root }}
+      image_id: ${{ steps.freeze.outputs.image_id }}
+    steps:
+      - name: Initialize Decoder6502 supplement freeze identity
+        id: identity
+        shell: bash
+        run: |
+          set -euo pipefail
+          UTC="$(date -u +%Y%m%dT%H%M%SZ)"
+          RAND="$(python3 - <<'PY'
+          import secrets
+          print(secrets.token_hex(4).upper())
+          PY
+          )"
+          FREEZE_ID="OTT-v0.5.6-D6502F-${UTC}-${RAND}"
+          echo "freeze_id=$FREEZE_ID" >> "$GITHUB_OUTPUT"
+          echo "OTT_FREEZE_ID=$FREEZE_ID" >> "$GITHUB_ENV"
+          printf 'OTT_FREEZE_ID=%s\n' "$FREEZE_ID"
+          printf 'STAGE_A_JOB_DISABLED=YES\n'
+          printf 'DIAGNOSTIC_JOB_DISABLED=YES\n'
+          printf 'START_STAGE_A=ABSENT\n'
+          printf 'RUN_AUTHORIZATION_CONSUMED=NO\n'
+      - name: Checkout freeze branch
+        uses: actions/checkout@v4
+      - name: Runner identity
+        run: |
+          set -euo pipefail
+          echo "runner.name=${{ runner.name }} os=${{ runner.os }} arch=${{ runner.arch }}"
+          echo "OTT_FREEZE_ID=${{ steps.identity.outputs.freeze_id }}"
+          docker --version
+          if [ "${{ runner.os }}" != "Linux" ] || [ "${{ runner.arch }}" != "X64" ]; then
+            echo "STOP_D6502_SUPPLEMENT_PARENT_IDENTITY_FAILURE" >&2
+            exit 1
+          fi
+      - name: Freeze Decoder6502 supplement (no Stage A)
+        id: freeze
+        env:
+          OTT_FREEZE_ID: ${{ steps.identity.outputs.freeze_id }}
+          GHCR_PULL_TOKEN: ${{ secrets.GHCR_PULL_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_ACTOR: ${{ github.actor }}
+          GITHUB_SHA: ${{ github.sha }}
+          GITHUB_RUN_ID: ${{ github.run_id }}
+          GITHUB_RUN_ATTEMPT: ${{ github.run_attempt }}
+          GITHUB_JOB: ${{ github.job }}
+          GITHUB_WORKFLOW: ${{ github.workflow }}
+          GITHUB_WORKFLOW_REF: ${{ github.workflow_ref }}
+          GITHUB_REF: ${{ github.ref }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          RUNNER_NAME: ${{ runner.name }}
+          RUNNER_OS: ${{ runner.os }}
+          RUNNER_ARCH: ${{ runner.arch }}
+        run: bash tools/ott_v056_d6502_freeze/gha_freeze.sh
+      - name: Upload freeze receipts (small files only)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.identity.outputs.freeze_id }}-freeze
+          path: |
+            gha-d6502f-receipts/
+            evidence/v056-d6502-supplement-freeze/
+          if-no-files-found: warn
+          retention-days: 90
+          include-hidden-files: false
+
+  ott-v056-d6502-supplement-retrieve:
+    name: OTT v0.5.6 Decoder6502 supplement independent retrieval
+    needs: ott-v056-d6502-supplement-freeze
+    if: github.event_name == 'workflow_dispatch' && needs.ott-v056-d6502-supplement-freeze.result == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    permissions:
+      contents: read
+      packages: read
+    env:
+      OTT_RUNTIME_REF: ghcr.io/slowomir33-arch/cae-ott-v055-runtime@sha256:1f9fad0bb1f8d65282ff237e0538e47a4e940e472fee7e915ec9c74fffe265b8
+      OTT_RUNTIME_DIGEST: sha256:1f9fad0bb1f8d65282ff237e0538e47a4e940e472fee7e915ec9c74fffe265b8
+    steps:
+      - name: Checkout retrieve scripts
+        uses: actions/checkout@v4
+      - name: Independent pull-by-digest + smoke (no Stage A)
+        env:
+          OTT_FREEZE_ID: ${{ needs.ott-v056-d6502-supplement-freeze.outputs.freeze_id }}
+          OTT_SUPPLEMENT_DIGEST: ${{ needs.ott-v056-d6502-supplement-freeze.outputs.oci_digest }}
+          OTT_CONTENT_ROOT: ${{ needs.ott-v056-d6502-supplement-freeze.outputs.content_root }}
+          GHCR_PULL_TOKEN: ${{ secrets.GHCR_PULL_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_ACTOR: ${{ github.actor }}
+          GITHUB_SHA: ${{ github.sha }}
+          GITHUB_RUN_ID: ${{ github.run_id }}
+          RUNNER_OS: ${{ runner.os }}
+          RUNNER_ARCH: ${{ runner.arch }}
+        run: bash tools/ott_v056_d6502_freeze/gha_retrieve.sh
+      - name: Upload independent retrieval receipts (small files only)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ needs.ott-v056-d6502-supplement-freeze.outputs.freeze_id }}-retrieve
+          path: |
+            gha-d6502f-retrieve/
+            evidence/v056-d6502-supplement-freeze/
+          if-no-files-found: warn
+          retention-days: 90
+          include-hidden-files: false
+
+  # DISABLED during the Decoder6502 supplement-freeze window.
+  ott-v056-d6502-diagnostic:
+    name: OTT v0.5.6 Decoder6502 PRESTART diagnostic (DISABLED during freeze)
+    if: false
     runs-on: ubuntu-latest
     timeout-minutes: 90
     permissions:

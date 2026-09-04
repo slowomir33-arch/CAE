@@ -5,7 +5,7 @@
 # Trigger: workflow_dispatch only. Do not add push / pull_request / schedule.
 # RUN_ID is generated on the runner at dispatch start; never reuse a terminal STOP id.
 #
-# DISABLED during the Decoder6502 PRESTART diagnostic window so a dedicated
+# DISABLED during the Decoder6502 supplement-freeze window so a dedicated
 # dispatch cannot reach START_STAGE_A / RUN_AUTHORIZATION consumption.
 name: ott-v056-stage-a
 
