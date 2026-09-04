@@ -58,6 +58,77 @@ jobs:
           fi
           echo "DIGEST_IDENTITY=EXACT_MATCH"
 
+      - name: Write in-image verification script
+        run: |
+          set -euo pipefail
+          cat > "$RUNNER_TEMP/ott_retrieve_verify.py" <<'PY'
+          import hashlib, json, os, subprocess, sys
+          from pathlib import Path
+
+          def run(cmd):
+              print("+", " ".join(cmd), flush=True)
+              subprocess.check_call(cmd)
+
+          print("===== IMPORTS =====")
+          subprocess.check_call([sys.executable, "-c", "import causal_abstraction, tracr; print('IMPORTS=PASS')"])
+
+          print("===== BRIDGES =====")
+          lib = Path("/opt/ott/sources/CAE/systems/10_cpu_6502_libs")
+          for name in ("libisa6502.so", "libgate6502.so", "libtransistor6502.so"):
+              p = lib / name
+              assert p.is_file() and os.access(p, os.X_OK), p
+          print("BRIDGES=3/3")
+
+          print("===== SOURCE HEADS =====")
+          print(Path("/opt/ott/fingerprint/source-heads.txt").read_text())
+          pins = {
+              "CAE": "9164499c60ebe5ced32f0005009fc4e72aca77ca",
+              "tracr": "9ce2b8c82b6ba10e62e86cf6f390e7536d4fd2cd",
+              "lilotane": "0a58c299c7d85034661f795dfe7b10ad64f547d3",
+              "pandaPIparser": "95bbe291c5bdb9fb517c1ad55f5136d45450c644",
+          }
+          for name, sha in pins.items():
+              got = subprocess.check_output(["git", "-C", f"/opt/ott/sources/{name}", "rev-parse", "HEAD"], text=True).strip()
+              assert got == sha, (name, got, sha)
+
+          print("===== LILOTANE =====")
+          binp = Path("/opt/ott/sources/lilotane/build/lilotane")
+          assert binp.is_file() and os.access(binp, os.X_OK)
+          ev = Path("/opt/ott/fingerprint/lilotane-gcc12-include-limits-optional-evidence.txt").read_text()
+          assert "include limits" in ev and "include optional" in ev
+          subprocess.run([str(binp), "--help"], check=False, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+          print("LILOTANE_BIN=OK")
+
+          print("===== PIP CHECK =====")
+          subprocess.run([sys.executable, "-m", "pip", "check"], check=False)
+
+          print("===== FINGERPRINT =====")
+          root = Path("/opt/ott/fingerprint")
+          records = []
+          for p in sorted(x for x in root.rglob("*") if x.is_file() and x.name != "runtime_fingerprint.json"):
+              records.append({"path": str(p.relative_to(root)), "sha256": hashlib.sha256(p.read_bytes()).hexdigest(), "size": p.stat().st_size})
+          payload = {"files": records}
+          canon = json.dumps(payload, sort_keys=True, separators=(",", ":")).encode()
+          payload["root_sha256"] = hashlib.sha256(canon).hexdigest()
+          out = (json.dumps(payload, indent=2) + "\n").encode()
+          js = hashlib.sha256(out).hexdigest()
+          pip = hashlib.sha256((root / "pip-freeze.txt").read_bytes()).hexdigest()
+          print("FP_JSON_SHA256", js)
+          print("FP_ROOT", payload["root_sha256"])
+          print("PIP_FREEZE_SHA256", pip)
+          assert js == os.environ["EXPECTED_FP_JSON_SHA256"], (js, os.environ["EXPECTED_FP_JSON_SHA256"])
+          assert payload["root_sha256"] == os.environ["EXPECTED_FP_ROOT"], (payload["root_sha256"], os.environ["EXPECTED_FP_ROOT"])
+          assert pip == os.environ["EXPECTED_PIP_FREEZE_SHA256"], (pip, os.environ["EXPECTED_PIP_FREEZE_SHA256"])
+          print("RETRIEVED_RUNTIME_FINGERPRINT=accepted_v0.5.5_identity")
+
+          print("===== CAE =====")
+          subprocess.check_call([sys.executable, "-m", "pytest", "-q", "test", "--tb=no"], cwd="/opt/ott/sources/CAE")
+          print("SCIENTIFIC_CHALLENGE_RUN=NO")
+          print("RUN_AUTHORIZATION=NOT_ISSUED")
+          PY
+          # strip the YAML-leading indent inside the generated file
+          python3 -c "from pathlib import Path; p=Path('$RUNNER_TEMP/ott_retrieve_verify.py'); t=p.read_text(); p.write_text('\n'.join(line[10:] if line.startswith('          ') else line for line in t.splitlines())+'\n')"
+
       - name: Post-retrieval execution on retrieved image
         run: |
           set -euo pipefail
@@ -65,57 +136,9 @@ jobs:
             -e EXPECTED_FP_JSON_SHA256 \
             -e EXPECTED_FP_ROOT \
             -e EXPECTED_PIP_FREEZE_SHA256 \
+            -v "$RUNNER_TEMP/ott_retrieve_verify.py:/tmp/ott_retrieve_verify.py:ro" \
             "$RUNTIME_IMAGE@$EXPECTED_DIGEST" \
-            bash -lc 'set -euo pipefail
-echo "===== IMPORTS ====="
-python -c "import causal_abstraction, tracr; print(\"IMPORTS=PASS\")"
-echo "===== BRIDGES ====="
-test -x /opt/ott/sources/CAE/systems/10_cpu_6502_libs/libisa6502.so
-test -x /opt/ott/sources/CAE/systems/10_cpu_6502_libs/libgate6502.so
-test -x /opt/ott/sources/CAE/systems/10_cpu_6502_libs/libtransistor6502.so
-echo "BRIDGES=3/3"
-echo "===== SOURCE HEADS ====="
-cat /opt/ott/fingerprint/source-heads.txt
-test "$(git -C /opt/ott/sources/CAE rev-parse HEAD)" = "9164499c60ebe5ced32f0005009fc4e72aca77ca"
-test "$(git -C /opt/ott/sources/tracr rev-parse HEAD)" = "9ce2b8c82b6ba10e62e86cf6f390e7536d4fd2cd"
-test "$(git -C /opt/ott/sources/lilotane rev-parse HEAD)" = "0a58c299c7d85034661f795dfe7b10ad64f547d3"
-test "$(git -C /opt/ott/sources/pandaPIparser rev-parse HEAD)" = "95bbe291c5bdb9fb517c1ad55f5136d45450c644"
-echo "===== LILOTANE ====="
-test -x /opt/ott/sources/lilotane/build/lilotane
-grep -q "include limits" /opt/ott/fingerprint/lilotane-gcc12-include-limits-optional-evidence.txt
-grep -q "include optional" /opt/ott/fingerprint/lilotane-gcc12-include-limits-optional-evidence.txt
-/opt/ott/sources/lilotane/build/lilotane --help >/tmp/lilotane-help.txt 2>&1 || true
-echo "LILOTANE_BIN=OK"
-echo "===== PIP CHECK ====="
-python -m pip check || true
-echo "===== FINGERPRINT ====="
-python - <<PY
-from pathlib import Path
-import hashlib, json, os
-root = Path("/opt/ott/fingerprint")
-records = []
-for p in sorted(x for x in root.rglob("*") if x.is_file() and x.name != "runtime_fingerprint.json"):
-    records.append({"path": str(p.relative_to(root)), "sha256": hashlib.sha256(p.read_bytes()).hexdigest(), "size": p.stat().st_size})
-payload = {"files": records}
-canon = json.dumps(payload, sort_keys=True, separators=(",", ":")).encode()
-payload["root_sha256"] = hashlib.sha256(canon).hexdigest()
-out = (json.dumps(payload, indent=2) + "\n").encode()
-js = hashlib.sha256(out).hexdigest()
-pip = hashlib.sha256((root / "pip-freeze.txt").read_bytes()).hexdigest()
-print("FP_JSON_SHA256", js)
-print("FP_ROOT", payload["root_sha256"])
-print("PIP_FREEZE_SHA256", pip)
-assert js == os.environ["EXPECTED_FP_JSON_SHA256"], (js, os.environ["EXPECTED_FP_JSON_SHA256"])
-assert payload["root_sha256"] == os.environ["EXPECTED_FP_ROOT"], (payload["root_sha256"], os.environ["EXPECTED_FP_ROOT"])
-assert pip == os.environ["EXPECTED_PIP_FREEZE_SHA256"], (pip, os.environ["EXPECTED_PIP_FREEZE_SHA256"])
-print("RETRIEVED_RUNTIME_FINGERPRINT=accepted_v0.5.5_identity")
-PY
-echo "===== CAE ====="
-cd /opt/ott/sources/CAE && python -m pytest -q test --tb=no
-echo "===== INVARIANCE ====="
-echo "SCIENTIFIC_CHALLENGE_RUN=NO"
-echo "RUN_AUTHORIZATION=NOT_ISSUED"
-'
+            python /tmp/ott_retrieve_verify.py
 
       - name: Persistence verdict
         run: |
