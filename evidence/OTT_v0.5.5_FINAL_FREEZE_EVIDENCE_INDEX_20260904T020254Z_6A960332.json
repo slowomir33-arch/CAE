@@ -1,0 +1,122 @@
+{
+  "document": "OTT_v0.5.5_FINAL_FREEZE_EVIDENCE_INDEX",
+  "created_at_utc": "2026-09-04T02:02:54Z",
+  "run_id": "OTT-v0.5.5-FFEC-20260904T020254Z-6A960332",
+  "parent_run_id": "OTT-v0.5.5-FFRPE-20260904T003448Z-E0F1128A",
+  "runtime_digest": "sha256:1f9fad0bb1f8d65282ff237e0538e47a4e940e472fee7e915ec9c74fffe265b8",
+  "retrieval_run_id": 33826209738,
+  "sealed_zip": {
+    "filename": "OTT_External_Blind_Challenge_v0.5.5_PREFREEZE_EXECUTION_CLOSURE.zip",
+    "sha256": "a1becacfa4b38104d4f7e47caf6f0a7e7da475152c0b5da3497b3a28d5451018",
+    "bytes": 47137,
+    "included_in_this_export": false
+  },
+  "prefreeze_root_sha256": "db6e1d45946b02c2226eb2a08c1ac431dfe74ff1d5241eec52ecd6eb55b7692b",
+  "manifest": "27/27",
+  "inventory": {
+    "sealed_zip_verification": "PASS (hash match; not re-run)",
+    "manifest_root_verification": "PASS 27/27; PREFREEZE_ROOT match",
+    "active_apt_sources": "snapshot.debian.org @ 20250906T112439Z only",
+    "apt_provenance_summary": "80/80 SNAPSHOT-RESOLVED; NON_SNAPSHOT=0; AMBIGUOUS=0; LIVE=0",
+    "base_mutation_audit": "DOWNGRADE=0; REMOVAL=0; BASE_UPGRADE=0 (from accepted v0.5.5 closure; not re-run)",
+    "source_heads": "8/8 pins matched; see supporting/source-heads.txt",
+    "glucose_archive_patch": "archive 51aa1cf1...c5029 OK; Solver.h.patch ef46037f...; Solver.cc.patch 7cb1bbaf...; setLearnCallback present",
+    "cae_tests": "111/111 PASS local and retrieved",
+    "contract_tests": "7/7 PASS",
+    "runtime_fingerprint": {
+      "json_sha256": "8ab74b5d7bb737275daf9cb4fb13edfef21cacb9a5f3b6a20c5b0ad637a317dd",
+      "root": "166068659b03c450b9ba2425f324bd4cfb2338a3784ee3c6fa764f0a8f256271"
+    },
+    "sbom": {
+      "included_in_this_export": false,
+      "generator": "syft 1.51.1",
+      "sha256": "4d36b5d4daefb6ae5e811f5aef1bc59fc977252bb41b6d21d7c7dd016ce91d06",
+      "components": 12470
+    },
+    "oci_push_receipt": {
+      "immutable_ref": "ghcr.io/slowomir33-arch/cae-ott-v055-runtime@sha256:1f9fad0bb1f8d65282ff237e0538e47a4e940e472fee7e915ec9c74fffe265b8",
+      "push_exit": 0,
+      "push_start": "2026-09-04T01:13:44Z",
+      "push_end": "2026-09-04T01:27:25Z"
+    }
+  },
+  "receipts": {
+    "FINALIZE_FREEZE.json": {
+      "bytes": 1936,
+      "sha256": "d0cc6aec46eafbd70f94e18d6ad8ee55b72b3803d979b626348bd5f97a4173cd"
+    },
+    "OTT_v0.5.5_FINAL_FREEZE_REPORT_20260904T013817Z_E0F1128A.md": {
+      "bytes": 11344,
+      "sha256": "7f0c36ad6147c5e51ded285571a7ee1072e5f1e5206296e7836c2d7d19a5efe3"
+    }
+  },
+  "export_files": [
+    {
+      "path": "FINALIZE_FREEZE.json",
+      "bytes": 1936,
+      "sha256": "d0cc6aec46eafbd70f94e18d6ad8ee55b72b3803d979b626348bd5f97a4173cd"
+    },
+    {
+      "path": "OTT_v0.5.5_FINAL_FREEZE_REPORT_20260904T013817Z_E0F1128A.md",
+      "bytes": 11344,
+      "sha256": "7f0c36ad6147c5e51ded285571a7ee1072e5f1e5206296e7836c2d7d19a5efe3"
+    },
+    {
+      "path": "supporting/build-start.txt",
+      "bytes": 85,
+      "sha256": "b192b4ed912f87c050a418d1a0ee9f9955f46c8c67ed2566d4e54d478ff660b8"
+    },
+    {
+      "path": "supporting/cae-tests-meta.txt",
+      "bytes": 86,
+      "sha256": "9805fb2c91e4531e4d0dec8f478f72b85eafe10522db29cdacb6998095409508"
+    },
+    {
+      "path": "supporting/ghcr-immutable-ref.txt",
+      "bytes": 117,
+      "sha256": "a5ea1ce76e7a827b0781341cdbc179994d79b45226fb21837861780dcd232bdd"
+    },
+    {
+      "path": "supporting/ghcr-manifest.json",
+      "bytes": 2622,
+      "sha256": "1f9fad0bb1f8d65282ff237e0538e47a4e940e472fee7e915ec9c74fffe265b8"
+    },
+    {
+      "path": "supporting/ghcr-push-meta.txt",
+      "bytes": 74,
+      "sha256": "bd2e117823a496673033a7fea29c2ed82eb7d4120e521b3e220d6cd6d10fcbeb"
+    },
+    {
+      "path": "supporting/host-check.txt",
+      "bytes": 2784,
+      "sha256": "e3c9cfbf5ab6bce931ad81805f2fc78a0532581a6e61d5cbfac944a65718eab4"
+    },
+    {
+      "path": "supporting/identity.txt",
+      "bytes": 178,
+      "sha256": "86394c3582ad32a78cd67e9e7ac2ba81d3803ffcbb3d479a54a67053335997a6"
+    },
+    {
+      "path": "supporting/ott-contract.txt",
+      "bytes": 633,
+      "sha256": "918a6b603b6bce1d3cd87f127f06128726048fb0c7635dc0af0408234867e347"
+    },
+    {
+      "path": "supporting/pip-freeze.txt",
+      "bytes": 4568,
+      "sha256": "0f9bfbf13cca0f5d58df1892c3c63e8834a592ebb74ecda2c5f08414bb77d147"
+    },
+    {
+      "path": "supporting/runtime_fingerprint.json",
+      "bytes": 1981,
+      "sha256": "8ab74b5d7bb737275daf9cb4fb13edfef21cacb9a5f3b6a20c5b0ad637a317dd"
+    },
+    {
+      "path": "supporting/source-heads.txt",
+      "bytes": 408,
+      "sha256": "0009dc25846709d5776dcad5fa75152c5646cc80958a6153bda9ac0ac63056ad"
+    }
+  ],
+  "scientific_challenge_run": "NO",
+  "run_authorization": "NOT ISSUED"
+}
